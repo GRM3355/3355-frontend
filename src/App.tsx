@@ -8,7 +8,7 @@ import ReportPage from './pages/ReportPage'
 
 function App() {
   return (
-    <div className='flex flex-col h-screen w-full sm:w-100 mx-auto'>
+    <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative'>
       <Header />
       <div className='flex-1 w-full'>
         <Routes>

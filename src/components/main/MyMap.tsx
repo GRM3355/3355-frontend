@@ -50,7 +50,11 @@ const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = {
   })),
 };
 
-export default function MyMap() {
+type MyMapProps = {
+  onShowBottomSheet: () => void;
+}
+
+export default function MyMap({ onShowBottomSheet }: MyMapProps) {
   //TODO: 유저 현재 위치로 변경
   const [viewport, setViewport] = useState({
     latitude: 37.5665,
@@ -62,8 +66,9 @@ export default function MyMap() {
 
   const mapRef = useRef<MapRef>(null);
 
+
   return (
-    <div className='w-full h-full'>
+    <div className='relative w-full h-full'>
       <Map
         ref={mapRef} //flyTo용 설정
         initialViewState={viewport} //시작 위치
@@ -96,6 +101,7 @@ export default function MyMap() {
               center: [longitude, latitude],
               zoom: 20,
             });
+            onShowBottomSheet();
           }
 
         }}
@@ -165,6 +171,7 @@ export default function MyMap() {
           />
         </Source>
       </Map>
+
     </div>
   );
 }
