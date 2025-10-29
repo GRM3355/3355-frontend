@@ -5,6 +5,8 @@ import { Route, Routes } from 'react-router-dom'
 import NotFound from './pages/NotFoundPage'
 import HomePage from './pages/HomePage'
 import ReportPage from './pages/ReportPage'
+import ChatListPage from './pages/ChatListPage'
+import ChatPage from './pages/ChatPage'
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <div className='flex-1 w-full'>
         <Routes>
           <Route path='/' element={<HomePage />} />
+          <Route path='/chat-list' element={<ChatListPage />} />
+          <Route path='/chat' element={<ChatPage />} />
           <Route path='/report' element={<ReportPage />} />
           <Route path='*' element={<NotFound />} />
         </Routes>

@@ -1,5 +1,13 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function Nav() {
+  const navigate = useNavigate();
+
   return (
-    <div>Nav</div>
+    <div className='flex h-16 bg-amber-100 items-center justify-between p-4'>
+      <span onClick={() => navigate('/')}>지도</span>
+      <span onClick={() => navigate('/chat-list')}>채팅방 리스트</span>
+      <span onClick={() => navigate('/chat')}>나의 채팅방</span>
+    </div>
   )
 }
