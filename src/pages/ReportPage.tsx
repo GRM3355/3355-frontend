@@ -1,8 +1,6 @@
 import { useForm } from 'react-hook-form';
-import DaumPostcode, { type Address } from 'react-daum-postcode';
 import type { ReportFormData } from '@/types/form';
 import { useState } from 'react';
-import Modal from '@/components/common/Modal';
 import PostcodeModal from '@/components/report/PostcodeModal';
 
 export default function ReportPage() {

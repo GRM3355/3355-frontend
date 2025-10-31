@@ -1,5 +1,6 @@
 import BottomSheet from '@/components/common/BottomSheet';
 import MyMap from '@/components/main/MyMap'
+import MyMapWithProvinces from '@/components/main/MyMapWithProvinces';
 import { useState } from 'react';
 
 export default function HomePage() {
@@ -12,6 +13,7 @@ export default function HomePage() {
   return (
     <>
       <MyMap onShowBottomSheet={handleShowBottomSheet} />
+      {/* <MyMapWithProvinces /> */}
       <BottomSheet
         isOpen={isBottomSheetOpen}
         onClose={() => setIsBottomSheetOpen(false)}
