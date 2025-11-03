@@ -8,8 +8,14 @@ import ReportPage from './pages/ReportPage'
 import ChatPage from './pages/ChatPage'
 import FestivalListPage from './pages/FestivalListPage'
 import RoomListPage from './pages/RoomListPage'
+import ConfirmModal from './components/common/ConfirmModal'
+import { useConfirmStore } from './stores/useConfirmStore'
 
 function App() {
+  const { isOpen, title, message, confirmText, cancelText,
+    onConfirm, onCancel, closeConfirm, } = useConfirmStore();
+
+
   return (
     <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative'>
       <Header />
@@ -24,6 +30,18 @@ function App() {
         </Routes>
       </div>
       <Nav />
+
+      <ConfirmModal
+        isOpen={isOpen}
+        title={title}
+        message={message}
+        confirmText={confirmText}
+        cancelText={cancelText}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        onClose={closeConfirm}
+      />
+
     </div>
   )
 }
