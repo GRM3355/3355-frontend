@@ -13,7 +13,7 @@ function App() {
   return (
     <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative'>
       <Header />
-      <div className='flex-1 w-full'>
+      <div className='flex-1 w-full overflow-y-auto'>
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/festival-list' element={<FestivalListPage />} />
