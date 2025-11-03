@@ -1,6 +1,8 @@
 import BottomSheet from '@/components/common/BottomSheet';
+import FestivalListBottomSheet from '@/components/main/FestivalListBottomSheet';
 import MyMap from '@/components/main/MyMap'
 import MyMapWithProvinces from '@/components/main/MyMapWithProvinces';
+import RoomItem from '@/components/room/RoomItem';
 import { useState } from 'react';
 
 export default function HomePage() {
@@ -14,12 +16,9 @@ export default function HomePage() {
     <>
       <MyMap onShowBottomSheet={handleShowBottomSheet} />
       {/* <MyMapWithProvinces /> */}
-      <BottomSheet
-        isOpen={isBottomSheetOpen}
-        onClose={() => setIsBottomSheetOpen(false)}
-      >
-        <p>ㄹㅇㄴㄹㄴㅇㄹ</p>
-      </BottomSheet>
+      <FestivalListBottomSheet
+        isBottomSheetOpen={isBottomSheetOpen}
+        setIsBottomSheetOpen={setIsBottomSheetOpen} />
     </>
   )
 }

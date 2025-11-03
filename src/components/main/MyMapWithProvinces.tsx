@@ -86,7 +86,7 @@ export default function MyMapWithProvinces() {
       ref={mapRef}
       initialViewState={{ latitude: 36.5, longitude: 127.8, zoom: 6 }}
       style={{ width: '100%', height: '100%' }}
-      mapStyle='mapbox://styles/mapbox/streets-v11'
+      mapStyle="mapbox://styles/mapbox/light-v11"
       mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
     />
   );

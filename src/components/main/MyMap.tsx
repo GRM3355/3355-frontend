@@ -96,10 +96,10 @@ export default function MyMap({ onShowBottomSheet }: MyMapProps) {
           }
           else if (point && point.geometry.type === 'Point') {
             const [longitude, latitude] = point.geometry.coordinates;
-            console.log('Sdfsdfs');
             mapRef.current?.flyTo({
               center: [longitude, latitude],
               zoom: 20,
+              offset: [0, -window.innerHeight * 0.18],
             });
             onShowBottomSheet();
           }
@@ -113,7 +113,7 @@ export default function MyMap({ onShowBottomSheet }: MyMapProps) {
           data={geoJsonPoints}
           cluster={true} //집합 시킬건지
           clusterMaxZoom={14} //해당 줌 레벨 이하에서 클러스터링
-          clusterRadius={100} //클러스터 반경
+          clusterRadius={30} //클러스터 반경
         >
           {/* Cluster 원 */}
           <Layer
