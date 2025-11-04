@@ -15,7 +15,7 @@ export default function ConfirmModal({
   isOpen,
   title,
   message,
-  confirmText = '확인',
+  confirmText,
   cancelText,
   onConfirm,
   onCancel,
