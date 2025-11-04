@@ -18,18 +18,20 @@ function App() {
 
 
   return (
-    <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative'>
+    <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative overflow-hidden'>
       <Header />
-      <div className='flex-1 w-full touch-none'>
-        <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/festival-list' element={<FestivalListPage />} />
-          <Route path='/room-list/:id' element={<RoomListPage />} />
-          <Route path='/create-room/:id' element={<CreateRoomPage />} />
-          <Route path='/chat' element={<ChatPage />} />
-          <Route path='/report' element={<ReportPage />} />
-          <Route path='*' element={<NotFound />} />
-        </Routes>
+      <div className='flex-1 relative w-full'>
+        <div className='absolute inset-0'>
+          <Routes>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/festival-list' element={<FestivalListPage />} />
+            <Route path='/room-list/:id' element={<RoomListPage />} />
+            <Route path='/create-room/:id' element={<CreateRoomPage />} />
+            <Route path='/chat' element={<ChatPage />} />
+            <Route path='/report' element={<ReportPage />} />
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </div>
       </div>
       <Nav />
 
