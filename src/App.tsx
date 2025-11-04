@@ -11,6 +11,8 @@ import RoomListPage from './pages/RoomListPage'
 import ConfirmModal from './components/common/ConfirmModal'
 import { useConfirmStore } from './stores/useConfirmStore'
 import CreateRoomPage from './pages/CreateRoomPage'
+import MyChatRoom from './pages/MyChatPage'
+import MyChatPage from './pages/MyChatPage'
 
 function App() {
   const { isOpen, title, message, confirmText, cancelText,
@@ -27,7 +29,8 @@ function App() {
             <Route path='/festival-list' element={<FestivalListPage />} />
             <Route path='/room-list/:id' element={<RoomListPage />} />
             <Route path='/create-room/:id' element={<CreateRoomPage />} />
-            <Route path='/chat' element={<ChatPage />} />
+            <Route path='/my-chat' element={<MyChatPage />} />
+            <Route path='/chat/:id' element={<ChatPage />} />
             <Route path='/report' element={<ReportPage />} />
             <Route path='*' element={<NotFound />} />
           </Routes>

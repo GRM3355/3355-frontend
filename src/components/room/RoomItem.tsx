@@ -1,12 +1,14 @@
 import { useConfirmStore } from "@/stores/useConfirmStore";
+import { useNavigate } from "react-router-dom";
 
 type RoomItemProps = {
   room: string;
 }
 
 export default function RoomItem({ room }: RoomItemProps) {
+  const navigate = useNavigate();
 
-  const { openConfirm } = useConfirmStore();
+  const { openConfirm, closeConfirm } = useConfirmStore();
 
   const handleClick = () => {
     openConfirm('채팅방에 참여하시겠어요?',
@@ -15,8 +17,10 @@ export default function RoomItem({ room }: RoomItemProps) {
   }
 
   const handleConfirm = () => {
-    console.log("확인 클릭됨");
+    closeConfirm();
+    navigate(`/chat/1`)
   }
+
   return (
     <div className='flex h-16 items-center border p-2 gap-2'
       onClick={() => handleClick()}>
