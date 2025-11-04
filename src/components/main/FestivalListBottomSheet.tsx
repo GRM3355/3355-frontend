@@ -1,6 +1,7 @@
 import React from 'react'
 import RoomItem from '../room/RoomItem'
 import BottomSheet from '../common/BottomSheet'
+import { useNavigate } from 'react-router-dom';
 
 type FestivalListBottomSheetProps = {
   isShowBottomSheet: boolean;
@@ -14,6 +15,14 @@ export default function FestivalListBottomSheet(
     onShowFestivalModal
   }: FestivalListBottomSheetProps
 ) {
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    // navigate(`/room-list/${id}`)
+    navigate(`/create-room/1`)
+
+  }
+
   return (
     <BottomSheet
       isOpen={isShowBottomSheet}
@@ -32,7 +41,7 @@ export default function FestivalListBottomSheet(
           </div>
           <p>페스티벌 Zone 내에서 채팅이 가능합니다.</p>
         </div>
-        <button>채팅방 생성 버튼</button>
+        <button onClick={() => handleClick()}>채팅방 생성 버튼</button>
       </div>
 
       <div>
