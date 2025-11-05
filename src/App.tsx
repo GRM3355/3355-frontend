@@ -11,16 +11,37 @@ import RoomListPage from './pages/RoomListPage'
 import ConfirmModal from './components/common/ConfirmModal'
 import { useConfirmStore } from './stores/useConfirmStore'
 import CreateRoomPage from './pages/CreateRoomPage'
-import MyChatRoom from './pages/MyChatPage'
 import MyChatPage from './pages/MyChatPage'
+import useAuthStore from './stores/useAuthStore'
+import { useEffect } from 'react'
+import axios from 'axios'
 
 function App() {
+  //확인 모달용
   const { isOpen, title, message, confirmText, cancelText,
     onConfirm, onCancel, closeConfirm, } = useConfirmStore();
 
+  //임시 토큰
+  const { tempToken, setTempToken } = useAuthStore();
+
+  // useEffect(() => {
+  //   // 토큰 없으면 서버에서 발급
+  //   if (!tempToken) {
+  //     axios.post('/api/v1/auth/token-register', {})
+  //       .then(response => {
+  //         const newToken = response.data.data.accessToken;
+  //         setTempToken(newToken);
+  //         console.log('임시 토큰 발급 성공:', newToken);
+  //       })
+  //       .catch(error => {
+  //         console.error('임시 토큰 발급 실패:', error);
+  //       });
+  //   }
+  // }, [tempToken, setTempToken]);
 
   return (
     <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative overflow-hidden'>
+      <p>{tempToken}</p>
       <Header />
       <div className='flex-1 relative w-full'>
         <div className='absolute inset-0'>
