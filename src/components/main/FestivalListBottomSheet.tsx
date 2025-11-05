@@ -2,26 +2,30 @@ import React from 'react'
 import RoomItem from '../room/RoomItem'
 import BottomSheet from '../common/BottomSheet'
 import { useNavigate } from 'react-router-dom';
+import type { Festival } from '@/types';
 
 type FestivalListBottomSheetProps = {
+  festivalData?: Festival;
   isShowBottomSheet: boolean;
   onHideBottomSheet: () => void;
   onShowFestivalModal: () => void;
 }
 
-export default function FestivalListBottomSheet(
-  { isShowBottomSheet,
-    onHideBottomSheet,
-    onShowFestivalModal
-  }: FestivalListBottomSheetProps
+export default function FestivalListBottomSheet({
+  festivalData,
+  isShowBottomSheet,
+  onHideBottomSheet,
+  onShowFestivalModal
+}: FestivalListBottomSheetProps
 ) {
   const navigate = useNavigate()
 
   const handleClick = () => {
     // navigate(`/room-list/${id}`)
     navigate(`/create-room/1`)
-
   }
+
+  if (!festivalData) return null;
 
   return (
     <BottomSheet
@@ -31,7 +35,7 @@ export default function FestivalListBottomSheet(
       <div className='flex items-center justify-between gap-4'>
         <div className='flex flex-col'>
           <div className='flex gap-1'>
-            <p>서울 바비큐페스타</p>
+            <p>{festivalData.name}</p>
             <span className='border'
               onClick={(e) => {
                 e.stopPropagation();

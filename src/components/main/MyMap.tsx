@@ -4,6 +4,10 @@ import type { MapRef } from 'react-map-gl/mapbox';
 import type { FeatureCollection, Point } from 'geojson';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { metersToPixels } from '@/\butils/map';
+import type { Festival } from '@/types';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { useDebounce } from 'use-debounce';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -40,21 +44,13 @@ const testPoints = [
   { id: 30, lat: 37.5662, lon: 126.9776, name: '분식 DD' },
 ];
 
-// GeoJSON 변환
-const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = {
-  type: 'FeatureCollection',
-  features: testPoints.map(({ id, lat, lon, name }) => ({
-    type: 'Feature', //MapBox용
-    properties: { id, name }, //Point 외의 정보 저장용
-    geometry: { type: 'Point', coordinates: [lon, lat] },
-  })),
-};
-
 type MyMapProps = {
+  onSelectFestival: (data: Festival) => void;
   onShowBottomSheet: () => void;
 }
 
-export default function MyMap({ onShowBottomSheet }: MyMapProps) {
+export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProps) {
+
   //TODO: 유저 현재 위치로 변경
   const [viewport, setViewport] = useState({
     latitude: 37.5665,
@@ -62,19 +58,82 @@ export default function MyMap({ onShowBottomSheet }: MyMapProps) {
     zoom: 16,
   });
 
+  const [debouncedViewport] = useDebounce(viewport, 1000);
   //navigator.geolocation.getCurrentPositio
 
   const mapRef = useRef<MapRef>(null);
 
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['festivals', debouncedViewport.latitude, debouncedViewport.longitude, debouncedViewport.zoom],
+    queryFn: async () => {
+      const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
+      const res = await axios.get('/api/festival/locationBasedList2', {
+        params: {
+          serviceKey: API_KEY,
+          _type: 'json',
+          pageNo: 1,
+          numOfRows: 20,
+          MobileApp: 'AppTest',
+          MobileOS: 'ETC',
+          contentTypeId: 15,
+          mapX: debouncedViewport.longitude,
+          mapY: debouncedViewport.latitude,
+          radius: 10000 / debouncedViewport.zoom,
+        },
+      });
+
+      const items = res.data?.response?.body?.items?.item ?? [];
+
+      console.log('Fetched festival data:', res.data.response.body.items);
+      return items.map((item: any): Festival => ({
+        id: String(item.contentid),
+        name: item.title ?? '',
+        longitude: parseFloat(item.mapx ?? 0),
+        latitude: parseFloat(item.mapy ?? 0),
+        mainImage: item.firstimage ?? '',
+        date: item.eventstartdate
+          ? `${item.eventstartdate} ~ ${item.eventenddate}`
+          : '',
+        address: item.addr1 ?? '',
+        category: item.cat3 ?? '',
+        region: item.areacode ?? '',
+      }));
+    },
+    refetchOnWindowFocus: false, // 창 포커스 시 재호출 방지
+    staleTime: 1000 * 60 * 2,    // 2분간 캐시 유지
+  });
+
+  // GeoJSON 변환
+  const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = {
+    type: 'FeatureCollection',
+    features:
+      data?.map((festival: Festival) => ({
+        type: 'Feature', //MapBox용
+        properties: { id: festival.id, name: festival.name }, //Point 외의 정보 저장용
+        geometry: {
+          type: 'Point',
+          coordinates: [festival.longitude, festival.latitude],
+        },
+      })) ?? [],
+  };
+
+  // if (isLoading) return <p>로딩중...</p>
+  if (isError) {
+    console.error(error);
+    return <p>에러 발생!!</p>
+  }
 
   return (
     <div className='relative w-full h-full'>
+      {/* {data && data.map((d: Festival) => (
+        <p>{d.name}</p>
+      ))} */}
       <Map
         ref={mapRef} //flyTo용 설정
         initialViewState={viewport} //시작 위치
         mapStyle='mapbox://styles/mapbox/streets-v11' //맵 스타일
         mapboxAccessToken={MAPBOX_TOKEN} //토큰
-        onMove={(evt) => setViewport(evt.viewState)} //줌 레벨과 실제 거리 계산용
+        onMoveEnd={(evt) => setViewport(evt.viewState)} //줌 레벨과 실제 거리 계산용
         style={{ width: '100%', height: '100%' }}
         interactiveLayerIds={['clusters', 'unclustered-point']}
         onClick={(evt) => {
@@ -96,11 +155,21 @@ export default function MyMap({ onShowBottomSheet }: MyMapProps) {
           }
           else if (point && point.geometry.type === 'Point') {
             const [longitude, latitude] = point.geometry.coordinates;
+
+            const selectedFestival = data?.find(
+              (f: Festival) => f.id === point.properties?.id
+            );
+
+            if (selectedFestival) {
+              onSelectFestival(selectedFestival);
+            }
+
             mapRef.current?.flyTo({
               center: [longitude, latitude],
               zoom: 20,
               offset: [0, -window.innerHeight * 0.18],
             });
+
             onShowBottomSheet();
           }
 
@@ -172,6 +241,6 @@ export default function MyMap({ onShowBottomSheet }: MyMapProps) {
         </Source>
       </Map>
 
-    </div>
+    </div >
   );
 }
