@@ -43,7 +43,6 @@ function App() {
   return (
     <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative overflow-hidden'>
       <p>{tempToken}</p>
-      <Header />
       <div className='flex-1 relative w-full'>
         <div className='absolute inset-0'>
           <Routes>

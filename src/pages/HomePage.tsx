@@ -1,3 +1,4 @@
+import Header from '@/components/layout/Header';
 import FestivalInfoModal from '@/components/main/FestivalInfoModal';
 import FestivalListBottomSheet from '@/components/main/FestivalListBottomSheet';
 import MyMap from '@/components/main/MyMap'
@@ -15,6 +16,7 @@ export default function HomePage() {
 
   return (
     <>
+      <Header showLogo={true} showSearch={true} />
       <MyMap onShowBottomSheet={() => setShowBottomSheet(true)}
         onSelectFestival={(data: Festival) => handleSelectFestival(data)} />
       {/* <MyMapWithProvinces /> */}

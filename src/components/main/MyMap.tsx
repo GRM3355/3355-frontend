@@ -84,7 +84,6 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
 
       const items = res.data?.response?.body?.items?.item ?? [];
 
-      console.log('Fetched festival data:', res.data.response.body.items);
       return items.map((item: any): Festival => ({
         id: String(item.contentid),
         name: item.title ?? '',
@@ -100,7 +99,9 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
       }));
     },
     refetchOnWindowFocus: false, // 창 포커스 시 재호출 방지
-    staleTime: 1000 * 60 * 2,    // 2분간 캐시 유지
+    staleTime: 1000 * 60 * 2, // 2분간 캐시 유지
+    gcTime: 1000 * 60 * 10, // 10분 후 가비지 컬렉션
+    placeholderData: (prevData) => prevData, //이전 데이터 유지
   });
 
   // GeoJSON 변환
