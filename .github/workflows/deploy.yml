@@ -22,8 +22,6 @@ jobs:
         run: npm install 
 
       - name: Build Project
-        # 현재 발생한 TS 에러가 해결되지 않으면 배포는 실패하지만,
-        # 스크립트 자체는 프로젝트의 정식 빌드 명령어를 사용합니다.
         run: npm run build 
 
       - name: Configure AWS Credentials
