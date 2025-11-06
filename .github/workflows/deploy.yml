@@ -1,0 +1,44 @@
+# .github/workflows/deploy.yml 파일에 아래 내용을 저장합니다.
+name: FE Deploy to S3 & CloudFront
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # FE 프로젝트 환경에 맞춰 설정
+
+      - name: Install Dependencies
+        run: npm install 
+
+      - name: Build Project
+        # 현재 발생한 TS 에러가 해결되지 않으면 배포는 실패하지만,
+        # 스크립트 자체는 프로젝트의 정식 빌드 명령어를 사용합니다.
+        run: npm run build 
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Deploy to S3
+        run: |
+          # Vite의 기본 빌드 폴더인 'dist'를 사용합니다.
+          aws s3 sync ./dist s3://www.zony.kro.kr --delete
+
+      - name: Invalidate CloudFront Cache
+        run: |
+          # CloudFront ID 사용
+          aws cloudfront create-invalidation --distribution-id EMI7Z9QR7FLVW --paths "/*"
