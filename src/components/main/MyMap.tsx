@@ -64,7 +64,7 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
   const mapRef = useRef<MapRef>(null);
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['festivals', debouncedViewport.latitude, debouncedViewport.longitude, debouncedViewport.zoom],
+    queryKey: ['festivals-by-location', debouncedViewport.latitude, debouncedViewport.longitude, debouncedViewport.zoom],
     queryFn: async () => {
       const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
       const res = await axios.get('/api/festival/locationBasedList2', {
