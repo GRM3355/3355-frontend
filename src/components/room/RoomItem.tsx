@@ -1,8 +1,9 @@
 import { useConfirmStore } from "@/stores/useConfirmStore";
+import type { ChatRoomAPI } from "@/types/api";
 import { useNavigate } from "react-router-dom";
 
 type RoomItemProps = {
-  room: string;
+  room: ChatRoomAPI;
 }
 
 export default function RoomItem({ room }: RoomItemProps) {
@@ -27,7 +28,7 @@ export default function RoomItem({ room }: RoomItemProps) {
       <img src="/testImg.png" alt="Festival Image"
         className="h-full aspect-square rounded-full" />
       <span className="flex-1">
-        {room}
+        {room.title}
       </span>
       <span>현재 참여자수</span>
     </div>

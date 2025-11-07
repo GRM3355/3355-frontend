@@ -82,6 +82,7 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
         },
       });
 
+      console.log("지도 기반 축제 데이터:", res.data);
       const items = res.data?.response?.body?.items?.item ?? [];
 
       return items.map((item: any): Festival => ({
@@ -228,7 +229,7 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
             filter={['!', ['has', 'point_count']]}
             paint={{
               'circle-color': '#f87171',
-              'circle-radius': metersToPixels(10, viewport.latitude, viewport.zoom), // 10m 기준
+              'circle-radius': metersToPixels(100, viewport.latitude, viewport.zoom), // 10m 기준
               'circle-stroke-width': 2,
               'circle-stroke-color': '#fff',
               'circle-opacity': 0.2,

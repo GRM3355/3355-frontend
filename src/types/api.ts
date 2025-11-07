@@ -9,3 +9,4 @@ export type ChatRoomAPI = {
   // lat: number;
   // lon: number;
 };
+

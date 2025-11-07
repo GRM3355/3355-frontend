@@ -17,6 +17,7 @@ export default defineConfig({
       '/api/festival': {
         target: 'https://apis.data.go.kr/B551011/KorService2',
         changeOrigin: true,
+        secure: false,
         rewrite: (path) => path.replace(/^\/api\/festival/, ''),
       },
       '/api': {

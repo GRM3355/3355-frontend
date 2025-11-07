@@ -1,3 +1,4 @@
+import { useGetFestivals } from '@/hooks/useFestival';
 import { getFestivals } from '@/api/festival';
 import FestivalItem from '@/components/festival/FestivalItem';
 import type { Festival } from '@/types';
@@ -26,11 +27,7 @@ export const regions = [
 
 
 export default function FestivalListPage() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["festivals"],
-    queryFn: getFestivals,
-    staleTime: 10 * 60 * 1000, // 10분 동안 캐시 유지
-  });
+  const { data, isLoading, isError } = useGetFestivals();
 
   if (isLoading) return <p>로딩 중...</p>;
   if (isError) return <p>에러 발생!</p>;

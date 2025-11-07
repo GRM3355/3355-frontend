@@ -15,6 +15,7 @@ import useAuthStore from './stores/useAuthStore'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import SearchPage from './pages/SearchPage'
+import EchoTest from './pages/EchoTest'
 
 
 function App() {
@@ -84,6 +85,7 @@ function App() {
             <Route path='/chat/:id' element={<ChatPage />} />
             <Route path='/report' element={<ReportPage />} />
             <Route path='/search' element={<SearchPage />} />
+            <Route path='echo' element={<EchoTest />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </div>

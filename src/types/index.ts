@@ -10,10 +10,10 @@ export type Festival = {
   region?: string;
 };
 
-export type ChatRoom = {
-  id: string;
-  festivalId: string;
-  name: string;
-  creatorId: string;
-  participantsCount: number;
-};
+// export type ChatRoom = {
+//   id: string;
+//   festivalId: string;
+//   title: string;
+//   creatorId: string;
+//   participantsCount: number;
+// };

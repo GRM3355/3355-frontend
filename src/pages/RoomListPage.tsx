@@ -1,10 +1,9 @@
-import { getRooms } from "@/api/festival";
+import { useGetFestivalByFestivalId, useGetRoomsByFestivalId } from "@/hooks/useFestival";
 import FestivalInfoModal from "@/components/main/FestivalInfoModal";
 import RoomItem from "@/components/room/RoomItem";
-import type { ChatRoomAPI } from "@/types/api";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import type { ChatRoomAPI } from "@/types/api";
 
 const testRoom = [
   "채팅방 1",
@@ -23,24 +22,35 @@ const testRoom = [
 export default function RoomListPage() {
   const { id } = useParams();
   const [isShowFestivalModal, setShowFestivalModal] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-  if (!id) return <p>잘못된 접근입니다.</p>;
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['rooms', id],
-    queryFn: () => getRooms(id),
-    enabled: !!id, // id가 있을 때에만 쿼리 실행
-  });
+  const {
+    data: roomDatas,
+    isLoading: isRoomLoading,
+    isError: isRoomError,
+  } = useGetRoomsByFestivalId(id || "");
 
-  if (isLoading) return <p>로딩 중...</p>;
-  if (isError) return <p>에러 발생!</p>;
+  const {
+    data: festivalData,
+    isLoading: isFestivalLoading,
+    isError: isFestivalError,
+  } = useGetFestivalByFestivalId(id || "");
+
+  if (isRoomLoading || isFestivalLoading) return <div>로딩 중...</div>;
+  if (isRoomError || isFestivalError) return <div>에러 발생!</div>;
+  if (!festivalData) return <div>축제 정보를 불러올 수 없습니다.</div>;
+
+  const handleCreateRoom = () => {
+    navigate(`/create-room/${festivalData.id}`);
+  }
 
   return (
     <div className="flex flex-col h-full">
       <div>
         <p>{id}</p>
-        <p>{data}</p>
+        {/* <p>{data}</p> */}
         <div className="flex gap-2">
-          <p>서울 바비큐페스타</p>
+          <p>{festivalData.name}</p>
           <span className="border"
             onClick={() => setShowFestivalModal(true)}>정보</span>
         </div>
@@ -51,14 +61,18 @@ export default function RoomListPage() {
 
 
       <div className='flex flex-col h-full gap-4 overflow-y-auto p-4'>
-        {data.map((room: any) => (
-          <RoomItem room={room} />
+        {roomDatas.map((room: ChatRoomAPI) => (
+          <RoomItem key={room.chatRoomId} room={room} />
         ))}
       </div>
 
-      <div className="absolute bottom-8 right-8 border bg-white">채팅방 생성</div>
-      <FestivalInfoModal isOpen={isShowFestivalModal}
+      <div className="absolute bottom-8 right-8 border bg-white"
+        onClick={() => handleCreateRoom()}>채팅방 생성</div>
+      <FestivalInfoModal
+        festivalData={festivalData}
+        isOpen={isShowFestivalModal}
         onClose={() => setShowFestivalModal(false)} />
+
     </div>
   )
 }

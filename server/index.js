@@ -3,17 +3,23 @@ import { MongoClient } from "mongodb";
 import cors from "cors";
 import dotenv from "dotenv";
 import festivalRouter from "./routes/festival.js";
+import roomRouter from "./routes/room.js";
+import userRouter from "./routes/user.js";
 
 //.env.local 파일 사용하려면 path 지정필요
 dotenv.config({ path: ".env.local" });
 
 const app = express();
 app.use(cors()); //CORS 막힘 방지
+app.use(express.json()); //J
 
 const uri = process.env.MONGODB_URI;
 export const client = new MongoClient(uri);
 
+app.use("/api/user", userRouter);
 app.use("/api/festival", festivalRouter);
+app.use("/api/room", roomRouter);
+
 
 app.get("/api/user", async (_, res) => {
   try {

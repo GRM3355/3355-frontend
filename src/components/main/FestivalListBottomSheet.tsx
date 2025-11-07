@@ -3,6 +3,8 @@ import RoomItem from '../room/RoomItem'
 import BottomSheet from '../common/BottomSheet'
 import { useNavigate } from 'react-router-dom';
 import type { Festival } from '@/types';
+import { useGetRoomsByFestivalId } from '@/hooks/useFestival';
+import type { ChatRoomAPI } from '@/types/api';
 
 type FestivalListBottomSheetProps = {
   festivalData?: Festival;
@@ -19,6 +21,13 @@ export default function FestivalListBottomSheet({
 }: FestivalListBottomSheetProps
 ) {
   const navigate = useNavigate()
+
+  const {
+    data: roomDatas,
+    isLoading: isRoomLoading,
+    isError: isRoomError,
+  } = useGetRoomsByFestivalId(festivalData?.id || "");
+
 
   const handleClick = () => {
     // navigate(`/room-list/${id}`)
@@ -49,7 +58,9 @@ export default function FestivalListBottomSheet({
       </div>
 
       <div>
-        <RoomItem room='채팅방 이름' />
+        {roomDatas.map((room: ChatRoomAPI) => (
+          <RoomItem key={room.chatRoomId} room={room} />
+        ))}
       </div>
 
     </BottomSheet>
