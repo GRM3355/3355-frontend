@@ -1,18 +1,8 @@
+import { getFestivals } from '@/api/festival';
 import FestivalItem from '@/components/festival/FestivalItem';
-import { useState } from 'react';
-
-const testFestivals = [
-  '한강불꽃축제',
-  '부산국제영화제',
-  '서울세계불꽃놀이',
-  '춘천마임축제',
-  '전주국제영화제',
-  '대구치맥페스티벌',
-  '제주불꽃놀이',
-  '안동국제탈춤페스티벌',
-  '광주비엔날레',
-  '부산바다축제'
-];
+import type { Festival } from '@/types';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
 export const regions = [
   '서울',
@@ -36,18 +26,28 @@ export const regions = [
 
 
 export default function FestivalListPage() {
-  const [showRegions, setShowRegions] = useState<boolean>(false);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["festivals"],
+    queryFn: getFestivals,
+    staleTime: 10 * 60 * 1000, // 10분 동안 캐시 유지
+  });
 
-  const visibleRegions = showRegions ? regions : regions.slice(0, 6);
+  if (isLoading) return <p>로딩 중...</p>;
+  if (isError) return <p>에러 발생!</p>;
 
   return (
     <div className='flex flex-col h-full '>
       {/* 지역 필터링 */}
-      <div className='flex flex-wrap gap-4 p-4 border-b shrink-0'>
+      {/* <div className='flex flex-wrap gap-4 p-4 border-b shrink-0'>
         {visibleRegions.map((region) => (
           <span key={region}>{region}</span>
         ))}
         <span onClick={() => setShowRegions(!showRegions)}>더보기</span>
+      </div> */}
+      <div className='flex gap-4 p-4 overflow-x-auto whitespace-nowrap'>
+        {regions.map((region) => (
+          <span key={region} className='p-2'>{region}</span>
+        ))}
       </div>
 
       {/* 정렬 */}
@@ -61,8 +61,8 @@ export default function FestivalListPage() {
 
       {/* 진행중인 페스티벌 */}
       <div className='flex flex-col h-full gap-4 overflow-y-auto p-4'>
-        {testFestivals.map((f) => (
-          <FestivalItem key={f} name={f} />
+        {data.map((festival: Festival) => (
+          <FestivalItem key={festival.id} festivalData={festival} />
         ))}
       </div>
     </div>

@@ -1,5 +1,8 @@
+import { getRooms } from "@/api/festival";
 import FestivalInfoModal from "@/components/main/FestivalInfoModal";
 import RoomItem from "@/components/room/RoomItem";
+import type { ChatRoomAPI } from "@/types/api";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -21,10 +24,21 @@ export default function RoomListPage() {
   const { id } = useParams();
   const [isShowFestivalModal, setShowFestivalModal] = useState<boolean>(false);
 
+  if (!id) return <p>잘못된 접근입니다.</p>;
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['rooms', id],
+    queryFn: () => getRooms(id),
+    enabled: !!id, // id가 있을 때에만 쿼리 실행
+  });
+
+  if (isLoading) return <p>로딩 중...</p>;
+  if (isError) return <p>에러 발생!</p>;
+
   return (
     <div className="flex flex-col h-full">
       <div>
         <p>{id}</p>
+        <p>{data}</p>
         <div className="flex gap-2">
           <p>서울 바비큐페스타</p>
           <span className="border"
@@ -37,12 +51,12 @@ export default function RoomListPage() {
 
 
       <div className='flex flex-col h-full gap-4 overflow-y-auto p-4'>
-        {testRoom.map(room => (
+        {data.map((room: any) => (
           <RoomItem room={room} />
         ))}
       </div>
 
-      <div className="absolute bottom-8 right-8 border">채팅방 생성</div>
+      <div className="absolute bottom-8 right-8 border bg-white">채팅방 생성</div>
       <FestivalInfoModal isOpen={isShowFestivalModal}
         onClose={() => setShowFestivalModal(false)} />
     </div>

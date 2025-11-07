@@ -6,25 +6,16 @@ type AuthStore = {
   setTempToken: (token: string) => void;
 }
 
-const useAuthStore = create<AuthStore>((set) => ({
-  tempToken: '',
-
-  setTempToken: (token: string) => set({ tempToken: token }),
-}
-
-));
-
-// const useAuthStore = create<AuthStore>()(
-//   persist(
-//     (set) => ({
-//       tempToken: '',
-//       setTempToken: (token) => set({ tempToken: token }),
-//     }),
-//     {
-//       name: 'auth-storage',
-//       getStorage: () => localStorage,
-//     }
-//   )
-// );
+const useAuthStore = create<AuthStore>()(
+  persist(
+    (set) => ({
+      tempToken: '',
+      setTempToken: (token: string) => set({ tempToken: token }),
+    }),
+    {
+      name: 'auth-storage',
+    }
+  )
+);
 
 export default useAuthStore;

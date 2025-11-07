@@ -63,66 +63,74 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
 
   const mapRef = useRef<MapRef>(null);
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['festivals-by-location', debouncedViewport.latitude, debouncedViewport.longitude, debouncedViewport.zoom],
-    queryFn: async () => {
-      const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
-      const res = await axios.get('/api/festival/locationBasedList2', {
-        params: {
-          serviceKey: API_KEY,
-          _type: 'json',
-          pageNo: 1,
-          numOfRows: 20,
-          MobileApp: 'AppTest',
-          MobileOS: 'ETC',
-          contentTypeId: 15,
-          mapX: debouncedViewport.longitude,
-          mapY: debouncedViewport.latitude,
-          radius: 10000 / debouncedViewport.zoom,
-        },
-      });
+  // const { data, isLoading, isError, error } = useQuery({
+  //   queryKey: ['festivals-by-location', debouncedViewport.latitude, debouncedViewport.longitude, debouncedViewport.zoom],
+  //   queryFn: async () => {
+  //     const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
+  //     const res = await axios.get('/api/festival/locationBasedList2', {
+  //       params: {
+  //         serviceKey: API_KEY,
+  //         _type: 'json',
+  //         pageNo: 1,
+  //         numOfRows: 20,
+  //         MobileApp: 'AppTest',
+  //         MobileOS: 'ETC',
+  //         contentTypeId: 15,
+  //         mapX: debouncedViewport.longitude,
+  //         mapY: debouncedViewport.latitude,
+  //         radius: 10000 / debouncedViewport.zoom,
+  //       },
+  //     });
 
-      const items = res.data?.response?.body?.items?.item ?? [];
+  //     const items = res.data?.response?.body?.items?.item ?? [];
 
-      return items.map((item: any): Festival => ({
-        id: String(item.contentid),
-        name: item.title ?? '',
-        longitude: parseFloat(item.mapx ?? 0),
-        latitude: parseFloat(item.mapy ?? 0),
-        mainImage: item.firstimage ?? '',
-        date: item.eventstartdate
-          ? `${item.eventstartdate} ~ ${item.eventenddate}`
-          : '',
-        address: item.addr1 ?? '',
-        category: item.cat3 ?? '',
-        region: item.areacode ?? '',
-      }));
-    },
-    refetchOnWindowFocus: false, // 창 포커스 시 재호출 방지
-    staleTime: 1000 * 60 * 2, // 2분간 캐시 유지
-    gcTime: 1000 * 60 * 10, // 10분 후 가비지 컬렉션
-    placeholderData: (prevData) => prevData, //이전 데이터 유지
-  });
+  //     return items.map((item: any): Festival => ({
+  //       id: String(item.contentid),
+  //       name: item.title ?? '',
+  //       longitude: parseFloat(item.mapx ?? 0),
+  //       latitude: parseFloat(item.mapy ?? 0),
+  //       mainImage: item.firstimage ?? '',
+  //       date: item.eventstartdate
+  //         ? `${item.eventstartdate} ~ ${item.eventenddate}`
+  //         : '',
+  //       address: item.addr1 ?? '',
+  //       category: item.cat3 ?? '',
+  //       region: item.areacode ?? '',
+  //     }));
+  //   },
+  //   refetchOnWindowFocus: false, // 창 포커스 시 재호출 방지
+  //   staleTime: 1000 * 60 * 2, // 2분간 캐시 유지
+  //   gcTime: 1000 * 60 * 10, // 10분 후 가비지 컬렉션
+  //   placeholderData: (prevData) => prevData, //이전 데이터 유지
+  // });
 
   // GeoJSON 변환
+  // const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = {
+  //   type: 'FeatureCollection',
+  //   features:
+  //     data?.map((festival: Festival) => ({
+  //       type: 'Feature', //MapBox용
+  //       properties: { id: festival.id, name: festival.name }, //Point 외의 정보 저장용
+  //       geometry: {
+  //         type: 'Point',
+  //         coordinates: [festival.longitude, festival.latitude],
+  //       },
+  //     })) ?? [],
+  // };
+
   const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = {
     type: 'FeatureCollection',
-    features:
-      data?.map((festival: Festival) => ({
-        type: 'Feature', //MapBox용
-        properties: { id: festival.id, name: festival.name }, //Point 외의 정보 저장용
-        geometry: {
-          type: 'Point',
-          coordinates: [festival.longitude, festival.latitude],
-        },
-      })) ?? [],
+    features: testPoints.map(({ id, lat, lon, name }) => ({
+      type: 'Feature', //MapBox용
+      properties: { id, name }, //Point 외의 정보 저장용
+      geometry: { type: 'Point', coordinates: [lon, lat] },
+    })),
   };
-
   // if (isLoading) return <p>로딩중...</p>
-  if (isError) {
-    console.error(error);
-    return <p>에러 발생!!</p>
-  }
+  // if (isError) {
+  //   console.error(error);
+  //   return <p>에러 발생!!</p>
+  // }
 
   return (
     <div className='relative w-full h-full'>
@@ -132,11 +140,12 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
       <Map
         ref={mapRef} //flyTo용 설정
         initialViewState={viewport} //시작 위치
-        mapStyle='mapbox://styles/mapbox/streets-v11' //맵 스타일
+        mapStyle='mapbox://styles/mapbox/streets-v12' //맵 스타일
         mapboxAccessToken={MAPBOX_TOKEN} //토큰
         onMoveEnd={(evt) => setViewport(evt.viewState)} //줌 레벨과 실제 거리 계산용
         style={{ width: '100%', height: '100%' }}
         interactiveLayerIds={['clusters', 'unclustered-point']}
+        language='ko'
         onClick={(evt) => {
 
           const features = evt.features;
@@ -157,13 +166,13 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
           else if (point && point.geometry.type === 'Point') {
             const [longitude, latitude] = point.geometry.coordinates;
 
-            const selectedFestival = data?.find(
-              (f: Festival) => f.id === point.properties?.id
-            );
+            // const selectedFestival = data?.find(
+            //   (f: Festival) => f.id === point.properties?.id
+            // );
 
-            if (selectedFestival) {
-              onSelectFestival(selectedFestival);
-            }
+            // if (selectedFestival) {
+            //   onSelectFestival(selectedFestival);
+            // }
 
             mapRef.current?.flyTo({
               center: [longitude, latitude],
