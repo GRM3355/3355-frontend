@@ -14,11 +14,11 @@ export default defineConfig({
   server: {
     port: 8082,
     proxy: {
-      // '/api/festival': {
-      //   target: 'https://apis.data.go.kr/B551011/KorService2',
-      //   changeOrigin: true,
-      //   rewrite: (path) => path.replace(/^\/api\/festival/, ''),
-      // },
+      '/api/festival': {
+        target: 'https://apis.data.go.kr/B551011/KorService2',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/festival/, ''),
+      },
       '/api': {
         target: 'https://api.zony.kro.kr',
         changeOrigin: true,
