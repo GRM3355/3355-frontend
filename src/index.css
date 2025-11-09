@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+/* 스크롤은 가능하지만 스크롤바는 안 보이게 */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

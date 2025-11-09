@@ -14,3 +14,4 @@ export type PostRoomParams = {
   title: string;
   token: string;
 };
+

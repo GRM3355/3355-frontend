@@ -33,3 +33,14 @@ export type RoomAPI = {
   festivalTitle: string;    // 축제 이름
   participantCount: number; // 현재 참여자 수
 };
+
+export type SearchResponse = {
+  festivals: {
+    totalCount: number;
+    data: FestivalAPI[];
+  };
+  chatRooms: {
+    totalCount: number;
+    data: RoomAPI[];
+  };
+};

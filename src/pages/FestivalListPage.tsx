@@ -7,42 +7,38 @@ import { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import type { FestivalAPI } from '@/types/api';
 
-export const regions = [
-  '서울',
-  '경기',
-  '인천',
-  '강원',
-  '충북',
-  '충남',
-  '전북',
-  '전남',
-  '경북',
-  '경남',
-  '제주',
-  '세종',
-  '대전',
-  '대구',
-  '광주',
-  '부산',
-  '울산',
-];
+export const REGIONS = [
+  { code: "SEOUL", name: "서울" },
+  { code: "GYEONGGI", name: "경기/인천" },
+  { code: "CHUNGCHEONG", name: "충청/대전/세종" },
+  { code: "GANGWON", name: "강원" },
+  { code: "GYEONGBUK", name: "경북/대구/울산" },
+  { code: "GYEONGNAM", name: "경남/부산" },
+  { code: "JEOLLA", name: "전라/광주" },
+  { code: "JEJU", name: "제주" },
+]
 
 
 export default function FestivalListPage() {
   const { data, isLoading, isError } = useGetFestivals();
-  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<string>('SEOUL');
 
   const handleSelectRegion = (region: string) => {
     setSelectedRegion(region);
   };
 
+  const filteredFestivals = data?.content.filter(
+    (f) => f.region == selectedRegion
+  );
 
   if (isLoading) return <p>로딩 중...</p>;
   if (isError) return <p>에러 발생!</p>;
 
+
+
   return (
     <>
-      <Header showLogo={true} showSearch={true} />
+      <Header showLogo={true} showUser={true} showSearch={true} />
       <div className='flex flex-col h-full '>
         {/* 지역 필터링 */}
         {/* <div className='flex flex-wrap gap-4 p-4 border-b shrink-0'>
@@ -51,13 +47,13 @@ export default function FestivalListPage() {
         ))}
         <span onClick={() => setShowRegions(!showRegions)}>더보기</span>
       </div> */}
-        <div className='flex gap-4 p-4 overflow-x-auto whitespace-nowrap'>
-          {regions.map((region) => (
-            <span key={region}
+        <div className='flex gap-4 p-4 overflow-x-auto whitespace-nowrap scrollbar-hide'>
+          {REGIONS.map((region) => (
+            <span key={region.code}
               className={`p-2 cursor-pointer 
-                ${selectedRegion === region ? "text-blue-500 border-b border-blue-500" : "text-black"}`}
-              onClick={() => handleSelectRegion(region)}>
-              {region}</span>
+                ${selectedRegion === region.code ? "text-blue-500 border-b border-blue-500" : "text-black"}`}
+              onClick={() => handleSelectRegion(region.code)}>
+              {region.name}</span>
           ))}
         </div>
 
@@ -72,7 +68,7 @@ export default function FestivalListPage() {
 
         {/* 진행중인 페스티벌 */}
         <div className='flex flex-col h-full gap-2 overflow-y-auto p-4'>
-          {data?.content.map((festival: FestivalAPI) => (
+          {filteredFestivals?.map((festival: FestivalAPI) => (
             <FestivalItem key={festival.festivalId} festivalData={festival} />
           ))}
         </div>
