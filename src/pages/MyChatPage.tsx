@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 export default function MyChatPage() {
   const { id } = useParams();
   const { tempToken } = useAuthStore();
-  const { data, isLoading, isError } = useGetRoomsByToken(tempToken);
+  const { data, isLoading, isError } = useGetRoomsByToken({ token: tempToken });
   console.log("내 채팅방 목록:", data);
 
   if (isLoading) return <div>로딩 중...</div>;

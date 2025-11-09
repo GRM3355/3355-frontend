@@ -41,7 +41,7 @@ export const createRoom = async ({ festivalId, title, token }: PostRoomParams) =
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
-        }
+        },
       }
     );
     console.log('응답:', data);
@@ -62,12 +62,16 @@ export const createRoom = async ({ festivalId, title, token }: PostRoomParams) =
 //   const res = await axios.get(`http://localhost:3000/api/room/user/${userId}`);
 //   return res.data.data;
 // };
-export const getRoomsByUserId = async (token: string) => {
+export const getRoomsByUserId = async ({ queryKey }: any) => {
+  const [, params] = queryKey;
+  const { token, ...queryParams } = params;
+
   const res = await axios.get('/api/v1/chat-rooms/my-rooms',
     {
       headers: {
         'Authorization': `Bearer ${token}`,
-      }
+      },
+      params: queryParams
     });
   return res.data.data;
 };
