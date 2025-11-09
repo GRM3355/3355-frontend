@@ -1,8 +1,9 @@
 import type { Festival } from '@/types';
 import Modal from '../common/Modal'
+import type { FestivalAPI } from '@/types/api';
 
 type FestivalInfoModalProps = {
-  festivalData?: Festival;
+  festivalData?: FestivalAPI;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -15,11 +16,11 @@ export default function FestivalInfoModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose}
       className='p-6 rounded-2xl'>
-      <p>{festivalData.name}</p>
+      <p>{festivalData.title}</p>
       {/* <img src='/testImg.png' alt='Festival Image'></img> */}
-      <img src={festivalData.mainImage} alt='Festival Image'></img>
-      <p>날짜: {festivalData.date}</p>
-      <p>주소: {festivalData.address}</p>
+      <img src={festivalData.firstImage} alt='Festival Image'></img>
+      <p>날짜: {festivalData.eventStartDate} - {festivalData.eventEndDate}</p>
+      <p>주소: {festivalData.addr1}</p>
     </Modal>
   )
 }

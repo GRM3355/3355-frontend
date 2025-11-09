@@ -1,9 +1,9 @@
 import { useConfirmStore } from "@/stores/useConfirmStore";
-import type { ChatRoomAPI } from "@/types/api";
+import type { ChatRoomAPI, RoomAPI } from "@/types/api";
 import { useNavigate } from "react-router-dom";
 
 type RoomItemProps = {
-  room: ChatRoomAPI;
+  room: RoomAPI;
 }
 
 export default function RoomItem({ room }: RoomItemProps) {

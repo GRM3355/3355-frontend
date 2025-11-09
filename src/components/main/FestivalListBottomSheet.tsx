@@ -4,10 +4,10 @@ import BottomSheet from '../common/BottomSheet'
 import { useNavigate } from 'react-router-dom';
 import type { Festival } from '@/types';
 import { useGetRoomsByFestivalId } from '@/hooks/useFestival';
-import type { ChatRoomAPI } from '@/types/api';
+import type { ChatRoomAPI, FestivalAPI, RoomAPI } from '@/types/api';
 
 type FestivalListBottomSheetProps = {
-  festivalData?: Festival;
+  festivalData?: FestivalAPI;
   isShowBottomSheet: boolean;
   onHideBottomSheet: () => void;
   onShowFestivalModal: () => void;
@@ -26,7 +26,7 @@ export default function FestivalListBottomSheet({
     data: roomDatas,
     isLoading: isRoomLoading,
     isError: isRoomError,
-  } = useGetRoomsByFestivalId(festivalData?.id || "");
+  } = useGetRoomsByFestivalId(festivalData?.festivalId);
 
 
   const handleClick = () => {
@@ -36,6 +36,7 @@ export default function FestivalListBottomSheet({
 
   if (!festivalData) return null;
 
+
   return (
     <BottomSheet
       isOpen={isShowBottomSheet}
@@ -44,7 +45,7 @@ export default function FestivalListBottomSheet({
       <div className='flex items-center justify-between gap-4'>
         <div className='flex flex-col'>
           <div className='flex gap-1'>
-            <p>{festivalData.name}</p>
+            <p>{festivalData.title}</p>
             <span className='border'
               onClick={(e) => {
                 e.stopPropagation();
@@ -58,7 +59,7 @@ export default function FestivalListBottomSheet({
       </div>
 
       <div>
-        {roomDatas.map((room: ChatRoomAPI) => (
+        {roomDatas?.content.map((room: RoomAPI) => (
           <RoomItem key={room.chatRoomId} room={room} />
         ))}
       </div>

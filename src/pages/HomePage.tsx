@@ -3,14 +3,15 @@ import FestivalInfoModal from '@/components/main/FestivalInfoModal';
 import FestivalListBottomSheet from '@/components/main/FestivalListBottomSheet';
 import MyMap from '@/components/main/MyMap'
 import type { Festival } from '@/types';
+import type { FestivalAPI } from '@/types/api';
 import { useState } from 'react';
 
 export default function HomePage() {
   const [isShowBottomSheet, setShowBottomSheet] = useState<boolean>(false);
   const [isShowFestivalModal, setShowFestivalModal] = useState<boolean>(false);
-  const [festivalData, setFestivalData] = useState<Festival>();
+  const [festivalData, setFestivalData] = useState<FestivalAPI>();
 
-  const handleSelectFestival = (data: Festival) => {
+  const handleSelectFestival = (data: FestivalAPI) => {
     setFestivalData(data);
   }
 
@@ -18,7 +19,7 @@ export default function HomePage() {
     <>
       <Header showLogo={true} showSearch={true} />
       <MyMap onShowBottomSheet={() => setShowBottomSheet(true)}
-        onSelectFestival={(data: Festival) => handleSelectFestival(data)} />
+        onSelectFestival={(data: FestivalAPI) => handleSelectFestival(data)} />
       {/* <MyMapWithProvinces /> */}
       <FestivalListBottomSheet
         festivalData={festivalData}

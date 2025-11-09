@@ -8,44 +8,14 @@ import type { Festival } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useDebounce } from 'use-debounce';
+import type { FestivalAPI } from '@/types/api';
+import { useGetFestivals } from '@/hooks/useFestival';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const testPoints = [
-  { id: 1, lat: 37.5666, lon: 126.9781, name: '맛집 A' },
-  { id: 2, lat: 37.5664, lon: 126.9782, name: '카페 B' },
-  { id: 3, lat: 37.5667, lon: 126.9779, name: '분식 C' },
-  { id: 4, lat: 37.5663, lon: 126.9778, name: '피자 D' },
-  { id: 5, lat: 37.5665, lon: 126.9783, name: '치킨 E' },
-  { id: 6, lat: 37.5666, lon: 126.9777, name: '떡볶이 F' },
-  { id: 7, lat: 37.5664, lon: 126.9780, name: '샐러드 G' },
-  { id: 8, lat: 37.5667, lon: 126.9782, name: '카페 H' },
-  { id: 9, lat: 37.5663, lon: 126.9779, name: '초밥 I' },
-  { id: 10, lat: 37.5665, lon: 126.9778, name: '버거 J' },
-  { id: 11, lat: 37.5701, lon: 126.9790, name: '커피 K' },
-  { id: 12, lat: 37.5649, lon: 126.9765, name: '국수 L' },
-  { id: 13, lat: 37.5680, lon: 126.9772, name: '김밥 M' },
-  { id: 14, lat: 37.5655, lon: 126.9795, name: '양식 N' },
-  { id: 15, lat: 37.5672, lon: 126.9788, name: '분식 O' },
-  { id: 16, lat: 37.5660, lon: 126.9770, name: '카페 P' },
-  { id: 17, lat: 37.5675, lon: 126.9767, name: '치킨 Q' },
-  { id: 18, lat: 37.5650, lon: 126.9783, name: '피자 R' },
-  { id: 19, lat: 37.5668, lon: 126.9775, name: '커피 S' },
-  { id: 20, lat: 37.5678, lon: 126.9785, name: '샌드위치 T' },
-  { id: 21, lat: 37.5652, lon: 126.9778, name: '김밥 U' },
-  { id: 22, lat: 37.5669, lon: 126.9789, name: '분식 V' },
-  { id: 23, lat: 37.5671, lon: 126.9769, name: '국수 W' },
-  { id: 24, lat: 37.5658, lon: 126.9772, name: '버거 X' },
-  { id: 25, lat: 37.5663, lon: 126.9786, name: '초밥 Y' },
-  { id: 26, lat: 37.5676, lon: 126.9779, name: '커피 Z' },
-  { id: 27, lat: 37.5661, lon: 126.9784, name: '피자 AA' },
-  { id: 28, lat: 37.5670, lon: 126.9773, name: '샐러드 BB' },
-  { id: 29, lat: 37.5656, lon: 126.9781, name: '치킨 CC' },
-  { id: 30, lat: 37.5662, lon: 126.9776, name: '분식 DD' },
-];
 
 type MyMapProps = {
-  onSelectFestival: (data: Festival) => void;
+  onSelectFestival: (data: FestivalAPI) => void;
   onShowBottomSheet: () => void;
 }
 
@@ -63,58 +33,60 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
 
   const mapRef = useRef<MapRef>(null);
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['festivals-by-location', debouncedViewport.latitude, debouncedViewport.longitude, debouncedViewport.zoom],
-    queryFn: async () => {
-      const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
-      const res = await axios.get('/api/festival/locationBasedList2', {
-        params: {
-          serviceKey: API_KEY,
-          _type: 'json',
-          pageNo: 1,
-          numOfRows: 20,
-          MobileApp: 'AppTest',
-          MobileOS: 'ETC',
-          contentTypeId: 15,
-          mapX: debouncedViewport.longitude,
-          mapY: debouncedViewport.latitude,
-          radius: 10000 / debouncedViewport.zoom,
-        },
-      });
+  const { data, isError, error } = useGetFestivals();
 
-      console.log("지도 기반 축제 데이터:", res.data);
-      const items = res.data?.response?.body?.items?.item ?? [];
+  // const { data, isLoading, isError, error } = useQuery({
+  //   queryKey: ['festivals-by-location', debouncedViewport.latitude, debouncedViewport.longitude, debouncedViewport.zoom],
+  //   queryFn: async () => {
+  //     const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
+  //     const res = await axios.get('/api/festival/locationBasedList2', {
+  //       params: {
+  //         serviceKey: API_KEY,
+  //         _type: 'json',
+  //         pageNo: 1,
+  //         numOfRows: 20,
+  //         MobileApp: 'AppTest',
+  //         MobileOS: 'ETC',
+  //         contentTypeId: 15,
+  //         mapX: debouncedViewport.longitude,
+  //         mapY: debouncedViewport.latitude,
+  //         radius: 10000 / debouncedViewport.zoom,
+  //       },
+  //     });
 
-      return items.map((item: any): Festival => ({
-        id: String(item.contentid),
-        name: item.title ?? '',
-        longitude: parseFloat(item.mapx ?? 0),
-        latitude: parseFloat(item.mapy ?? 0),
-        mainImage: item.firstimage ?? '',
-        date: item.eventstartdate
-          ? `${item.eventstartdate} ~ ${item.eventenddate}`
-          : '',
-        address: item.addr1 ?? '',
-        category: item.cat3 ?? '',
-        region: item.areacode ?? '',
-      }));
-    },
-    refetchOnWindowFocus: false, // 창 포커스 시 재호출 방지
-    staleTime: 1000 * 60 * 2, // 2분간 캐시 유지
-    gcTime: 1000 * 60 * 10, // 10분 후 가비지 컬렉션
-    placeholderData: (prevData) => prevData, //이전 데이터 유지
-  });
+  //     console.log("지도 기반 축제 데이터:", res.data);
+  //     const items = res.data?.response?.body?.items?.item ?? [];
+
+  //     return items.map((item: any): Festival => ({
+  //       id: String(item.contentid),
+  //       name: item.title ?? '',
+  //       longitude: parseFloat(item.mapx ?? 0),
+  //       latitude: parseFloat(item.mapy ?? 0),
+  //       mainImage: item.firstimage ?? '',
+  //       date: item.eventstartdate
+  //         ? `${item.eventstartdate} ~ ${item.eventenddate}`
+  //         : '',
+  //       address: item.addr1 ?? '',
+  //       category: item.cat3 ?? '',
+  //       region: item.areacode ?? '',
+  //     }));
+  //   },
+  //   refetchOnWindowFocus: false, // 창 포커스 시 재호출 방지
+  //   staleTime: 1000 * 60 * 2, // 2분간 캐시 유지
+  //   gcTime: 1000 * 60 * 10, // 10분 후 가비지 컬렉션
+  //   placeholderData: (prevData) => prevData, //이전 데이터 유지
+  // });
 
   //GeoJSON 변환
   const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = {
     type: 'FeatureCollection',
     features:
-      data?.map((festival: Festival) => ({
+      data?.content.map((festival: FestivalAPI) => ({
         type: 'Feature', //MapBox용
-        properties: { id: festival.id, name: festival.name }, //Point 외의 정보 저장용
+        properties: { id: festival.festivalId, name: festival.title }, //Point 외의 정보 저장용
         geometry: {
           type: 'Point',
-          coordinates: [festival.longitude, festival.latitude],
+          coordinates: [festival.lon, festival.lat],
         },
       })) ?? [],
   };
@@ -167,8 +139,8 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
           else if (point && point.geometry.type === 'Point') {
             const [longitude, latitude] = point.geometry.coordinates;
 
-            const selectedFestival = data?.find(
-              (f: Festival) => f.id === point.properties?.id
+            const selectedFestival = data?.content.find(
+              (f: FestivalAPI) => f.festivalId === point.properties?.id
             );
 
             if (selectedFestival) {

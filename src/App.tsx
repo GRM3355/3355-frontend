@@ -70,17 +70,18 @@ function App() {
     }
   }, [tempToken, setTempToken]);
 
+  // console.log("임시 토큰:", tempToken);
   return (
     <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative overflow-hidden'>
-      <p>{tempToken}</p>
-      <p>{userId}</p>
+      {/* <p>{tempToken}</p> */}
+      {/*<p>{userId}</p> */}
       <div className='flex-1 relative w-full'>
         <div className='absolute inset-0'>
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/festival-list' element={<FestivalListPage />} />
-            <Route path='/room-list/:id' element={<RoomListPage />} />
-            <Route path='/create-room/:id' element={<CreateRoomPage />} />
+            <Route path='/room-list/:festivalId' element={<RoomListPage />} />
+            <Route path='/create-room/:festivalId' element={<CreateRoomPage />} />
             <Route path='/my-chat' element={<MyChatPage />} />
             <Route path='/chat/:id' element={<ChatPage />} />
             <Route path='/report' element={<ReportPage />} />
