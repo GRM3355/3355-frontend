@@ -10,5 +10,21 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, 'src')
     }
-  }
+  },
+  server: {
+    port: 8082,
+    proxy: {
+      '/api/festival': {
+        target: 'https://apis.data.go.kr/B551011/KorService2',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api\/festival/, ''),
+      },
+      '/api': {
+        target: 'https://api.zony.kro.kr',
+        changeOrigin: true,
+        secure: false,
+      }
+    },
+  },
 })
