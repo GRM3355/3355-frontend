@@ -158,6 +158,39 @@
   --radius-max: 999px;
 }
 
+/* Title styles */
+.title1-sb { @apply text-[20px] font-semibold; }
+.title2-sb { @apply text-[18px] font-semibold; }
+.title3-sb { @apply text-[16px] font-semibold; }
+.title4-sb { @apply text-[14px] font-semibold; }
+
+/* Label styles */
+.label1-sb { @apply text-[16px] font-semibold; }
+.label2-r  { @apply text-[16px] font-normal; }
+.label3-sb { @apply text-[15px] font-semibold; }
+.label4-sb { @apply text-[14px] font-semibold; }
+.label5-r  { @apply text-[14px] font-normal; }
+.label6-sb { @apply text-[12px] font-semibold; }
+.label7-r  { @apply text-[12px] font-normal; }
+.label8-b  { @apply text-[10px] font-bold; }
+.label9-b  { @apply text-[8px] font-bold; }
+
+/* Body styles */
+.body1-r { @apply text-[16px] font-normal; }
+
+/* Caption styles */
+.caption1-r { @apply text-[24px] font-normal; }
+.caption2-r { @apply text-[14px] font-normal; }
+.caption3-r { @apply text-[12px] font-normal; }
+.caption4-r { @apply text-[11px] font-normal; }
+.caption5-r { @apply text-[10px] font-normal; }
+
+/* Effect styles */
+.tooltip  { @apply shadow-[1px_1px_4px_rgba(0,0,0,0.15)]; }
+.floating { @apply shadow-[2px_4px_4px_rgba(0,0,0,0.2)]; }
+.sheet    { @apply shadow-[0px_-7px_50px_rgba(0,0,0,0.1)]; }
+
+
 .input-search-default {
   @apply px-4 py-2 h-10 rounded-max bg-surface-container-searchbar-default text-text-placeholder;
 }
