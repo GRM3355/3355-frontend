@@ -10,7 +10,7 @@ export default function ReportPage() {
 
   const onSubmit = (data: ReportFormData) => {
     //TODO: 데이터 전송 api
-
+    console.log(data);
   };
 
   return (
