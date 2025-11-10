@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import SearchPage from './pages/SearchPage'
 import EchoTest from './pages/EchoTest'
+import api from './api/axios'
 
 
 function App() {
@@ -48,7 +49,7 @@ function App() {
   useEffect(() => {
     // 토큰 없으면 서버에서 발급
     if (!tempToken) {
-      axios.post('/api/v1/auth/token-register', {
+      api.post('/v1/auth/token-register', {
         lat: "37.566826",
         lon: "126.9786567"
       },
@@ -83,7 +84,7 @@ function App() {
             <Route path='/room-list/:festivalId' element={<RoomListPage />} />
             <Route path='/create-room/:festivalId' element={<CreateRoomPage />} />
             <Route path='/my-chat' element={<MyChatPage />} />
-            <Route path='/chat/:id' element={<ChatPage />} />
+            <Route path='/chat/:roomId' element={<ChatPage />} />
             <Route path='/report' element={<ReportPage />} />
             <Route path='/search' element={<SearchPage />} />
             <Route path='echo' element={<EchoTest />} />

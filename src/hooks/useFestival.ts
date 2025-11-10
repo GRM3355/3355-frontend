@@ -11,7 +11,7 @@ import type { FestivalAPI, RoomAPI } from '@/types/api';
 //   });
 // };
 export const useGetFestivals = (params: any = {}) => {
-  const defaultParams = { page: 1, pageSize: 100, order: 'DATE_DESC' };
+  const defaultParams = { page: 1, pageSize: 10, order: '', region: '', status: '', keyword: '' };
 
   return useQuery<{ content: FestivalAPI[] }>({
     queryKey: ['festivals', { ...defaultParams, ...params }],
