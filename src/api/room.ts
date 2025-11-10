@@ -67,7 +67,7 @@ export const getRoomsByUserId = async ({ queryKey }: any) => {
   const [, params] = queryKey;
   const { token, ...queryParams } = params;
 
-  const res = await api.get('/v1/chat-rooms/my-rooms',
+  const res = await api.get('/api/v1/chat-rooms/my-rooms',
     {
       headers: {
         'Authorization': `Bearer ${token}`,

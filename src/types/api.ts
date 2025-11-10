@@ -44,3 +44,13 @@ export type SearchResponse = {
     data: RoomAPI[];
   };
 };
+
+export type ChatAPI = {
+  id: string;
+  chatRoomId: string;
+  userId: string;
+  nickname: string;
+  content: string;
+  type: "TEXT" | string;
+  createdAt: string;
+}

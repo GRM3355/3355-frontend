@@ -13,6 +13,10 @@ export default function SearchPage() {
   const [keyword, setKeyword] = useState<string>("");
   const [debouncedKeyword] = useDebounce(keyword, 1000);
 
+  const [activeTab, setActiveTab] = useState<string>("전체");
+
+  const tabs = ["전체", "페스티벌", "채팅방"];
+
   const { data, isLoading, isError, refetch } = useGetSearch({ keyword: debouncedKeyword });
 
   useEffect(() => {
@@ -65,17 +69,24 @@ export default function SearchPage() {
     <>
       <div className='flex flex-col h-full'>
         {/* 검색 */}
-        <div className=''>
+        <div className='flex p-4 gap-2'>
           <span>&lt;</span>
-          <span>검색 아이콘</span>
           <input type="text" placeholder='검색어 입력'
+            className='bg-gray-100 flex-1 p-2'
             onChange={(e) => setKeyword(e.target.value)} />
-          <span>취소</span>
         </div>
-        <div className='flex gap-4'>
-          <span>전체</span>
-          <span>페스티벌</span>
-          <span>채팅방</span>
+        <div className="flex gap-4 py-2">
+          {tabs.map((tab) => (
+            <span
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`cursor-pointer text-lg transition-colors 
+            ${activeTab === tab ? "text-blue-500 font-semibold" : "text-gray-700 hover:text-blue-400"}
+          `}
+            >
+              {tab}
+            </span>
+          ))}
         </div>
         {/* 검색 결과 */}
         {keyword == "" ? (
@@ -84,7 +95,7 @@ export default function SearchPage() {
           </div>
         ) : (
           <div className='w-full h-full overflow-y-scroll'>
-            <p>페스티벌</p>
+            <p>페스티벌{data?.festivals.data.length}</p>
             {data?.festivals.data.map((festival: FestivalAPI) => (
               <div key={festival.festivalId} className='border p-2 my-2'>
                 <h2>{festival.title}</h2>

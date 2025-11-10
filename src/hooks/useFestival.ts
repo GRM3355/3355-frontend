@@ -17,6 +17,7 @@ export const useGetFestivals = (params: any = {}) => {
     queryKey: ['festivals', { ...defaultParams, ...params }],
     queryFn: getFestivals,
     staleTime: 10 * 60 * 1000, // 10분 캐시 유지
+    retry: 2,
   });
 };
 

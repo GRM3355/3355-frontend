@@ -49,7 +49,7 @@ function App() {
   useEffect(() => {
     // 토큰 없으면 서버에서 발급
     if (!tempToken) {
-      api.post('/v1/auth/token-register', {
+      api.post('/api/v1/auth/token-register', {
         lat: "37.566826",
         lon: "126.9786567"
       },
