@@ -1,3 +1,4 @@
+import Button from './Button';
 import Modal from './Modal';
 
 type ConfirmModalProps = {
@@ -22,11 +23,14 @@ export default function ConfirmModal({
   onClose
 }: ConfirmModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <h2>{title}</h2>
-      <p>{message}</p>
-      {cancelText && <span onClick={() => onCancel ? onCancel() : onClose?.()}>{cancelText}</span>}
-      <span onClick={() => onConfirm?.()}>{confirmText}</span>
+    <Modal isOpen={isOpen} onClose={onClose}
+      className='w-full h-max p-5 m-10 rounded-4 bg-surface-bg-modal-sheet'>
+      <h2 className='h-7 title2-sb text-text-primary'>{title}</h2>
+      <p className='h-7 body1-r mb-6 text-text-secondary'>{message}</p>
+      <div className='flex gap-2'>
+        <Button onClick={() => onCancel ? onCancel() : onClose?.()}>{cancelText}</Button>
+        <Button onClick={() => onConfirm?.()} variant='brand'>{confirmText}</Button>
+      </div>
     </Modal>
   );
 }

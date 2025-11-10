@@ -2,35 +2,37 @@ import type { ReactNode } from "react";
 
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline";
+  variant?: "brand" | "default" | "error";
   size?: "sm" | "md" | "lg";
   className?: string;
   children: ReactNode;
 }
 
 export default function Button({
-  variant = "primary",
+  variant = "default",
   size = "md",
   className = "",
   children,
   ...rest
 }: ButtonProps) {
-  const base = "rounded-xl font-semibold transition-colors focus:outline-none";
 
   const variants = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300",
-    outline: "border border-gray-400 text-gray-800 hover:bg-gray-100",
+    brand: "bg-surface-container-brand-1 text-text-inverse",
+    default: "bg-state-interacion-container-default text-text-primary border border-line-border-primary",
+    error: "bg-state-interacion-container-error text-text-inverse",
   };
 
   const sizes = {
-    sm: "px-3 py-1 text-sm",
-    md: "px-4 py-2 text-base",
+    sm: "p-1 text-sm",
+    md: "p-2 text-base",
     lg: "px-5 py-3 text-lg",
   };
 
   return (
-    <button {...rest} className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}>
+    // <button {...rest} className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}>
+    <button {...rest} className={`w-full rounded-2 hover:brightness-90 
+    ${variants[variant]} ${sizes[size]} ${className}`}>
+
       {children}
     </button>
   );

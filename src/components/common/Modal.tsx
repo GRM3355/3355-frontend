@@ -12,11 +12,11 @@ export default function Modal({ isOpen, onClose, children, className }: ModalPro
 
   return (
     <div
-      className={`fixed inset-0 bg-black/50 flex justify-center items-center z-50 ${className}`}
+      className={`fixed inset-0 bg-black/50 flex justify-center items-center z-50`}
       onClick={onClose} // 배경 클릭 시 닫기
     >
       <div
-        className='bg-white p-6 rounded-2xl shadow-lg'
+        className={`${className}`}
         onClick={(e) => e.stopPropagation()} //이벤트 버블링 방지
       >
         {children}

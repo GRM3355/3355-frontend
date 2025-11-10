@@ -17,6 +17,7 @@ import axios from 'axios'
 import SearchPage from './pages/SearchPage'
 import EchoTest from './pages/EchoTest'
 import api from './api/axios'
+import ComponentTestPage from './pages/ComponentTestPage'
 
 
 function App() {
@@ -89,6 +90,7 @@ function App() {
             <Route path='/search' element={<SearchPage />} />
             <Route path='echo' element={<EchoTest />} />
             <Route path='*' element={<NotFound />} />
+            <Route path='test' element={<ComponentTestPage />} /> {/*//TODO 추후 삭제 */}
           </Routes>
         </div>
       </div>
