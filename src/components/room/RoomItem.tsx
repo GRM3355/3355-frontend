@@ -23,14 +23,14 @@ export default function RoomItem({ room }: RoomItemProps) {
   }
 
   return (
-    <div className='flex h-16 items-center border p-2 gap-2'
+    <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-2 rounded-3'
       onClick={() => handleClick()}>
       <img src="/testImg.png" alt="Festival Image"
         className="h-full aspect-square rounded-full" />
-      <span className="flex-1">
+      <span className="title3-sb text-text-primary">
         {room.title}
       </span>
-      <span>현재 참여자수</span>
+      <span className="caption2-r text-text-quaternary">{room.participantCount}</span>
     </div>
   )
 }

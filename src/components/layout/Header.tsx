@@ -1,3 +1,5 @@
+import { useConfirmStore } from "@/stores/useConfirmStore";
+import { ChevronLeft, Search, User } from "@mynaui/icons-react";
 import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
@@ -19,8 +21,22 @@ export default function Header({
   showSearch = false,
   showSettings = false,
 }: HeaderProps) {
-
   const navigate = useNavigate()
+
+  const { openConfirm, closeConfirm } = useConfirmStore();
+
+
+  const handleBackConfirm = () => {
+    closeConfirm();
+    navigate(-1)
+  }
+
+  const handleClickBack = () => {
+    openConfirm('채팅방 만들기 취소',
+      `채팅방 생성을 취소하시겠어요?
+      작성하신 내용은 저장되지 않습니다.`,
+      handleBackConfirm, undefined, '나가기', '취소');
+  }
 
   const handleClickLogo = () => {
     navigate(`/`)
@@ -31,14 +47,14 @@ export default function Header({
   }
 
   return (
-    <div className='flex items-center justify-between w-full h-13 p-4'>
-      {showBack && <span>뒤로가기</span>}
+    <div className='flex items-center justify-between w-full h-13 px-4 py-[14]'>
+      {showBack && <ChevronLeft size={24} onClick={() => handleClickBack()} />}
       {showLogo && <span onClick={() => handleClickLogo()}>로고</span>}
-      {title && <span>{title}</span>}
-      <div className="flex gap-2">
-        {showUser && <span>유저</span>}
+      {title && <span className="title3-sb text-text-primary ml-2 mr-auto">{title}</span>}
+      <div className="flex gap-4">
+        {showUser && <User size={24} />}
         {showLogin && <span>로그인</span>}
-        {showSearch && <span onClick={() => handleClickSearch()}>검색</span>}
+        {showSearch && <Search size={24} onClick={() => handleClickSearch()} />}
         {showSettings && <span>환경설정</span>}
       </div>
     </div>

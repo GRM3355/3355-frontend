@@ -13,6 +13,7 @@ export default function Button({
   size = "md",
   className = "",
   children,
+  disabled = false,
   ...rest
 }: ButtonProps) {
 
@@ -30,8 +31,10 @@ export default function Button({
 
   return (
     // <button {...rest} className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}>
-    <button {...rest} className={`w-full rounded-2 hover:brightness-90 
-    ${variants[variant]} ${sizes[size]} ${className}`}>
+    <button {...rest} disabled={disabled}
+      className={`w-full rounded-2 hover:brightness-90 
+    ${variants[variant]} ${sizes[size]} ${className}
+    disabled:bg-state-interacion-container-disabled disabled:text-text-disabled`}>
 
       {children}
     </button>

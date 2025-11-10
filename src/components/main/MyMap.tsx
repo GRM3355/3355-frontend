@@ -3,7 +3,7 @@ import Map, { Source, Layer } from 'react-map-gl/mapbox';
 import type { MapRef } from 'react-map-gl/mapbox';
 import type { FeatureCollection, Point } from 'geojson';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { metersToPixels } from '@/\butils/map';
+import { metersToPixels } from '@/utils/map';
 import type { Festival } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';

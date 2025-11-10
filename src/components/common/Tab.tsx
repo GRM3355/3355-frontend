@@ -1,0 +1,31 @@
+import { useState } from "react";
+
+export type TabItem = {
+  key: string;
+  label: string;
+}
+
+type TabProps = {
+  items: Array<{ key: string, label: string }>
+  selected: string;
+  onSelect: (key: string) => void;
+}
+
+export default function Tab({ items, selected, onSelect }: TabProps) {
+  return (
+    <>
+      <div className='flex h-max p-4 overflow-x-auto whitespace-nowrap scrollbar-hide'>
+        {items.map((item: TabItem) => (
+          <div className="flex flex-col w-full h-max">
+            <span key={item.key}
+              className={`p-2 cursor-pointer
+                      ${selected === item.key ? "text-text-brand h-9 label1-sb" : "text-text-primary label2-r"}`}
+              onClick={() => onSelect(item.key)}>
+              {item.label}</span>
+            {selected === item.key && <span className="w-full h-1 bg-text-brand rounded-full" />}
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}

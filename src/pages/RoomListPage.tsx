@@ -4,6 +4,9 @@ import RoomItem from "@/components/room/RoomItem";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
+import Header from "@/components/layout/Header";
+import AD from "@/components/common/AD";
+import { Info, Plus } from "@mynaui/icons-react";
 
 
 export default function RoomListPage() {
@@ -35,34 +38,43 @@ export default function RoomListPage() {
 
   console
   return (
-    <div className="flex flex-col h-full">
-      <div>
-        <p>{festivalId}</p>
-        {/* <p>{data}</p> */}
-        <div className="flex gap-2">
-          <p>{festivalData.title}</p>
-          <span className="border"
-            onClick={() => setShowFestivalModal(true)}>정보</span>
+    <>
+      <Header showBack={true} />
+      <AD />
+      <div className="flex flex-col h-full p-4">
+        <div className="pb-8">
+          {/* <p>{festivalId}</p> */}
+          {/* <p>{data}</p> */}
+          <div className="flex items-center gap-2">
+            <p className="title1-sb">{festivalData.title}</p>
+            <Info size={16} onClick={() => setShowFestivalModal(true)}
+              className="border rounded-full border-text-primary" />
+          </div>
+          <p className="caption2-r text-text-tertiary">페스티벌 Zone 내에서 채팅이 가능합니다.</p>
+        </div>
+        <div className="flex gap-1 pb-2">
+          <span className="title3-sb text-text-primary">단체 채팅방</span>
+          <span className="flex-1 label5-r text-text-tertiary">{roomDatas.content.length}</span>
+          <span>참여자순</span>
         </div>
 
-        <p>페스티벌 Zone 내에서 채팅이 가능합니다.</p>
-        <p>단체 채팅방 (현재 활성화된 채팅방 {roomDatas.content.length}개)</p>
+        <div className='flex flex-col h-full gap-4 overflow-y-auto'>
+          {roomDatas.content.map((room: RoomAPI) => (
+            <RoomItem key={room.chatRoomId} room={room} />
+          ))}
+        </div>
+
+        {/* <div className="absolute bottom-8 right-8 border bg-white"
+          onClick={() => handleCreateRoom()}>채팅방 생성</div> */}
+        <Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1"
+          onClick={() => handleCreateRoom()} />
+        <FestivalInfoModal
+          festivalData={festivalData}
+          isOpen={isShowFestivalModal}
+          onClose={() => setShowFestivalModal(false)} />
+
       </div>
+    </>
 
-
-      <div className='flex flex-col h-full gap-4 overflow-y-auto p-4'>
-        {roomDatas.content.map((room: RoomAPI) => (
-          <RoomItem key={room.chatRoomId} room={room} />
-        ))}
-      </div>
-
-      <div className="absolute bottom-8 right-8 border bg-white"
-        onClick={() => handleCreateRoom()}>채팅방 생성</div>
-      <FestivalInfoModal
-        festivalData={festivalData}
-        isOpen={isShowFestivalModal}
-        onClose={() => setShowFestivalModal(false)} />
-
-    </div>
   )
 }
