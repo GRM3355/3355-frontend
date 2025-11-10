@@ -1,6 +1,6 @@
 import { useConfirmStore } from "@/stores/useConfirmStore";
 import { ChevronLeft, Search, User } from "@mynaui/icons-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type HeaderProps = {
   showBack?: boolean;
@@ -22,9 +22,9 @@ export default function Header({
   showSettings = false,
 }: HeaderProps) {
   const navigate = useNavigate()
+  const location = useLocation();
 
   const { openConfirm, closeConfirm } = useConfirmStore();
-
 
   const handleBackConfirm = () => {
     closeConfirm();
@@ -32,10 +32,14 @@ export default function Header({
   }
 
   const handleClickBack = () => {
-    openConfirm('채팅방 만들기 취소',
-      `채팅방 생성을 취소하시겠어요?
+    if (location.pathname.startsWith('/create-room')) {
+      openConfirm('채팅방 만들기 취소',
+        `채팅방 생성을 취소하시겠어요?
       작성하신 내용은 저장되지 않습니다.`,
-      handleBackConfirm, undefined, '나가기', '취소');
+        handleBackConfirm, undefined, '나가기', '취소');
+    } else {
+      navigate(-1);
+    }
   }
 
   const handleClickLogo = () => {
