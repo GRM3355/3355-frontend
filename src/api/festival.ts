@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "./axios";
 
 // 축제 리스트 조회
 // export const getFestivals = async () => {
@@ -7,7 +8,7 @@ import axios from "axios";
 // };
 export const getFestivals = async ({ queryKey }: any) => {
   const [, params] = queryKey;
-  const { data } = await axios.get("/api/v1/festivals", { params });
+  const { data } = await api.get("/v1/festivals", { params });
   return data.data;
 };
 
@@ -20,7 +21,7 @@ export const getRoomsByFestivalId = async ({ queryKey }: any) => {
   const [, params] = queryKey;
   const { festivalId, ...queryParams } = params;
 
-  const { data } = await axios.get(`/api/v1/festivals/${params.festivalId}/chat-rooms`,
+  const { data } = await api.get(`/v1/festivals/${params.festivalId}/chat-rooms`,
     { params: queryParams });
   return data.data;
 };
@@ -32,6 +33,6 @@ export const getRoomsByFestivalId = async ({ queryKey }: any) => {
 // };
 export const getFestivalByFestivalId = async ({ queryKey }: any) => {
   const [, params] = queryKey;
-  const { data } = await axios.get(`/api/v1/festivals/${params.festivalId}`);
+  const { data } = await api.get(`/v1/festivals/${params.festivalId}`);
   return data.data;
 };

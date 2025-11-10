@@ -1,9 +1,10 @@
 import type { PostRoomParams } from "@/types/params";
 import axios from "axios";
+import api from "./axios";
 
 // 방 아이디로 방 정보 조회
 export const getRoomByRoomId = async (id: string) => {
-  const res = await axios.get(`http://localhost:3000/api/room/${id}`);
+  const res = await api.get(`http://localhost:3000/api/room/${id}`);
   return res.data.data;
 };
 
@@ -34,8 +35,8 @@ export const createRoom = async ({ festivalId, title, token }: PostRoomParams) =
   console.log('URL:', `/api/v1/festivals/${festivalId}/chat-rooms`);
 
   try {
-    const { data } = await axios.post(
-      `/api/v1/festivals/${festivalId}/chat-rooms`,
+    const { data } = await api.post(
+      `/v1/festivals/${festivalId}/chat-rooms`,
       { title },
       {
         headers: {
@@ -66,7 +67,7 @@ export const getRoomsByUserId = async ({ queryKey }: any) => {
   const [, params] = queryKey;
   const { token, ...queryParams } = params;
 
-  const res = await axios.get('/api/v1/chat-rooms/my-rooms',
+  const res = await api.get('/v1/chat-rooms/my-rooms',
     {
       headers: {
         'Authorization': `Bearer ${token}`,
