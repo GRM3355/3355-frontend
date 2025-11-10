@@ -1,3 +1,4 @@
+import Input from '@/components/common/Input';
 import Header from '@/components/layout/Header';
 import { useGetSearch } from '@/hooks/useSearch';
 import type { Festival } from '@/types';
@@ -6,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce';
+import { Search } from "@mynaui/icons-react";
 
 export default function SearchPage() {
   const [page, setPage] = useState<number>(1);
@@ -71,9 +73,20 @@ export default function SearchPage() {
         {/* 검색 */}
         <div className='flex p-4 gap-2'>
           <span>&lt;</span>
-          <input type="text" placeholder='검색어 입력'
-            className='bg-gray-100 flex-1 p-2'
-            onChange={(e) => setKeyword(e.target.value)} />
+          {/* <InputSearch type="text" placeholder='검색어를 입력해주세요.'
+            onChange={(e) => setKeyword(e.target.value)} /> */}
+          <Input
+            type="text"
+            placeholder="검색어 입력"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            icon={<Search />}
+            defaultStyle="input-search-default"
+            focusStyle="input-search-focus"
+            completeStyle="input-search-complete"
+            showClear={true}
+            onClear={() => setKeyword('')}
+          />
         </div>
         <div className="flex gap-4 py-2">
           {tabs.map((tab) => (

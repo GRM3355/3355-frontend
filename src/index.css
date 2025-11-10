@@ -149,4 +149,25 @@
   --color-icon-border-primary: var(--color-grayscale-900);
   --color-icon-border-secondary: var(--color-grayscale-500);
   --color-icon-border-brand: var(--color-orange-500);
+
+  /* radius */
+  --radius-1: 2px;
+  --radius-2: 8px;
+  --radius-3: 12px;
+  --radius-4: 16px;
+  --radius-max: 999px;
+}
+
+.input-search-default {
+  @apply px-4 py-2 h-10 rounded-max bg-surface-container-searchbar-default text-text-placeholder;
+}
+
+.input-search-focus {
+  @apply px-4 py-2 h-10 rounded-max bg-surface-bg-page text-text-primary;
+  @apply border border-state-interacion-border-focus;
+}
+
+.input-search-complete {
+  @apply px-4 py-2 h-10 rounded-max bg-surface-container-default text-text-primary;
+  @apply border border-line-border-secondary;
 }
