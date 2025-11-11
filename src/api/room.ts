@@ -36,7 +36,7 @@ export const createRoom = async ({ festivalId, title, token }: PostRoomParams) =
 
   try {
     const { data } = await api.post(
-      `/v1/festivals/${festivalId}/chat-rooms`,
+      `/api/v1/festivals/${festivalId}/chat-rooms`,
       { title },
       {
         headers: {

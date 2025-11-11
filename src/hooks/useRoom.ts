@@ -54,7 +54,7 @@ export const useCreateRoom = () => {
 
 // 유저의 방 목록 가져오기
 export const useGetRoomsByToken = (params: any = {}) => {
-  const defaultParams = { page: 1, pageSize: 10, order: 'DATE_DESC', keyword: '' };
+  const defaultParams = { page: 1, pageSize: 10, order: '', keyword: '' };
 
   return useQuery<{ content: RoomAPI[] }>({
     queryKey: ["myRooms", { ...defaultParams, ...params }],
