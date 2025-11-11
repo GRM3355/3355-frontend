@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import type { FestivalAPI } from '@/types/api';
 import Tab from '@/components/common/Tab';
+import Select from '@/components/common/Select';
 
 export const REGIONS = [
   { key: "SEOUL", label: "서울" },
@@ -19,10 +20,15 @@ export const REGIONS = [
   { key: "JEJU", label: "제주" },
 ]
 
+const FILTER = [
+  { key: "DATE", label: "개최순" },
+  { key: "ABC", label: "가나다순" },
+]
 
 export default function FestivalListPage() {
   const { data, isLoading, isError } = useGetFestivals();
   const [region, setRegion] = useState<string>('SEOUL');
+  const [filter, setFilter] = useState<string>('DATE');
 
   const filteredFestivals = data?.content.filter(
     (f) => f.region == region
@@ -46,10 +52,11 @@ export default function FestivalListPage() {
         <div className='flex gap-1 items-center justify-between p-4'>
           <span className='title1-sb text-text-primary'>진행/예정 페스티벌</span>
           <span className='flex-1 label2-r text-text-tertiary'>{filteredFestivals?.length ?? 0}</span>
-          <select className='label5-r'>
-            <option value='someOption'>개최순</option>
-            <option value='otherOption'>가나다순</option>
-          </select>
+          <Select
+            items={FILTER}
+            selected={filter}
+            onSelect={setFilter}
+          />
         </div>
 
         {/* 진행중인 페스티벌 */}
