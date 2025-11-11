@@ -74,7 +74,7 @@ function App() {
 
   // console.log("임시 토큰:", tempToken);
   return (
-    <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative overflow-hidden'>
+    <div className='flex flex-col h-dvh w-full sm:w-100 mx-auto relative overflow-hidden'>
       {/* <p>{tempToken}</p> */}
       {/*<p>{userId}</p> */}
       <div className='flex-1 relative w-full'>
@@ -94,7 +94,9 @@ function App() {
           </Routes>
         </div>
       </div>
-      <Nav />
+      <div className="pb-[env(safe-area-inset-bottom)]">
+        <Nav />
+      </div>
 
       <ConfirmModal
         isOpen={isOpen}

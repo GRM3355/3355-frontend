@@ -23,8 +23,8 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
 
   //TODO: 유저 현재 위치로 변경
   const [viewport, setViewport] = useState({
-    latitude: 37.5665,
-    longitude: 126.9780,
+    latitude: 35.1011951345,
+    longitude: 129.0323594995,
     zoom: 16,
   });
 
