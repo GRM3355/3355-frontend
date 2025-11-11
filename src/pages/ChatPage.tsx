@@ -1,10 +1,12 @@
+import ChatItem from "@/components/chat/ChatItem";
 import useAuthStore from "@/stores/useAuthStore";
+import type { ChatAPI } from "@/types/api";
 import { Client } from "@stomp/stompjs";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<ChatAPI[]>([]);
   const [message, setMessage] = useState("");
   const stompClientRef = useRef<Client | null>(null);
   const { tempToken } = useAuthStore();
@@ -25,7 +27,7 @@ export default function ChatPage() {
         //메시지 구독
         client.subscribe(`/sub/chat-rooms/${roomId}`, (frame) => {
           const msg = JSON.parse(frame.body);
-          setMessages((prev) => [...prev, msg.content]);
+          setMessages((prev) => [...prev, msg]);
         });
 
         //채팅방 입장
@@ -50,12 +52,17 @@ export default function ChatPage() {
     };
   }, [tempToken, roomId]); // 토큰 또는 방이 바뀔 때 재연결
 
+  //메세지 전송
   const sendMessage = () => {
     if (!stompClientRef.current || !message.trim()) return;
 
     stompClientRef.current.publish({
       destination: `/app/chat-rooms/${roomId}/send`,
-      body: JSON.stringify({ content: message }),
+      body: JSON.stringify({
+        userId: 'userId',
+        nickname: "닉네임도 가지나?",
+        content: message,
+      }),
     });
 
     setMessage("");
@@ -63,9 +70,9 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto border p-2">
+      <div className="flex flex-col flex-1 overflow-y-auto border p-2 gap-2">
         {messages.map((m, i) => (
-          <p key={i}>{m}</p>
+          <ChatItem key={i} chat={m} />
         ))}
       </div>
       <div className="flex border-t">

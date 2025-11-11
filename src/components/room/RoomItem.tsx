@@ -22,6 +22,8 @@ export default function RoomItem({ room }: RoomItemProps) {
     navigate(`/chat/1`)
   }
 
+  // if (room.participantCount >= 30)
+
   return (
     <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-2 rounded-3'
       onClick={() => handleClick()}>
