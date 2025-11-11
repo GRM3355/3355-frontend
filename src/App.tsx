@@ -94,9 +94,8 @@ function App() {
           </Routes>
         </div>
       </div>
-      <div className="pb-[env(safe-area-inset-bottom)]">
-        <Nav />
-      </div>
+      <Nav />
+
 
       <ConfirmModal
         isOpen={isOpen}
