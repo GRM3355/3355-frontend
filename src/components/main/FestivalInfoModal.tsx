@@ -24,7 +24,7 @@ export default function FestivalInfoModal({
       </div>
       {/* <img src='/testImg.png' alt='Festival Image'></img> */}
       <img src={festivalData.firstImage} alt='Festival Image'
-        className='w-full h-50 object-cover py-2'></img>
+        className='w-full h-max py-2'></img>
       <p className='body1-r text-text-secondary'>날짜: {festivalData.eventStartDate} - {festivalData.eventEndDate}</p>
       <p className='body1-r text-text-secondary'>주소: {festivalData.addr1}</p>
     </Modal>

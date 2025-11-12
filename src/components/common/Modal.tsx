@@ -16,7 +16,7 @@ export default function Modal({ isOpen, onClose, children, className }: ModalPro
       onClick={onClose} // 배경 클릭 시 닫기
     >
       <div
-        className={`${className}`}
+        className={`${className} max-w-90`}
         onClick={(e) => e.stopPropagation()} //이벤트 버블링 방지
       >
         {children}
