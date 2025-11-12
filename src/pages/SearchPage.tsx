@@ -117,7 +117,7 @@ export default function SearchPage() {
               selected={activeTab}
               onSelect={setActiveTab}
             />
-            <div className='w-full h-full overflow-y-scroll p-4'>
+            <div className='w-full h-full overflow-y-scroll p-4 scrollbar-hide'>
               <div className='flex gap-1 pb-4 items-center'>
                 <span className='title3-sb text-text-primary'>검색결과</span>
                 <span className='label5-r text-text-quaternary'>

@@ -60,7 +60,7 @@ export default function FestivalListPage() {
         </div>
 
         {/* 진행중인 페스티벌 */}
-        <div className='flex flex-col h-full gap-2 overflow-y-auto p-4'>
+        <div className='flex flex-col h-full gap-2 overflow-y-auto p-4 scrollbar-hide pb-16'>
           {filteredFestivals?.map((festival: FestivalAPI) => (
             <FestivalItem key={festival.festivalId} festivalData={festival} />
           ))}

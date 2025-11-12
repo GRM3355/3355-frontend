@@ -70,7 +70,7 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex flex-col flex-1 overflow-y-auto border p-2 gap-2">
+      <div className="flex flex-col flex-1 overflow-y-auto border p-2 gap-2 scrollbar-hide">
         {messages.map((m, i) => (
           <ChatItem key={i} chat={m} />
         ))}
