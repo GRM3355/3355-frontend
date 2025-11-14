@@ -59,16 +59,14 @@ export const useGetFestivalByFestivalId = (params: any = {}) => {
 
 //위치 기반 축제 조회
 export const useGetFestivalByLocation = (params: GetFestivalByLocationParams) => {
-  // const defaultParams = {
-  //   page: 1, pageSize: 50, order: '', region: 'DATE_DESC', status: '', keyword: '',
-  //   ps: true, lat, lon, radius
-  // };
+  const defaultParams = { ps: true }
+  console.log('useGetFestivalByLocation 호출!', params);
 
   return useQuery<{ content: FestivalAPI[] }>({
-    queryKey: ['festivals', params],
+    queryKey: ['festivalsByLocation', { ...defaultParams, ...params }],
     queryFn: getFestivals,
-    staleTime: 10 * 60 * 1000, // 10분 캐시 유지
-    retry: 2,
+    enabled: true,
+    retry: false, // 재시도 막기
   });
 }
 
