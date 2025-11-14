@@ -14,15 +14,19 @@ export default function CreateRoomPage() {
 
   // const { mutate, isPending } = useCreateRoom();
   const { mutate, isPending } = useCreateRoom();
+  const { lat, lon } = useAuthStore();
 
   const handleCreateRoom = () => {
     if (!tempToken || !festivalId) return;
 
-    console.log("채팅방 생성 시도:", { festivalId, roomTitle, token: tempToken });
+    const id = parseInt(festivalId);
+    console.log("채팅방 생성 시도:", { festivalId, token: tempToken, roomTitle, lat, lon });
     mutate({
-      festivalId,
-      title: roomTitle,
+      festivalId: id,
       token: tempToken,
+      title: roomTitle,
+      lat,
+      lon
     });
 
   }

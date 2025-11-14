@@ -31,8 +31,18 @@ export const getRoomsByFestivalId = async ({ queryKey }: any) => {
 //   const res = await axios.get(`http://localhost:3000/api/festival/${id}`);
 //   return res.data.data;
 // };
+
 export const getFestivalByFestivalId = async ({ queryKey }: any) => {
-  const [, params] = queryKey;
-  const { data } = await api.get(`/api/v1/festivals/${params.festivalId}`);
+  const [, { festivalId }] = queryKey;
+  const { data } = await api.get(`/api/v1/festivals/${festivalId}`);
+  return data.data;
+};
+
+//지역별 축제 개수
+export const getFestivalCountByRegion = async ({ queryKey }: any) => {
+  const [, { region }] = queryKey;
+  const { data } = await api.get(`/api/v1/festivals/count`, {
+    params: { region },
+  });
   return data.data;
 };

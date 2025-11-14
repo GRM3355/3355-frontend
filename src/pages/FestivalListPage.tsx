@@ -1,4 +1,4 @@
-import { useGetFestivals } from '@/hooks/useFestival';
+import { useGetFestivalCount, useGetFestivals } from '@/hooks/useFestival';
 import { getFestivals } from '@/api/festival';
 import FestivalItem from '@/components/festival/FestivalItem';
 import type { Festival } from '@/types';
@@ -26,17 +26,28 @@ const FILTER = [
 ]
 
 export default function FestivalListPage() {
-  const { data, isLoading, isError } = useGetFestivals();
   const [region, setRegion] = useState<string>('SEOUL');
   const [filter, setFilter] = useState<string>('DATE');
 
-  const filteredFestivals = data?.content.filter(
-    (f) => f.region == region
+  const { data: festivalInfo,
+    isLoading: isFestivalInfoLoading,
+    isError: isFestivalInfoError } = useGetFestivals();
+
+  const filteredFestivals = festivalInfo?.content.filter(
+    (info) => info.region == region
   );
 
-  if (isLoading) return <p>로딩 중...</p>;
-  if (isError) return <p>에러 발생!</p>;
+  // const {
+  //   data: festivalCount,
+  //   isLoading: isFestivalCountLoading,
+  //   isError: isFestivalCountError,
+  // } = useGetFestivalCount({ region });
 
+
+  // if (isFestivalInfoLoading || isFestivalCountLoading) return <p>로딩 중...</p>;
+  // if (isFestivalInfoError || isFestivalCountError) return <p>에러 발생!</p>;
+
+  // console.log(festivalCount);
   return (
     <>
       <Header showLogo={true} showUser={true} showSearch={true} />
@@ -51,7 +62,7 @@ export default function FestivalListPage() {
         {/* 정렬 */}
         <div className='flex gap-1 items-center justify-between p-4'>
           <span className='title1-sb text-text-primary'>진행/예정 페스티벌</span>
-          <span className='flex-1 label2-r text-text-tertiary'>{filteredFestivals?.length ?? 0}</span>
+          {/* <span className='flex-1 label2-r text-text-tertiary'>{festivalCount.count ?? 0}</span> */}
           <Select
             items={FILTER}
             selected={filter}

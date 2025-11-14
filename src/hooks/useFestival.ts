@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { getFestivals, getRoomsByFestivalId, getFestivalByFestivalId } from '@/api/festival';
+import { getFestivals, getRoomsByFestivalId, getFestivalByFestivalId, getFestivalCountByRegion } from '@/api/festival';
 import type { FestivalAPI, RoomAPI } from '@/types/api';
+import type { GetFestivalByLocationParams } from '@/types/params';
 
 // 모든 축제 리스트
 // export const useGetFestivals = () => {
@@ -11,7 +12,7 @@ import type { FestivalAPI, RoomAPI } from '@/types/api';
 //   });
 // };
 export const useGetFestivals = (params: any = {}) => {
-  const defaultParams = { page: 1, pageSize: 10, order: '', region: '', status: '', keyword: '' };
+  const defaultParams = { page: 1, pageSize: 50, order: 'DATE_ASC', region: '', status: '', keyword: '', ps: false };
 
   return useQuery<{ content: FestivalAPI[] }>({
     queryKey: ['festivals', { ...defaultParams, ...params }],
@@ -55,3 +56,29 @@ export const useGetFestivalByFestivalId = (params: any = {}) => {
     enabled: !!params.festivalId,
   });
 };
+
+//위치 기반 축제 조회
+export const useGetFestivalByLocation = (params: GetFestivalByLocationParams) => {
+  // const defaultParams = {
+  //   page: 1, pageSize: 50, order: '', region: 'DATE_DESC', status: '', keyword: '',
+  //   ps: true, lat, lon, radius
+  // };
+
+  return useQuery<{ content: FestivalAPI[] }>({
+    queryKey: ['festivals', params],
+    queryFn: getFestivals,
+    staleTime: 10 * 60 * 1000, // 10분 캐시 유지
+    retry: 2,
+  });
+}
+
+
+//축제 개수 조회
+export const useGetFestivalCount = (params: any = {}) => {
+  const defaultParams = { region: "SEOUL" }
+
+  return useQuery({
+    queryKey: ['festivalCount', { ...defaultParams }],
+    queryFn: getFestivalCountByRegion,
+  });
+}

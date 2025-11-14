@@ -46,6 +46,10 @@ export default function Header({
     navigate(`/`)
   }
 
+  const handleClickUser = () => {
+    navigate(`/mypage`)
+  }
+
   const handleClickSearch = () => {
     navigate(`/search`)
   }
@@ -56,7 +60,7 @@ export default function Header({
       {showLogo && <span onClick={() => handleClickLogo()}>로고</span>}
       {title && <span className="title3-sb text-text-primary ml-2 mr-auto">{title}</span>}
       <div className="flex gap-4">
-        {showUser && <User size={24} />}
+        {showUser && <User size={24} onClick={() => handleClickUser()} />}
         {showLogin && <span>로그인</span>}
         {showSearch && <Search size={24} onClick={() => handleClickSearch()} />}
         {showSettings && <span>환경설정</span>}

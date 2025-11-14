@@ -18,11 +18,13 @@ export default function FestivalItem({ festivalData }: RoomItemProps) {
     navigate(`/room-list/${festivalData.festivalId}`);
   }
 
+  const mainImage = festivalData.firstImage || "/testImg.png";
+
   return (
     <div className='flex flex-row h-20 gap-3 items-center bg-surface-container-default
     border border-line-border-secondary p-4 rounded-3 cursor-pointer'
       onClick={() => handleClick()}>
-      <img src={festivalData.firstImage} alt='Festival Image'
+      <img src={mainImage} alt='Festival Image'
         className='h-12 w-12 aspect-square rounded-full ' />
       <div className='flex flex-col'>
         <span className='flex-1 title3-sb'>

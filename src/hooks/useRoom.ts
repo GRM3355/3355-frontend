@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createRoom, getRoomByRoomId, getRoomsByUserId } from "@/api/room";
 import { useNavigate } from "react-router-dom";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
+import useAuthStore from "@/stores/useAuthStore";
 
 // 특정 방 정보 가져오기
 export const useGetRoomById = (roomId: string) => {
@@ -34,12 +35,12 @@ export const useGetRoomById = (roomId: string) => {
 export const useCreateRoom = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
+  const { setUserId } = useAuthStore();
   return useMutation({
     mutationFn: createRoom,
     onSuccess: (newRoom: RoomAPI) => {
       console.log('방 생성 성공:', newRoom);
-
+      setUserId(newRoom.userId);
       // 해당 축제 방 목록만 갱신
       queryClient.invalidateQueries({ queryKey: ['festivalRooms', { festivalId: newRoom.festivalId }] });
 

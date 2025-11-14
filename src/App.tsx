@@ -18,6 +18,7 @@ import SearchPage from './pages/SearchPage'
 import EchoTest from './pages/EchoTest'
 import api from './api/axios'
 import ComponentTestPage from './pages/ComponentTestPage'
+import MyPage from './pages/MyPage'
 
 
 function App() {
@@ -45,14 +46,16 @@ function App() {
   // }, []);
 
   //임시 토큰
-  const { tempToken, setTempToken } = useAuthStore();
-
+  const { tempToken, setTempToken, setCoord } = useAuthStore();
+  const LAT = 37.56813168
+  const LON = 126.9696496
   useEffect(() => {
     // 토큰 없으면 서버에서 발급
     if (!tempToken) {
-      api.post('/api/v1/auth/token-register', {
-        lat: "35.1011951345",
-        lon: "129.0323594995"
+      api.post('/api/auth/tokens', {
+        lat: LAT,
+        lon: LON,
+        validCoordinates: true,
       },
         {
           headers: {
@@ -62,6 +65,7 @@ function App() {
         .then(response => {
           const newToken = response.data.data.accessToken;
           setTempToken(newToken);
+          setCoord(LAT, LON);
           console.log('임시 토큰 발급 성공:', newToken);
           setUserId(newToken);
         })
@@ -85,6 +89,7 @@ function App() {
             <Route path='/room-list/:festivalId' element={<RoomListPage />} />
             <Route path='/create-room/:festivalId' element={<CreateRoomPage />} />
             <Route path='/my-chat' element={<MyChatPage />} />
+            <Route path='/mypage' element={<MyPage />} />
             <Route path='/chat/:roomId' element={<ChatPage />} />
             <Route path='/report' element={<ReportPage />} />
             <Route path='/search' element={<SearchPage />} />

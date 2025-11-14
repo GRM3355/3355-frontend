@@ -31,10 +31,10 @@ export default function RoomListSection({ festivalData, roomDatas }: RoomListSec
       <div className="py-8">
         {/* <p>{festivalId}</p> */}
         {/* <p>{data}</p> */}
-        <div className="flex items-center gap-2">
-          <p className="title1-sb">{festivalData.title}</p>
+        <div className="flex gap-2">
+          <p className="title1-sb flex-1">{festivalData.title}</p>
           <Info size={16} onClick={(e) => handleShowInfo(e)}
-            className="border rounded-full border-text-primary" />
+            className="border rounded-full border-text-primary my-1.5" />
         </div>
         <p className="caption2-r text-text-tertiary">페스티벌 Zone 내에서 채팅이 가능합니다.</p>
       </div>

@@ -2,9 +2,10 @@ import type { ChatAPI } from "@/types/api"
 
 type ChatItemProps = {
   chat: ChatAPI;
+  isMine: boolean
 }
 
-export default function ChatItem({ chat }: ChatItemProps) {
+export default function ChatItem({ chat, isMine }: ChatItemProps) {
   const formattedTime = new Date(chat.createdAt.split('.')[0]).toLocaleTimeString('ko-KR', {
     hour: '2-digit',
     minute: '2-digit',
@@ -18,7 +19,7 @@ export default function ChatItem({ chat }: ChatItemProps) {
         <p className="label2-r text-text-primary w-fit max-w-[70%] 
       bg-state-interacion-container-bubble-default rounded-4 px-2.5 py-2 
       whitespace-pre-line">
-          {chat.content}
+          {chat.content}, {isMine}
         </p>
         <span className="text-xs text-gray-400">{formattedTime}</span>
       </div>
