@@ -1,5 +1,4 @@
-import { useGetFestivalCount, useGetFestivals } from '@/hooks/useFestival';
-import { getFestivals } from '@/api/festival';
+import { useGetFestivalCount, useGetFestivals, useGetFestivalsInfinite } from '@/hooks/useFestival';
 import FestivalItem from '@/components/festival/FestivalItem';
 import type { Festival } from '@/types';
 import { useQuery } from '@tanstack/react-query';
@@ -29,13 +28,31 @@ export default function FestivalListPage() {
   const [region, setRegion] = useState<string>('SEOUL');
   const [filter, setFilter] = useState<string>('DATE');
 
-  const { data: festivalInfo,
-    isLoading: isFestivalInfoLoading,
-    isError: isFestivalInfoError } = useGetFestivals();
+  // const { data: festivalInfo,
+  //   isLoading: isFestivalInfoLoading,
+  //   isError: isFestivalInfoError } = useGetFestivals({ region });
 
-  const filteredFestivals = festivalInfo?.content.filter(
-    (info) => info.region == region
-  );
+  // const filteredFestivals = festivalInfo?.content.filter(
+  //   (info) => info.region == region
+  // );
+
+  const {
+    data,
+    isFetching,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useGetFestivalsInfinite({ region });
+
+  const allFestivals = data?.pages.flatMap(page => page.content) ?? [];
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    if (scrollHeight - scrollTop <= clientHeight + 50 && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
 
   // const {
   //   data: festivalCount,
@@ -48,6 +65,9 @@ export default function FestivalListPage() {
   // if (isFestivalInfoError || isFestivalCountError) return <p>에러 발생!</p>;
 
   // console.log(festivalCount);
+
+  if (!data) return <></>
+
   return (
     <>
       <Header showLogo={true} showUser={true} showSearch={true} />
@@ -71,9 +91,12 @@ export default function FestivalListPage() {
         </div>
 
         {/* 진행중인 페스티벌 */}
-        <div className='flex flex-col h-full gap-2 overflow-y-auto p-4 scrollbar-hide pb-16'>
-          {filteredFestivals?.map((festival: FestivalAPI) => (
-            <FestivalItem key={festival.festivalId} festivalData={festival} />
+        <div className='flex flex-col h-full gap-2 overflow-y-auto p-4 scrollbar-hide pb-16'
+          onScroll={handleScroll}>
+          {/* > */}
+
+          {allFestivals?.map((festival: FestivalAPI, i) => (
+            <FestivalItem key={`${i}-${festival.festivalId}`} festivalData={festival} />
           ))}
         </div>
       </div>

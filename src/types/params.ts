@@ -1,3 +1,30 @@
+// export type GetFestivalsParams = {
+//   page: number;
+//   pageSize: number;
+//   order?: 'DATE_ASC' | 'DATE_DESC';
+//   region?: string;
+//   status?: ''
+//   keyword?: string;
+//   ps: boolean;
+//   lat?: number;
+//   lon?: number;
+//   radius?: number;
+// };
+
+export type GetFestivalsParams = {
+  page?: number;
+  pageSize?: number;
+  order?: 'DATE_ASC' | 'DATE_DESC';
+  region?: string;
+  status?: '' | 'UPCOMING';
+  keyword?: string;
+  ps?: boolean;
+  lat?: number;
+  lon?: number;
+  radius?: number;
+};
+
+
 export type GetRoomsByFestivalIdParams = {
   festivalId: number;
   page: number;
