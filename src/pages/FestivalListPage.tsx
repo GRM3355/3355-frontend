@@ -36,6 +36,7 @@ export default function FestivalListPage() {
   //   (info) => info.region == region
   // );
 
+  //페스티벌
   const {
     data,
     isFetching,
@@ -45,14 +46,18 @@ export default function FestivalListPage() {
     isFetchingNextPage
   } = useGetFestivalsInfinite({ region });
 
-  const allFestivals = data?.pages.flatMap(page => page.content) ?? [];
+  const festivals = data?.pages.flatMap(page => page.content) ?? [];
 
+  //무한 스크롤 감지
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     if (scrollHeight - scrollTop <= clientHeight + 50 && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   };
+
+  //현재 지역 페스티벌 개수
+  const { data: festivalCount } = useGetFestivalCount({ region });
 
   // const {
   //   data: festivalCount,
@@ -82,12 +87,12 @@ export default function FestivalListPage() {
         {/* 정렬 */}
         <div className='flex gap-1 items-center justify-between p-4'>
           <span className='title1-sb text-text-primary'>진행/예정 페스티벌</span>
-          {/* <span className='flex-1 label2-r text-text-tertiary'>{festivalCount.count ?? 0}</span> */}
-          <Select
+          <span className='flex-1 label2-r text-text-tertiary'>{festivalCount.count ?? 0}</span>
+          {/* <Select
             items={FILTER}
             selected={filter}
             onSelect={setFilter}
-          />
+          /> */}
         </div>
 
         {/* 진행중인 페스티벌 */}
@@ -95,7 +100,7 @@ export default function FestivalListPage() {
           onScroll={handleScroll}>
           {/* > */}
 
-          {allFestivals?.map((festival: FestivalAPI, i) => (
+          {festivals?.map((festival: FestivalAPI, i) => (
             <FestivalItem key={`${i}-${festival.festivalId}`} festivalData={festival} />
           ))}
         </div>

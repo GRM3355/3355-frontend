@@ -38,10 +38,7 @@ export const getFestivalByFestivalId = async ({ queryKey }: any) => {
 };
 
 //지역별 축제 개수
-export const getFestivalCountByRegion = async ({ queryKey }: any) => {
-  const [, { region }] = queryKey;
-  const { data } = await api.get(`/api/v1/festivals/count`, {
-    params: { region },
-  });
+export const getFestivalCountByRegion = async (params: any) => {
+  const { data } = await api.get(`/api/v1/festivals/count`, { params });
   return data.data;
 };

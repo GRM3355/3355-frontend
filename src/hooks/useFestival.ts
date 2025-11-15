@@ -115,7 +115,7 @@ export const useGetFestivalCount = (params: any = {}) => {
   const defaultParams = { region: "SEOUL" }
 
   return useQuery({
-    queryKey: ['festivalCount', { ...defaultParams }],
-    queryFn: getFestivalCountByRegion,
+    queryKey: ['festivalCount', params],
+    queryFn: () => getFestivalCountByRegion({ ...defaultParams, ...params }),
   });
 }
