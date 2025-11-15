@@ -26,6 +26,8 @@ jobs:
           VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
           VITE_PUBLIC_API_KEY: ${{ secrets.VITE_PUBLIC_API_KEY }}
           VITE_MONGODB_URI: ${{ secrets.VITE_MONGODB_URI }}
+          VITE_KAKAO_API_KEY: ${{ secrets.VITE_KAKAO_API_KEY }}
+          VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI }}
         run: npm run build 
 
       - name: Configure AWS Credentials
