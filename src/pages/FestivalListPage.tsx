@@ -100,9 +100,14 @@ export default function FestivalListPage() {
           onScroll={handleScroll}>
           {/* > */}
 
-          {festivals?.map((festival: FestivalAPI, i) => (
-            <FestivalItem key={`${i}-${festival.festivalId}`} festivalData={festival} />
-          ))}
+          {(festivals && festivals.length > 0) ? (festivals.map((festival: FestivalAPI, i) => (
+            <FestivalItem key={`${i}-${festival.festivalId}`} festivalData={festival} />))
+          ) : (
+            <div className='flex flex-col w-full h-full items-center justify-center pb-16'>
+              <p>현재 개최중인</p>
+              <p>페스티벌이 없습니다.</p>
+            </div>
+          )}
         </div>
       </div>
     </>

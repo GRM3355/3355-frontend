@@ -21,6 +21,7 @@ export interface FestivalAPI {
   lon: number;
   region: 'SEOUL' | 'JEOLLA' | 'GYEONGGI' | 'BUSAN' | string;
   chatRoomCount: number;
+  totalParticipantCount: number;
 }
 
 export type RoomAPI = {
