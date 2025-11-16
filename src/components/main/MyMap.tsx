@@ -137,7 +137,6 @@ export default function MyMap({
     });
 
     const filteredGroupPoints = [...groupMap.values()].filter(g => g.points.length > 1);
-    console.log(filteredGroupPoints);
 
     setSinglePoints(filteredSinglePoints);
     setGroupPoints(filteredGroupPoints);
@@ -193,7 +192,23 @@ export default function MyMap({
         mapboxAccessToken={MAPBOX_TOKEN}
         style={{ width: '100%', height: '100%' }}
         interactiveLayerIds={['clusters', 'unclustered-point']}
-        onClick={() => onCloseBottomSheet()}
+        onClick={(evt) => {
+          const features = evt.features;
+          if (!features) return;
+
+          const cluster = features.find(f => f.layer?.id === 'clusters');
+
+          if (cluster && cluster.geometry.type === 'Point') {
+            const [longitude, latitude] = cluster.geometry.coordinates;
+
+            mapRef.current?.flyTo({
+              center: [longitude, latitude],
+              zoom: 16, // 원하는 줌 레벨
+            });
+          }
+
+          onCloseBottomSheet();
+        }}
         onMoveEnd={(evt) => setViewport(evt.viewState)}
         onLoad={(evt) => {
           const map = evt.target;
@@ -222,7 +237,7 @@ export default function MyMap({
           type="geojson"
           data={geoJsonPoints}
           cluster={true}
-          clusterMaxZoom={6}
+          clusterMaxZoom={13}
           clusterRadius={40}
         >
           {/* 클러스터 심볼 */}
