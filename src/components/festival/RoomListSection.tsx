@@ -7,14 +7,22 @@ import type { ChatRoomAPI, FestivalAPI, RoomAPI } from "@/types/api";
 import Header from "@/components/layout/Header";
 import AD from "@/components/common/AD";
 import { Info, Plus, X } from "@mynaui/icons-react";
+import Select from "../common/Select";
 
 type RoomListSectionProps = {
   festivalData: FestivalAPI;
   roomDatas: RoomAPI[];
 }
 
+const FILTER = [
+  { key: "participant", label: "참여자순" },
+  { key: "ABC", label: "최신순" },
+]
+
 export default function RoomListSection({ festivalData, roomDatas }: RoomListSectionProps) {
   const [isShowFestivalModal, setShowFestivalModal] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>('participant');
+
   const navigate = useNavigate();
 
   const handleCreateRoom = () => {
@@ -25,6 +33,7 @@ export default function RoomListSection({ festivalData, roomDatas }: RoomListSec
     e.stopPropagation();
     setShowFestivalModal(true)
   }
+
 
   return (
     <div className="flex flex-col h-full p-4 pt-0">
@@ -41,7 +50,11 @@ export default function RoomListSection({ festivalData, roomDatas }: RoomListSec
       <div className="flex gap-1 pb-2">
         <span className="title3-sb text-text-primary">단체 채팅방</span>
         <span className="flex-1 label5-r text-text-tertiary">{roomDatas.length}</span>
-        <span>참여자순</span>
+        <Select
+          items={FILTER}
+          selected={filter}
+          onSelect={setFilter}
+        />
       </div>
       <div className='flex flex-col h-full gap-2 '>
 

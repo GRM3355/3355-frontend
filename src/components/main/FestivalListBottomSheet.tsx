@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Festival } from '@/types';
 import { useGetRoomsByFestivalId } from '@/hooks/useFestival';
 import type { ChatRoomAPI, FestivalAPI, RoomAPI } from '@/types/api';
-import { ArrowRight, Info } from '@mynaui/icons-react';
+import { ArrowRight, Info, Plus } from '@mynaui/icons-react';
 import RoomListSection from '../festival/RoomListSection';
 
 type FestivalListBottomSheetProps = {
@@ -37,8 +37,7 @@ export default function FestivalListBottomSheet({
 
 
   const handleClick = () => {
-    // navigate(`/room-list/${id}`)
-    navigate(`/create-room/1`)
+    navigate(`/room-list/${festivalData?.festivalId}`);
   }
 
   const handleShowInfo = (e: MouseEvent) => {
@@ -48,6 +47,23 @@ export default function FestivalListBottomSheet({
 
   if (isRoomLoading) {
     return <p>로딩 중...</p>;
+  }
+
+
+  const handleCreateRoom = (e: MouseEvent) => {
+    e.stopPropagation();
+    // if (!tempToken || !festivalId) return;
+
+    // const id = parseInt(festivalId);
+    // console.log("채팅방 생성 시도:", { festivalId, token: tempToken, roomTitle, lat, lon });
+    // mutate({
+    //   festivalId: id,
+    //   token: tempToken,
+    //   title: roomTitle,
+    //   lat,
+    //   lon
+    // });
+
   }
 
   if (!festivalData || !roomDatas?.content) return null;
@@ -64,11 +80,13 @@ export default function FestivalListBottomSheet({
           <span>9000명 참여중</span>
           <p>{festivalData.title}</p>
           <p>{festivalData.eventStartDate} - {festivalData.eventEndDate}</p>
-          <span>더보러가기</span>
+          <span onClick={() => handleClick()}>더보러가기</span>
         </div>
       </div>
       <p className="caption2-r text-text-tertiary bg-gray-100">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
       <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
+      <Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1"
+        onClick={(e) => handleCreateRoom(e)} />
     </BottomSheet>
   )
 }

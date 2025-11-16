@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronUp } from "@mynaui/icons-react";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 
 export type SelectItem = {
   key: string;
@@ -15,9 +15,15 @@ type SelectProps = {
 export default function Select({ items, selected, onSelect }: SelectProps) {
   const [show, setShow] = useState<boolean>(false);
 
-  const handleSelected = (key: string) => {
+  const handleSelected = (e: MouseEvent, key: string) => {
+    e.stopPropagation();
     setShow(false);
     onSelect(key);
+  }
+
+  const handleShow = (e: MouseEvent, b: boolean) => {
+    e.stopPropagation();
+    setShow(b);
   }
 
   return (
@@ -26,11 +32,11 @@ export default function Select({ items, selected, onSelect }: SelectProps) {
       {show && (
         <div
           className="fixed inset-0"
-          onClick={() => setShow(false)}
+          onClick={(e) => handleShow(e, false)}
         />
       )}
       {/* 기본 */}
-      <div onClick={() => setShow(prev => !prev)}
+      <div onClick={(e) => handleShow(e, !show)}
         className="flex items-center gap-1 lebel5-r text-text-primary">
         <span>{items.find(item => item.key === selected)?.label ?? items[0].label}</span>
         {show ? (<ChevronUp size={20} />) : (<ChevronDown size={20} />)}
@@ -41,7 +47,7 @@ export default function Select({ items, selected, onSelect }: SelectProps) {
         label5-r'>
           {items.map(item => (
             <span key={item.key} className={`${selected === item.key ? 'text-text-brand' : 'text-text-primary'}`}
-              onClick={() => handleSelected(item.key)}>{item.label}</span>
+              onClick={(e) => handleSelected(e, item.key)}>{item.label}</span>
           ))}
         </div>
       }

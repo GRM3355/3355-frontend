@@ -36,6 +36,7 @@ export default function FestivalListPage() {
   //   (info) => info.region == region
   // );
 
+
   //페스티벌
   const {
     data,

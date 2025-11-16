@@ -12,6 +12,7 @@ type GroupPointsProps = {
 
 export default function GroupPoints({ viewport, groupPoints, onClickPoint, isShowBottomSheet }: GroupPointsProps) {
   const [color, setColor] = useState<string>("bg-alpha-violet-16");
+  const [isSeleted, setIsSeleted] = useState<boolean>(false);
 
   const circleColor = {
     upcoming: "bg-alpha-gray-16",
@@ -19,8 +20,6 @@ export default function GroupPoints({ viewport, groupPoints, onClickPoint, isSho
     medium: "bg-alpha-yellow-16",
     high: "bg-alpha-pink-16"
   };
-
-
 
   return (
     <>
@@ -36,6 +35,7 @@ export default function GroupPoints({ viewport, groupPoints, onClickPoint, isSho
             onClick={(e) => {
               e.stopPropagation();
               onClickPoint(point.points[0]);
+
             }}>
             {/* 큰 원 */}
             <div
