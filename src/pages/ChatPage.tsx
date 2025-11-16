@@ -1,4 +1,5 @@
 import ChatItem from "@/components/chat/ChatItem";
+import Input from "@/components/common/Input";
 import Header, { type HeaderRoomInfo } from "@/components/layout/Header";
 import useAuthStore from "@/stores/useAuthStore";
 import type { ChatAPI } from "@/types/api";
@@ -136,7 +137,6 @@ export default function ChatPage() {
 
   const { lat, lon } = useAuthStore();
 
-  console.log("위치" + lat, lon);
   useEffect(() => {
     // if (!tempToken || !roomId) return;
 
@@ -254,17 +254,23 @@ export default function ChatPage() {
       </div> */}
 
 
-        <div className="flex border-t">
-          <input
-            className="flex-1 p-2 border-none outline-none"
+        <div className="px-2">
+          <Input
+            type="text"
+            placeholder="메세지 입력"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="메시지를 입력하세요"
+            defaultStyle="px-4 py-2 h-10 border rounded-2 text-text-quaternary border-line-border-secondary bg-surface-container-default"
+            focusStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
+            completeStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
+            disabledStyle="px-4 py-2 h-10 rounded-2 text-text-disabled bg-state-interacion-container-disabled"
+            // isDisabled={true}
+            onSend={() => sendMessage()}
+            onClear={() => setMessage('')}
           />
-          <button className="bg-blue-500 text-white p-2" onClick={sendMessage}>
-            전송
-          </button>
         </div>
+
+
       </div>
     </>
 
