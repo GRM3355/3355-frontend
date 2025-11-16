@@ -1,29 +1,99 @@
 import type { ChatAPI } from "@/types/api"
+import { LikeSolid } from "@mynaui/icons-react";
+import { useRef, useState } from "react";
 
 type ChatItemProps = {
   chat: ChatAPI;
-  isMine: boolean
-}
+  isMine: boolean;
+  bubblePosition: "single" | "top" | "middle" | "bottom";
+};
 
-export default function ChatItem({ chat, isMine }: ChatItemProps) {
-  const formattedTime = new Date(chat.createdAt.split('.')[0]).toLocaleTimeString('ko-KR', {
-    hour: '2-digit',
-    minute: '2-digit',
+export default function ChatItem({ chat, isMine, bubblePosition }: ChatItemProps) {
+  const formattedTime = new Date(chat.createdAt.split('.')[0]).toLocaleTimeString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: false,
   });
 
-  return (
-    <div className="w-[80%] flex flex-col">
-      <p className="text-grayscale-800 mb-1">{chat.userId}</p>
-      <div className="flex flex-row items-end gap-1">
-        <p className="label2-r text-text-primary w-fit max-w-[70%] 
-      bg-state-interacion-container-bubble-default rounded-4 px-2.5 py-2 
-      whitespace-pre-line">
-          {chat.content}, {isMine}
-        </p>
-        <span className="text-xs text-gray-400">{formattedTime}</span>
-      </div>
-    </div>
+  // long press like
+  const [isLiked, setIsLiked] = useState(chat.liked);
+  const timerRef = useRef<number | null>(null);
 
-  )
+  const handlePointerDown = () => {
+    timerRef.current = window.setTimeout(() => {
+      setIsLiked(true);
+      console.log("좋아요!");
+    }, 500);
+  };
+
+  const handlePointerUp = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  /** 말풍선 라운드 설정 */
+  const leftStyles = {
+    single: "rounded-4",
+    top: "rounded-4 rounded-bl-[2px]",
+    middle: "rounded-4 rounded-tl-[2px] rounded-bl-[2px]",
+    bottom: "rounded-4 rounded-tl-[2px]",
+  };
+
+  const rightStyles = {
+    single: "rounded-4",
+    top: "rounded-4 rounded-br-[2px]",
+    middle: "rounded-4 rounded-tr-none rounded-br-[2px]",
+    bottom: "rounded-4 rounded-tr-[2px]",
+  };
+
+  const bubbleClass = isMine ? rightStyles[bubblePosition] : leftStyles[bubblePosition];
+
+  return (
+    <div className={`w-[80%] flex flex-col ${isMine ? "ml-auto items-end" : ""}`}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerLeave={handlePointerUp}>
+      {/* 닉네임 */}
+      {(bubblePosition == 'single' || bubblePosition == 'top') && <p className={isMine ? "text-text-brand" : "text-grayscale-800"}>
+        {chat.nickname}
+      </p>}
+
+      {/* 말풍선 + 시간 */}
+      <div className={`flex flex-row items-end gap-1 mb-1 w-full ${isMine ? "justify-end" : ""}`}>
+        {/* 상대방: 시간 → 왼, 말풍선 → 오른쪽 */}
+        {(bubblePosition === 'single' || bubblePosition === 'bottom') && isMine && (
+          <span className="text-xs text-gray-400">{formattedTime}</span>
+        )}
+        <p
+          className={`
+            label2-r w-fit max-w-[70%] px-2.5 py-2 whitespace-pre-line
+            ${isMine ? "text-text-inverse bg-text-brand" : "text-text-primary bg-state-interacion-container-bubble-default"}
+            ${bubbleClass}
+          `}
+        >
+          {chat.content}
+        </p>
+
+        {/* 내 메시지: 시간 → 오른쪽 */}
+        {(bubblePosition === 'single' || bubblePosition === 'bottom') && !isMine && (
+          <span className="text-xs text-gray-400">{formattedTime}</span>
+        )}
+      </div>
+
+      {/* 좋아요 버튼 */}
+      {(chat.likeCount > 0 || (chat.likeCount == 0 && isLiked)) && (
+        <div
+          className="w-max flex gap-0.5 px-0.75 py-0.5 bg-state-interacion-container-bubble-default rounded-3 items-center">
+          <LikeSolid
+            size={12}
+            className={isLiked ? "text-icon-border-brand" : "text-icon-container-tertiary"}
+          />
+          <span className="caption5-r text-text-primary">{chat.likeCount}</span>
+        </div>
+      )}
+
+    </div>
+  );
 }

@@ -19,12 +19,19 @@ import EchoTest from './pages/EchoTest'
 import api from './api/axios'
 import ComponentTestPage from './pages/ComponentTestPage'
 import MyPage from './pages/MyPage'
-
+import { jwtDecode } from "jwt-decode";
+import KakaoLoginModal from './components/main/KakaoLoginModal'
+import useLoginStore from './stores/useLoginStore'
+import KakaoRedirectPage from './pages/KakaoRedirectPage'
 
 function App() {
   //확인 모달용
   const { isOpen, title, message, confirmText, cancelText,
     onConfirm, onCancel, closeConfirm, } = useConfirmStore();
+
+  const { isLoginModalOpen, closeLoginModal } = useLoginStore();
+
+
   const [userId, setUserId] = useState<string>();
 
   //TODO: 로컬로 id 저장하는 거 없애고 아래 토큰 쓰기!!!
@@ -47,8 +54,11 @@ function App() {
 
   //임시 토큰
   const { tempToken, setTempToken, setCoord } = useAuthStore();
+
+
   const LAT = 37.56813168
   const LON = 126.9696496
+
   useEffect(() => {
     // 토큰 없으면 서버에서 발급
     if (!tempToken) {
@@ -64,6 +74,8 @@ function App() {
         })
         .then(response => {
           const newToken = response.data.data.accessToken;
+          const payload: any = jwtDecode(newToken);
+          console.log(payload.auth);
           setTempToken(newToken);
           setCoord(LAT, LON);
           console.log('임시 토큰 발급 성공:', newToken);
@@ -95,7 +107,8 @@ function App() {
             <Route path='/search' element={<SearchPage />} />
             <Route path='echo' element={<EchoTest />} />
             <Route path='*' element={<NotFound />} />
-            <Route path='test' element={<ComponentTestPage />} /> {/*//TODO 추후 삭제 */}
+            {/* <Route path='test' element={<ComponentTestPage />} /> //TODO 추후 삭제 */}
+            <Route path='/auth/kakao/redirect' element={<KakaoRedirectPage />} />
           </Routes>
         </div>
       </div>
@@ -113,6 +126,9 @@ function App() {
         onClose={closeConfirm}
       />
 
+      <KakaoLoginModal
+        isOpen={isLoginModalOpen}
+        onClose={closeLoginModal} />
     </div>
   )
 }

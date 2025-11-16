@@ -32,6 +32,7 @@ export default function HomePage() {
   });
 
   useEffect(() => {
+    if (!apiViewport) return; apiViewport
     console.log("apiViewport (현재 params):", {
       lat: apiViewport.latitude,
       lon: apiViewport.longitude
@@ -39,6 +40,7 @@ export default function HomePage() {
   }, [apiViewport]);
 
   useEffect(() => {
+    if (!data) return;
     console.log("API 응답 데이터:", data);
   }, [data]);
 
@@ -49,7 +51,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Header showLogo={true} showSearch={true} />
+      <Header showLogo={true} showUser={true} showSearch={true} />
       <MyMap data={data?.content}
         onShowBottomSheet={() => setShowBottomSheet(true)}
         onSelectFestival={(data: FestivalAPI) => handleSelectFestival(data)}

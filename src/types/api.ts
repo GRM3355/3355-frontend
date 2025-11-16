@@ -55,5 +55,12 @@ export type ChatAPI = {
   type: "TEXT" | string;
   createdAt: string;
   likeCount: number;
-  liked: true;
+  liked: boolean;
 }
+
+export type User = {
+  userId: string;
+  profileNickName: string;
+  accountEmail: string;
+  createdAt: string;
+};
