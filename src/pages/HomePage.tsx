@@ -26,6 +26,7 @@ export default function HomePage() {
   } as ViewState);
 
   const { data, isError, error, refetch } = useGetFestivalByLocation({
+    pageSize: 50,
     lat: apiViewport.latitude,
     lon: apiViewport.longitude,
     radius: 100
@@ -49,11 +50,21 @@ export default function HomePage() {
     return <p>에러 발생!!</p>
   }
 
+  const handleShowBottomSheet = () => {
+
+    setShowBottomSheet(!isShowBottomSheet);
+  }
+  const handleCloseBottomSheet = () => {
+    if (isShowBottomSheet)
+      setShowBottomSheet(false);
+  }
   return (
     <>
       <Header showLogo={true} showUser={true} showSearch={true} />
       <MyMap data={data?.content}
-        onShowBottomSheet={() => setShowBottomSheet(true)}
+        onShowBottomSheet={() => handleShowBottomSheet()}
+        isShowBottomSheet={isShowBottomSheet}
+        onCloseBottomSheet={() => handleCloseBottomSheet()}
         onSelectFestival={(data: FestivalAPI) => handleSelectFestival(data)}
         onSearchFestivalByLocation={(state: ViewState) => setApiViewport(state)} />
       {/* <MyMapWithProvinces /> */}

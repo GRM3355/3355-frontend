@@ -103,7 +103,7 @@ export const useGetFestivalByLocation = (params: GetFestivalByLocationParams) =>
 
   return useQuery<{ content: FestivalAPI[] }>({
     queryKey: ['festivalsByLocation', params],
-    queryFn: getFestivals,
+    queryFn: () => getFestivals({ ...defaultParams, ...params }),
     enabled: true,
     retry: false, // 재시도 막기
   });

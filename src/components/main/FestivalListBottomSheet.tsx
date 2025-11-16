@@ -57,6 +57,17 @@ export default function FestivalListBottomSheet({
       isOpen={isShowBottomSheet}
       onClose={() => onHideBottomSheet()}
     >
+      <div className='flex p-4 gap-2'>
+        <img src={festivalData.firstImage || '/testImg.png'} alt=""
+          className='w-15 h-15' />
+        <div className='flex flex-col'>
+          <span>9000명 참여중</span>
+          <p>{festivalData.title}</p>
+          <p>{festivalData.eventStartDate} - {festivalData.eventEndDate}</p>
+          <span>더보러가기</span>
+        </div>
+      </div>
+      <p className="caption2-r text-text-tertiary bg-gray-100">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
       <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
     </BottomSheet>
   )
