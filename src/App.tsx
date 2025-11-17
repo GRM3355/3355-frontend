@@ -23,6 +23,7 @@ import { jwtDecode } from "jwt-decode";
 import KakaoLoginModal from './components/main/KakaoLoginModal'
 import useLoginStore from './stores/useLoginStore'
 import KakaoRedirectPage from './pages/KakaoRedirectPage'
+import useCurrentLocation from './hooks/useCurrentLocation'
 
 function App() {
   //확인 모달용
@@ -59,6 +60,11 @@ function App() {
   const LAT = 37.56813168
   const LON = 126.9696496
 
+  const { location, error } = useCurrentLocation();
+
+
+
+
   useEffect(() => {
     // 토큰 없으면 서버에서 발급
     if (!tempToken) {
@@ -88,6 +94,9 @@ function App() {
     }
   }, [tempToken, setTempToken]);
 
+  if (error) return <div>위치 정보 가져오기 실패: {error}</div>;
+  if (!location) return <div>위치 가져오는 중...</div>;
+
   // console.log("임시 토큰:", tempToken);
   return (
     <div className='flex flex-col h-dvh w-full sm:w-100 mx-auto relative overflow-hidden'>
@@ -108,7 +117,7 @@ function App() {
             <Route path='echo' element={<EchoTest />} />
             <Route path='*' element={<NotFound />} />
             {/* <Route path='test' element={<ComponentTestPage />} /> //TODO 추후 삭제 */}
-            <Route path='/auth/kakao/redirect' element={<KakaoRedirectPage />} />
+            <Route path='/' element={<KakaoRedirectPage />} />
           </Routes>
         </div>
       </div>

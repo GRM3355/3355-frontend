@@ -58,6 +58,7 @@ export default function HomePage() {
     if (isShowBottomSheet)
       setShowBottomSheet(false);
   }
+
   return (
     <>
       <Header showLogo={true} showUser={true} showSearch={true} />

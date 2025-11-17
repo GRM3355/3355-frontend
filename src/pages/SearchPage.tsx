@@ -91,7 +91,7 @@ export default function SearchPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     {(activeTab === "ALL"
-                      ? data?.festivals?.data?.slice(0, 3)
+                      ? data?.festivals?.data?.slice(0, 4)
                       : data?.festivals?.data
                     )?.map((festival: FestivalAPI) => (
                       <FestivalItem key={festival.festivalId} festivalData={festival} />

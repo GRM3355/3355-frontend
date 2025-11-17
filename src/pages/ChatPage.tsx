@@ -132,67 +132,62 @@ export default function ChatPage() {
   const [message, setMessage] = useState("");
   const stompClientRef = useRef<Client | null>(null);
   const { tempToken, userId } = useAuthStore();
-  const { roomId: rawRoomId } = useParams();
-  const roomId = rawRoomId ? decodeURIComponent(rawRoomId) : undefined;
+  const { roomId } = useParams();
+
+  // const { roomId: rawRoomId } = useParams();
+  // const roomId = rawRoomId ? decodeURIComponent(rawRoomId) : undefined;
 
   const { lat, lon } = useAuthStore();
 
-  useEffect(() => {
-    // if (!tempToken || !roomId) return;
 
-    console.log(roomId);
+  useEffect(() => {
+    if (!roomId) return;
 
     const client = new Client({
       brokerURL: "wss://ws.zony.kro.kr/chat",
-      connectHeaders: { Authorization: `Bearer ${tempToken}` },
-      // reconnectDelay: 5000, //TODO 연결확인 (테스트할때 계속 재시도해서 일단 뺌)
+      connectHeaders: {
+        // Authorization: `Bearer ${tempToken}`,
+        Authorization: `Bearer ${tempToken}`,
+
+      },
       debug: (str) => console.log("STOMP DEBUG:", str),
 
       onConnect: () => {
-        console.log("연결됨");
+        console.log(" 연결됨");
+
         client.publish({
           destination: `/app/chat-rooms/${roomId}/join`,
-          body: JSON.stringify({
-            lat, lon
-          }),
+          body: JSON.stringify({ lat, lon }),
+          headers: { "content-type": "application/json" },
         });
 
-        //메시지 구독
         client.subscribe(`/sub/chat-rooms/${roomId}`, (frame) => {
-          console.log("Dsfdfsfsdf")
+          console.log("서버 메시지 원본:", frame.body);
           const msg = JSON.parse(frame.body);
-          console.log(msg);
-
+          console.log("파싱된 메시지:", msg);
           setMessages((prev) => [...prev, msg]);
         });
-        // client.subscribe(`/sub/chat-rooms/${roomId}`, (frame) => {
-        //   console.log("📩 /sub 수신:", frame.body);
-        // });
 
-        // client.subscribe(`/topic/chat-rooms/${roomId}`, (frame) => {
-        //   console.log("📩 /topic 수신:", frame.body);
-        // });
+        client.subscribe('/user/queue/errors', (frame) => {
+          console.error('STOMP 에러 수신:', frame.body);
+          // 여기에 에러 알림 로직 추가
+        });
 
-        // client.publish({
-        //   destination: `/app/chat-rooms/${roomId}/join`,
-        //   body: JSON.stringify({}),
-        // });
-
-        //채팅방 입장
-
-      },
-
-      onDisconnect: () => {
-        console.log("연결 종료");
       },
     });
 
-    // 언마운트 시 연결 해제
+    client.activate();
+    stompClientRef.current = client;
+
     return () => {
-      client.deactivate();
-      stompClientRef.current = null;
+      if (client.active) {
+        client.deactivate();
+      }
     };
-  }, [tempToken, roomId, lat, lon]);
+  }, [roomId]);
+
+  console.log("STOMP connected:", stompClientRef.current?.connected);
+  console.log("Messages:", messages);
 
   //메세지 전송
   const sendMessage = () => {
@@ -214,7 +209,6 @@ export default function ChatPage() {
       body: JSON.stringify(payload),
     });
 
-    console.log("publish 호출 완료");
     setMessage("");
   };
 
@@ -234,7 +228,7 @@ export default function ChatPage() {
           {/* {testChatData.map((m, i) => (
           <ChatItem key={i} chat={m} isMine={m.userId == testUserId} />
         ))} */}
-          {bubbleTestData.map((chat, i) => {
+          {/* {bubbleTestData.map((chat, i) => {
             const bubblePosition = getBubblePosition(bubbleTestData, i);
 
             return (
@@ -245,13 +239,17 @@ export default function ChatPage() {
                 bubblePosition={bubblePosition}
               />
             );
-          })}
+          })} */}
         </div>
-        {/* <div className="flex flex-col flex-1 overflow-y-auto border p-2 gap-2 scrollbar-hide">
-        {messages.map((m, i) => (
-          <ChatItem key={i} chat={m} isMine={m.userId == userId} />
-        ))}
-      </div> */}
+        <div className="flex flex-col flex-1 overflow-y-auto border p-2 gap-2 scrollbar-hide">
+          {messages.map((m, i) => {
+            const bubblePosition = getBubblePosition(messages, i);
+
+            return (<ChatItem key={i} chat={m} isMine={m.userId == userId} bubblePosition={bubblePosition} />)
+
+          }
+          )}
+        </div>
 
 
         <div className="px-2">

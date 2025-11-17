@@ -57,7 +57,8 @@ export default function Input({
               className="w-5 h-5 p-1 text-white bg-icon-container-secondary rounded-full" />
           )}
         </div>
-        {(isFocused || rest.value) && onSend && <SendSolid size={32} className="bg-orange-50 text-text-brand rounded-full p-1" />}
+        {(isFocused || rest.value) && onSend && <SendSolid size={32} className="bg-orange-50 text-text-brand rounded-full p-1"
+          onClick={() => onSend()} />}
       </div>
     </>
 

@@ -28,7 +28,7 @@ export default function ConfirmModal({
       <h2 className='h-7 title2-sb text-text-primary'>{title}</h2>
       <p className='body1-r mb-6 text-text-secondary whitespace-pre-line'>{message}</p>
       <div className='flex gap-2'>
-        <Button onClick={() => onCancel ? onCancel() : onClose?.()}>{cancelText}</Button>
+        {cancelText && <Button onClick={() => onCancel ? onCancel() : onClose?.()}>{cancelText}</Button>}
         <Button onClick={() => onConfirm?.()} variant='brand'>{confirmText}</Button>
       </div>
     </Modal>

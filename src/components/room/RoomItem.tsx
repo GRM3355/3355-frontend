@@ -1,6 +1,6 @@
 import { useConfirmStore } from "@/stores/useConfirmStore";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type RoomItemProps = {
   room: RoomAPI;
@@ -10,18 +10,26 @@ type RoomItemProps = {
 
 export default function RoomItem({ room, showDetail, isNew }: RoomItemProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { openConfirm, closeConfirm } = useConfirmStore();
 
   const handleClick = () => {
+    if (location.pathname === '/my-chat') {
+      navigate(`/chat/${room.chatRoomId}`);
+      return;
+    }
+
     openConfirm('채팅방에 참여하시겠어요?',
-      '내 채팅 목록에 채팅방이 생성됩니다.',
-      handleConfirm, undefined, '확인', '취소');
+      '내 채팅 목록에 채팅방이 생성됩니다.', handleConfirm, undefined, '확인', '취소');
+
   }
 
   const handleConfirm = () => {
     closeConfirm();
-    navigate(`/chat/1`)
+    // navigate(`/ chat / 1`)
+    navigate(`/ chat / ${room.chatRoomId}`)
+
   }
 
   // if (room.participantCount >= 30)
