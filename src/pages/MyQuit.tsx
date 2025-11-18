@@ -28,7 +28,7 @@ const UserQuitPage = () => {
 
       if (!accessToken) {
         alert("로그인이 필요한 페이지입니다.");
-        window.location.href = "/login";
+        window.location.href = "/";
         return;
       }
 

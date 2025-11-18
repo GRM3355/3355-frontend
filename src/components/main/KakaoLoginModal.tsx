@@ -35,8 +35,8 @@ type KakaoLoginModalProps = {
 };
 
 const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY; //카카오 api 키
-const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI; //api 로그인 처리 url
-const RETURN_URI =  import.meta.env.VITE_RETURN_URI;  //프론트페이지로 되돌아올 url
+const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;  //api 로그인 처리 url
+const RETURN_URI =  import.meta.env.VITE_RETURN_URI;   //프론트페이지로 되돌아올 url
 
 export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProps) {
 
