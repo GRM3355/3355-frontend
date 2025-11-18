@@ -41,6 +41,10 @@ const RETURN_URI = "https://www.zony.kro.kr/kakao-redirect";
 export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProps) {
 
   const handleClickLogin = () => {
+    console.log("REDIRECT_URI", REDIRECT_URI);
+    console.log("RETURN_URI", RETURN_URI);
+
+
     const kakaoAuthUrl =
       `https://kauth.kakao.com/oauth/authorize` +
       `?client_id=${KAKAO_API_KEY}` +
