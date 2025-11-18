@@ -2,11 +2,11 @@ import type { ReactNode } from "react";
 
 type BottomSheetProps = {
   isOpen: boolean;
-  onClose: () => void;
+  // onClose: () => void;
   children: ReactNode;
 }
 
-export default function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
+export default function BottomSheet({ isOpen, children }: BottomSheetProps) {
   return (
     <div
       className={`absolute -bottom-16 left-0 right-0 inset-0 z-40 transition-all duration-300 
