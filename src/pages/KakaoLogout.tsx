@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '@/stores/useAuthStore';
 import axios from "axios"; 
+import apiClient from "@/api/apiClient";
 
 const API_LOGOUT_URL = "/api/auth/logout"; // 백엔드 로그아웃 엔드포인트
 
@@ -9,23 +10,15 @@ const Logout = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
-      // 서버에 POST 요청
-      // const response = await axios.post(
-      //   API_LOGOUT_URL,
-      //   {}, // POST 바디가 없어도 빈 객체
-      //   {
-      //     withCredentials: true, // 쿠키 전달을 위해 반드시 필요
-      //   }
-      // );
 
       const accessToken = localStorage.getItem("accessToken");
+      //로그인 안했을 경우 메인으로 이동
       if (!accessToken) {
-        alert("로그인이 필요한 페이지입니다.");
         window.location.href = "/";
         return;
       }
 
-      const response = await axios.post(
+      const response = await apiClient.post(
         API_LOGOUT_URL,
         {}, // POST 바디가 없어도 빈 객체
         {
@@ -36,7 +29,7 @@ const Logout = () => {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 204) {
         localStorage.removeItem("accessToken");
         alert("로그아웃 되었습니다.");
       }

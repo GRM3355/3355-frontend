@@ -20,8 +20,12 @@ const processQueue = (error: any, token: string | null = null) => {
 
   failedQueue = [];
 };
+
+const API_URI = import.meta.env.VITE_API_URI;
+const REFRESH_API_URI = API_URI + "/api/auth/refresh";
+
 const apiClient = axios.create({
-  baseURL: "/api",
+  baseURL: API_URI,
   withCredentials: true, // refreshToken 쿠키 포함
 });
 
@@ -41,6 +45,8 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    alert("1111");
+
     // AccessToken 만료 → refresh 시도
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -54,18 +60,15 @@ apiClient.interceptors.response.use(
           })
           .catch((err) => Promise.reject(err));
       }
-
       originalRequest._retry = true;
       isRefreshing = true;
-
       try {
         //RefreshToken으로 새 AccessToken 발급
         const refreshResponse = await axios.post(
-          "/api/auth/refresh",
+          REFRESH_API_URI,
           {},
           { withCredentials: true }
         );
-
         const newAccessToken = refreshResponse.data.data.accessToken;
 
         // 새 토큰 저장
@@ -76,19 +79,20 @@ apiClient.interceptors.response.use(
 
         // Authorization 갱신 후 재요청
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
         return apiClient(originalRequest);
       } catch (err) {
+        console.log("에러 발생 " + err);
+
         // refreshToken도 만료됨 → 강제 로그아웃
         processQueue(err, null);
         localStorage.removeItem("accessToken");
-        window.location.href = "/login";
+        window.location.href = "/";
         return Promise.reject(err);
       } finally {
+        console.log("에러 발생2222 ");
         isRefreshing = false;
       }
     }
-
     return Promise.reject(error);
   }
 );

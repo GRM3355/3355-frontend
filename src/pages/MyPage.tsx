@@ -12,34 +12,37 @@ type UserInfo = {
 };
 
 const MyPage = () => {
+
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchUser = async () => {
+
     try {
       setLoading(true);
 
       const accessToken = localStorage.getItem("accessToken");
-
       if (!accessToken) {
-        alert("로그인이 필요한 페이지입니다.");
-        window.location.href = "/";
-        return;
+         alert("로그인이 필요한 페이지입니다.");
+         window.location.href = "/login";
+         return;
       }
 
       const response = await apiClient.get("/api/v1/user/me", {
-        withCredentials: true, // refreshToken 쿠키 사용 시 필수
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // 토큰 필요하면 포함
-        }
-      });
+         withCredentials: true, // refreshToken 쿠키 사용 시 필수
+         headers: {
+           Authorization: `Bearer ${accessToken}`, // 토큰 필요하면 포함
+         }
+       });
 
-      setUser(response.data.data); // 타입이 이미 UserInfo | null 로 설정됨
+       setUser(response.data.data); // 타입이 이미 UserInfo | null 로 설정됨
+
     } catch (err) {
       console.error("내 정보 불러오기 오류", err);
     } finally {
       setLoading(false);
     }
+
   };
 
   useEffect(() => {

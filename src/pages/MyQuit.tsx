@@ -68,15 +68,18 @@ const UserQuitPage = () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
 
-      const response = await apiClient.delete(API_QUIT_URL, {
-        data: { reason },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        withCredentials: true,
-      });
+      const response = await apiClient.post(
+        API_QUIT_URL,
+        { reason }, 
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          withCredentials: true
+        }
+      );
 
-      if (response.status === 200) {
+      if (response.status === 204) {
         alert("회원탈퇴가 완료되었습니다.");
 
         // 클라이언트 토큰 제거
