@@ -36,7 +36,7 @@ type KakaoLoginModalProps = {
 
 const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
-const RETURN_URI = "https://www.zony.kro.kr/";
+const RETURN_URI = "https://www.zony.kro.kr/r";
 
 export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProps) {
 
@@ -48,15 +48,7 @@ export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProp
       `&response_type=code` +
       `&state=${encodeURIComponent(RETURN_URI)}`;
 
-    const authWindow = window.open(kakaoAuthUrl, 'KakaoLogin', 'width=500,height=600');
-
-    window.addEventListener('message', (event) => {
-      if (event.origin !== RETURN_URI) return;
-      const { accessToken } = event.data;
-      console.log('받은 토큰:', accessToken);
-      localStorage.setItem('accessToken', accessToken); // 필요시 저장
-      if (authWindow) authWindow.close();
-    }, { once: true }); // 한 번만 실행
+    window.location.href = kakaoAuthUrl;
   };
 
   return (
