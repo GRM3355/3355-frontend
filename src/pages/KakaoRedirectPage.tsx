@@ -74,13 +74,14 @@ export default function KakaoRedirectPage() {
       // 메인 페이지로 이동
       navigate('/');
     } else {
-      alert('로그인 실패');
+      //alert('로그인 실패'); // 두번호출되어서 주석처리
       navigate('/');
     }
   }, [navigate]);
 
   return (
     <div className="flex items-center justify-center h-screen">
+
       <p>로그인 처리 중...</p>
     </div>
   );

@@ -16,9 +16,12 @@ import api from "./axios";
 
 export const kakaoLogin = async (code: string) => {
   try {
-    const response = await axios.get("https://api.zony.kro.kr/api/auth/kakao/callback", {
-      params: { code }
-    });
+    const response = await axios.get(
+      "https://api.zony.kro.kr/api/auth/kakao/callback",
+      {
+        params: { code },
+      }
+    );
     return response.data.data;
   } catch (error: any) {
     console.error("Kakao login error:", error.response?.data || error.message);
@@ -46,7 +49,6 @@ export const kakaoLogin = async (code: string) => {
 //     throw error;
 //   }
 // };
-
 
 // export const kakaoLogin = async (code: string) => {
 //   console.log('📤 Request URL:', '/api/auth/kakao/callback');
