@@ -1,4 +1,5 @@
 import ChatItem from "@/components/chat/ChatItem";
+import ChatSection from "@/components/chat/ChatSection";
 import Input from "@/components/common/Input";
 import Header, { type HeaderRoomInfo } from "@/components/layout/Header";
 import useAuthStore from "@/stores/useAuthStore";
@@ -112,20 +113,6 @@ export const bubbleTestData: ChatAPI[] = [
 ];
 
 
-function getBubblePosition(messages: ChatAPI[], index: number) {
-  const curr = messages[index];
-  const prev = messages[index - 1];
-  const next = messages[index + 1];
-
-  const isPrevSame = prev && prev.userId === curr.userId;
-  const isNextSame = next && next.userId === curr.userId;
-
-  if (!isPrevSame && isNextSame) return "top";     // 맨 위
-  else if (isPrevSame && isNextSame) return "middle";   // 중간
-  else if (isPrevSame && !isNextSame) return "bottom";  // 맨 아래
-  return "single"; // 혼자
-}
-
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<ChatAPI[]>([]);
@@ -139,7 +126,6 @@ export default function ChatPage() {
 
   const { lat, lon } = useAuthStore();
 
-
   useEffect(() => {
     if (!roomId) return;
 
@@ -148,7 +134,6 @@ export default function ChatPage() {
       connectHeaders: {
         // Authorization: `Bearer ${tempToken}`,
         Authorization: `Bearer ${tempToken}`,
-
       },
       debug: (str) => console.log("STOMP DEBUG:", str),
 
@@ -186,8 +171,6 @@ export default function ChatPage() {
     };
   }, [roomId]);
 
-  console.log("STOMP connected:", stompClientRef.current?.connected);
-  console.log("Messages:", messages);
 
   //메세지 전송
   const sendMessage = () => {
@@ -220,15 +203,16 @@ export default function ChatPage() {
     festivalTitle: " 테스트 축제명",
     count: 4
   }
+
   return (
     <>
       <Header showBack={true} info={testRoomInfo} showLeaveRoom={true} />
       <div className="flex flex-col h-full pb-16">
-        <div className="flex flex-col flex-1 overflow-y-auto p-2 gap-2 scrollbar-hide">
-          {/* {testChatData.map((m, i) => (
+        {/*<div className="flex flex-col flex-1 overflow-y-auto p-2 gap-2 scrollbar-hide">
+           {testChatData.map((m, i) => (
           <ChatItem key={i} chat={m} isMine={m.userId == testUserId} />
         ))} */}
-          {/* {bubbleTestData.map((chat, i) => {
+        {/* {bubbleTestData.map((chat, i) => {
             const bubblePosition = getBubblePosition(bubbleTestData, i);
 
             return (
@@ -239,19 +223,11 @@ export default function ChatPage() {
                 bubblePosition={bubblePosition}
               />
             );
-          })} */}
+          })} 
+        </div>*/}
+        <div className="flex-1 overflow-y-auto">
+          <ChatSection userId={userId} messages={messages} />
         </div>
-        <div className="flex flex-col flex-1 overflow-y-auto border p-2 gap-2 scrollbar-hide">
-          {messages.map((m, i) => {
-            const bubblePosition = getBubblePosition(messages, i);
-
-            return (<ChatItem key={i} chat={m} isMine={m.userId == userId} bubblePosition={bubblePosition} />)
-
-          }
-          )}
-        </div>
-
-
         <div className="px-2">
           <Input
             type="text"

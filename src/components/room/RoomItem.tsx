@@ -28,7 +28,7 @@ export default function RoomItem({ room, showDetail, isNew }: RoomItemProps) {
   const handleConfirm = () => {
     closeConfirm();
     // navigate(`/ chat / 1`)
-    navigate(`/ chat / ${room.chatRoomId}`)
+    navigate(`/chat/${room.chatRoomId}`)
 
   }
 

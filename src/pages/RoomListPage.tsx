@@ -84,9 +84,8 @@ export default function RoomListPage() {
           <p className="caption2-r text-text-tertiary bg-gray-100">페스티벌 Zone 내에서 채팅이 가능합니다.</p>
         </div>
 
-        <div className="pb-32">
+        <div className="min-h-[80%] pb-32">
           <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
-
         </div>
       </div >
       <Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1"
