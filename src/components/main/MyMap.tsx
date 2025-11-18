@@ -279,10 +279,10 @@ export default function MyMap({
       {/* 클러스터 색깔 정보 */}
       <div className='absolute w-max h-max top-0 left-0'
         onClick={() => setShowColorInfo(prev => !prev)}>
-        <InfoCircle size={30} className='absolute top-5 left-5 bg-white text-center self-center rounded-full floating p-1' />
+        <InfoCircle size={30} className='absolute top-4 left-4 bg-white text-center self-center rounded-full floating p-1' />
         {showColorInfo && (
           <>
-            <div className='absolute top-16 left-10 w-max h-max flex flex-col gap-1 bg-white rounded-4 tooltip p-3 rounded-tl-none'>
+            <div className='absolute top-16 left-8 w-max h-max flex flex-col gap-1 bg-white rounded-4 tooltip p-3 rounded-tl-none'>
               <ZoneInfoItem label="매우 혼잡" info='(0,000 ~ 0,000)' />
               <ZoneInfoItem color="bg-state-zone-yellow-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
               <ZoneInfoItem color="bg-state-zone-green-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
@@ -296,11 +296,14 @@ export default function MyMap({
 
       </div>
       {/* 재검색 버튼 */}
-      <span className='absolute top-0 left-1/2 -translate-x-1/2 border bg-alpha-black-38'
+      <span className='absolute top-4 left-1/2 -translate-x-1/2 label5-r
+        bg-surface-overlay-chip chip rounded-full text-basic-100 px-3.5 py-1.5'
         onClick={() => handleResearchFestival()}>이 지역 재검색</span>
       {/* 현재 위치로 이동 */}
-      <Target size={32} className={`absolute ${isShowBottomSheet ? "bottom-100" : "bottom-16"} right-0 bg-white`}
+      <img src="/Target.svg" alt="target" className={`absolute ${isShowBottomSheet ? "bottom-100" : "bottom-16"} 
+      right-3 bg-white p-2.5 rounded-full floating`}
         onClick={() => handleGoMyPos()} />
+
     </div >
   );
 }
