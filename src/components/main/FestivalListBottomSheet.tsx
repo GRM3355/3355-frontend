@@ -11,14 +11,14 @@ import RoomListSection from '../festival/RoomListSection';
 type FestivalListBottomSheetProps = {
   festivalData?: FestivalAPI;
   isShowBottomSheet: boolean;
-  onHideBottomSheet: () => void;
+  // onHideBottomSheet: () => void;
   onShowFestivalModal: () => void;
 }
 
 export default function FestivalListBottomSheet({
   festivalData,
   isShowBottomSheet,
-  onHideBottomSheet,
+  // onHideBottomSheet,
   onShowFestivalModal
 }: FestivalListBottomSheetProps
 ) {
@@ -71,7 +71,7 @@ export default function FestivalListBottomSheet({
   return (
     <BottomSheet
       isOpen={isShowBottomSheet}
-      onClose={() => onHideBottomSheet()}
+    // onClose={() => onHideBottomSheet()}
     >
       <div className='flex p-4 gap-2'>
         <img src={festivalData.firstImage || '/testImg.png'} alt=""
