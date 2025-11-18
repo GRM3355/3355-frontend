@@ -48,7 +48,15 @@ export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProp
       `&response_type=code` +
       `&state=${encodeURIComponent(RETURN_URI)}`;
 
-    window.location.href = kakaoAuthUrl;
+    const authWindow = window.open(kakaoAuthUrl, 'KakaoLogin', 'width=500,height=600');
+
+    window.addEventListener('message', (event) => {
+      if (event.origin !== RETURN_URI) return;
+      const { accessToken } = event.data;
+      console.log('받은 토큰:', accessToken);
+      localStorage.setItem('accessToken', accessToken); // 필요시 저장
+      if (authWindow) authWindow.close();
+    }, { once: true }); // 한 번만 실행
   };
 
   return (
