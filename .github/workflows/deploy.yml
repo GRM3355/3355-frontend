@@ -28,6 +28,7 @@ jobs:
           VITE_MONGODB_URI: ${{ secrets.VITE_MONGODB_URI }}
           VITE_KAKAO_API_KEY: ${{ secrets.VITE_KAKAO_API_KEY }}
           VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI }}
+          VITE_RETURN_URI: ${{ secrets.VITE_RETURN_URI }}
           VITE_API_URI: ${{ secrets.VITE_API_URI }}
         run: npm run build 
 
