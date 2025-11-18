@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Festival } from '@/types';
 import { useGetRoomsByFestivalId } from '@/hooks/useFestival';
 import type { ChatRoomAPI, FestivalAPI, RoomAPI } from '@/types/api';
-import { ArrowRight, Info, Plus } from '@mynaui/icons-react';
+import { ArrowRight, Info, Plus, UserSolid } from '@mynaui/icons-react';
 import RoomListSection from '../festival/RoomListSection';
 
 type FestivalListBottomSheetProps = {
@@ -13,6 +13,16 @@ type FestivalListBottomSheetProps = {
   isShowBottomSheet: boolean;
   // onHideBottomSheet: () => void;
   onShowFestivalModal: () => void;
+}
+
+function formatDateWithWeekday(dateStr: string) {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekday = days[date.getDay()];
+
+  return `${year}.${month}.${day}(${weekday})`;
 }
 
 export default function FestivalListBottomSheet({
@@ -37,12 +47,19 @@ export default function FestivalListBottomSheet({
 
 
   const handleClick = () => {
-    navigate(`/room-list/${festivalData?.festivalId}`);
+    if (festivalData)
+      navigate(`/create-room/${festivalData.festivalId}`);
   }
 
   const handleShowInfo = (e: MouseEvent) => {
     e.stopPropagation();
     onShowFestivalModal();
+  }
+
+  const handleShowDetail = () => {
+    if (festivalData)
+      navigate(`/room-list/${festivalData?.festivalId}`);
+
   }
 
   if (isRoomLoading) {
@@ -52,6 +69,10 @@ export default function FestivalListBottomSheet({
 
   const handleCreateRoom = (e: MouseEvent) => {
     e.stopPropagation();
+
+    if (festivalData)
+      navigate(`/create-room/${festivalData.festivalId}`);
+
     // if (!tempToken || !festivalId) return;
 
     // const id = parseInt(festivalId);
@@ -65,7 +86,6 @@ export default function FestivalListBottomSheet({
     // });
 
   }
-
   if (!festivalData || !roomDatas?.content) return null;
 
   return (
@@ -77,15 +97,20 @@ export default function FestivalListBottomSheet({
         <img src={festivalData.firstImage || '/testImg.png'} alt=""
           className='w-15 h-15' />
         <div className='flex flex-col'>
-          <span>9000명 참여중</span>
-          <p>{festivalData.title}</p>
-          <p>{festivalData.eventStartDate} - {festivalData.eventEndDate}</p>
-          <span onClick={() => handleClick()}>더보러가기</span>
+          <div className="flex items-center w-max p-1 gap-1 text-text-inverse label8-b rounded-1 bg-surface-container-brand-1 ">
+            <UserSolid size={12} />
+            <span>{festivalData.totalParticipantCount}명 참여중</span>
+          </div>
+          <p className='title1-sb text-text-primary'>{festivalData.title}</p>
+          <p className='label5-r text-text-quaternary'>
+            {formatDateWithWeekday(festivalData.eventStartDate)} - {formatDateWithWeekday(festivalData.eventEndDate)}</p>
+          <span className='label7-r text-text-tertiary'
+            onClick={() => handleShowDetail()} >더보러가기 &gt;</span>
         </div>
       </div>
-      <p className="caption2-r text-text-tertiary bg-gray-100">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
+      <p className="label5-r text-text-tertiary bg-gray-100 px-3 py-2">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
       <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
-      <Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1"
+      <Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1 floating"
         onClick={(e) => handleCreateRoom(e)} />
     </BottomSheet>
   )
