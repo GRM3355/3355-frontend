@@ -47,7 +47,7 @@ export default function RoomListSection({ festivalData, roomDatas }: RoomListSec
         </div>
         <p className="caption2-r text-text-tertiary">페스티벌 Zone 내에서 채팅이 가능합니다.</p> */}
       </div>
-      <div className="flex gap-1 pb-2">
+      <div className="flex gap-1 pb-3">
         <span className="title3-sb text-text-primary">단체 채팅방</span>
         <span className="flex-1 label5-r text-text-tertiary">{roomDatas.length}</span>
         <Select
