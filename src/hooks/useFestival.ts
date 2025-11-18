@@ -99,7 +99,6 @@ export const useGetFestivalByFestivalId = (params: any = {}) => {
 //위치 기반 축제 조회
 export const useGetFestivalByLocation = (params: GetFestivalByLocationParams) => {
   const defaultParams = { ps: true }
-  console.log('useGetFestivalByLocation 호출!', params);
 
   return useQuery<{ content: FestivalAPI[] }>({
     queryKey: ['festivalsByLocation', params],

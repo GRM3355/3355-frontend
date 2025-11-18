@@ -149,16 +149,13 @@ export default function MyMap({
     if (!isShowBottomSheet)
       onShowBottomSheet();
     else if (isShowBottomSheet && selectedFestivalPoint?.id == festivalPoint.id)
-      onCloseBottomSheet();
+      handleCloseBottomSheet();
 
     setSeletedFestivalPoint(festivalPoint);
+
     const selectedFestival = data?.find(
       (f: FestivalAPI) => f.festivalId == festivalPoint.id
     );
-
-    console.log("festivalId", festivalPoint.id);
-    console.log("selectedFestival", selectedFestival);
-
 
     if (selectedFestival) {
       onSelectFestival(selectedFestival);
@@ -181,6 +178,11 @@ export default function MyMap({
 
   const handleGoMyPos = () => {
     handleFlyTo(myViewport.longitude, myViewport.latitude, myViewport.zoom, true);
+    handleCloseBottomSheet();
+  }
+
+  const handleCloseBottomSheet = () => {
+    setSeletedFestivalPoint(null);
     onCloseBottomSheet();
   }
 
@@ -208,7 +210,7 @@ export default function MyMap({
             });
           }
 
-          onCloseBottomSheet();
+          handleCloseBottomSheet();
         }}
         onMoveEnd={(evt) => setViewport(evt.viewState)}
         onLoad={(evt) => {
@@ -265,9 +267,11 @@ export default function MyMap({
             }}
           />
         </Source>
-        {singlePoints && <SinglePoints viewport={viewport} singlePoints={singlePoints} onClickPoint={handleClickPoint} />}
-        {groupPoints && <GroupPoints viewport={viewport} groupPoints={groupPoints} onClickPoint={handleClickPoint}
-          isShowBottomSheet={isShowBottomSheet} />}
+        {singlePoints && <SinglePoints selectedFestivalId={selectedFestivalPoint?.id ?? null}
+          viewport={viewport} singlePoints={singlePoints} onClickPoint={handleClickPoint} />}
+        {groupPoints && <GroupPoints selectedFestivalId={selectedFestivalPoint?.id ?? null}
+          viewport={viewport} groupPoints={groupPoints} onClickPoint={handleClickPoint}
+          isShowBottomSheet={isShowBottomSheet} onCloseBottomSheet={handleCloseBottomSheet} />}
 
         {/* 내위치 */}
         <Marker

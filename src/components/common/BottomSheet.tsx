@@ -15,7 +15,7 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
       {/* 내용 */}
       <div
         className="absolute bottom-0 left-0 right-0 h-1/2 bg-white rounded-t-2xl shadow-lg pointer-events-auto"
-        onClick={onClose} // 이벤트 버블링 방지
+      // onClick={onClose} // 이벤트 버블링 방지
       >
         {children}
       </div>
