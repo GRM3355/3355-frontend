@@ -117,7 +117,7 @@ function App() {
             <Route path='echo' element={<EchoTest />} />
             <Route path='*' element={<NotFound />} />
             {/* <Route path='test' element={<ComponentTestPage />} /> //TODO 추후 삭제 */}
-            <Route path='/r ' element={<KakaoRedirectPage />} />
+            <Route path='/api/auth/kakao/callback ' element={<KakaoRedirectPage />} />
           </Routes>
         </div>
       </div>
