@@ -36,7 +36,7 @@ type KakaoLoginModalProps = {
 
 const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
-const RETURN_URI = "https://www.zony.kro.kr/kakao-redirect";
+const RETURN_URI =  import.meta.env.VITE_RETURN_URI;
 
 export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProps) {
 
@@ -50,6 +50,8 @@ export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProp
       `?client_id=${KAKAO_API_KEY}` +
       `&redirect_uri=${REDIRECT_URI}` +
       `&response_type=code` +
+      '&prompt=login consent' +
+      '&scope=account_email,profile_nickname,profile_image' +
       `&state=${encodeURIComponent(RETURN_URI)}`;
 
     window.location.href = kakaoAuthUrl;

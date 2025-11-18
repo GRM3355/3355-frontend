@@ -24,6 +24,7 @@ import KakaoLoginModal from './components/main/KakaoLoginModal'
 import useLoginStore from './stores/useLoginStore'
 import KakaoRedirectPage from './pages/KakaoRedirectPage'
 import useCurrentLocation from './hooks/useCurrentLocation'
+import KakaoLogout from './pages/KakaoLogout'
 
 function App() {
   //확인 모달용
@@ -117,7 +118,8 @@ function App() {
             <Route path='echo' element={<EchoTest />} />
             <Route path='*' element={<NotFound />} />
             {/* <Route path='test' element={<ComponentTestPage />} /> //TODO 추후 삭제 */}
-            <Route path='/kakao-redirect ' element={<KakaoRedirectPage />} />
+            <Route path='/kakao-redirect' element={<KakaoRedirectPage />} />
+            <Route path='/kakao-logout' element={<KakaoLogout />} />
           </Routes>
         </div>
       </div>
