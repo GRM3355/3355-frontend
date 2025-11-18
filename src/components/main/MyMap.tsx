@@ -5,12 +5,13 @@ import type { FeatureCollection, Point } from 'geojson';
 import type { FestivalAPI } from '@/types/api';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type { GeoJSONFeature } from 'mapbox-gl';
-import { Circle, CircleSolid, Target } from '@mynaui/icons-react';
+import { ChevronDownLeftSolid, Circle, CircleSolid, InfoCircle, InfoTriangleSolid, Target, Triangle } from '@mynaui/icons-react';
 import { metersToPixels } from '@/utils/map';
 import { useAsyncError } from 'react-router-dom';
 import SinglePoints from './SinglePoints';
 import GroupPoints from './GroupPoints';
 import { isFestivalActive } from '@/utils/date';
+import ZoneInfoItem from './ZoneInfoItem';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -148,16 +149,13 @@ export default function MyMap({
     if (!isShowBottomSheet)
       onShowBottomSheet();
     else if (isShowBottomSheet && selectedFestivalPoint?.id == festivalPoint.id)
-      onCloseBottomSheet();
+      handleCloseBottomSheet();
 
     setSeletedFestivalPoint(festivalPoint);
+
     const selectedFestival = data?.find(
       (f: FestivalAPI) => f.festivalId == festivalPoint.id
     );
-
-    console.log("festivalId", festivalPoint.id);
-    console.log("selectedFestival", selectedFestival);
-
 
     if (selectedFestival) {
       onSelectFestival(selectedFestival);
@@ -180,6 +178,11 @@ export default function MyMap({
 
   const handleGoMyPos = () => {
     handleFlyTo(myViewport.longitude, myViewport.latitude, myViewport.zoom, true);
+    handleCloseBottomSheet();
+  }
+
+  const handleCloseBottomSheet = () => {
+    setSeletedFestivalPoint(null);
     onCloseBottomSheet();
   }
 
@@ -207,7 +210,7 @@ export default function MyMap({
             });
           }
 
-          onCloseBottomSheet();
+          handleCloseBottomSheet();
         }}
         onMoveEnd={(evt) => setViewport(evt.viewState)}
         onLoad={(evt) => {
@@ -264,9 +267,11 @@ export default function MyMap({
             }}
           />
         </Source>
-        {singlePoints && <SinglePoints viewport={viewport} singlePoints={singlePoints} onClickPoint={handleClickPoint} />}
-        {groupPoints && <GroupPoints viewport={viewport} groupPoints={groupPoints} onClickPoint={handleClickPoint}
-          isShowBottomSheet={isShowBottomSheet} />}
+        {singlePoints && <SinglePoints selectedFestivalId={selectedFestivalPoint?.id ?? null}
+          viewport={viewport} singlePoints={singlePoints} onClickPoint={handleClickPoint} />}
+        {groupPoints && <GroupPoints selectedFestivalId={selectedFestivalPoint?.id ?? null}
+          viewport={viewport} groupPoints={groupPoints} onClickPoint={handleClickPoint}
+          isShowBottomSheet={isShowBottomSheet} onCloseBottomSheet={handleCloseBottomSheet} />}
 
         {/* 내위치 */}
         <Marker
@@ -278,25 +283,31 @@ export default function MyMap({
       {/* 클러스터 색깔 정보 */}
       <div className='absolute w-max h-max top-0 left-0'
         onClick={() => setShowColorInfo(prev => !prev)}>
-        <p className='absolute top-5 left-5 w-6 h-6 bg-white text-center self-center'>i</p>
+        <InfoCircle size={30} className='absolute top-4 left-4 bg-white text-center self-center rounded-full floating p-1' />
         {showColorInfo && (
           <>
-            <div className='absolute top-10 left-10 w-max h-max bg-white '>
-              <p>매우 혼잡</p>
-              <p>보통 혼잡</p>
-              <p>여유 있음</p>
-              <p>예정 축제</p>
+            <div className='absolute top-16 left-8 w-max h-max flex flex-col gap-1 bg-white rounded-4 tooltip p-3 rounded-tl-none'>
+              <ZoneInfoItem label="매우 혼잡" info='(0,000 ~ 0,000)' />
+              <ZoneInfoItem color="bg-state-zone-yellow-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
+              <ZoneInfoItem color="bg-state-zone-green-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
+              <ZoneInfoItem color="bg-state-zone-gray-primary" label="예정 축제" />
+              <hr className='text-line-divider-primary my-2' />
+              <p className='caption3-r text-text-tertiary'>* 인원수 기준</p>
+              <ChevronDownLeftSolid className='absolute -top-3 -left-2 text-white' />
             </div>
           </>
         )}
 
       </div>
       {/* 재검색 버튼 */}
-      <span className='absolute top-0 left-1/2 -translate-x-1/2 border bg-alpha-black-38'
+      <span className='absolute top-4 left-1/2 -translate-x-1/2 label5-r
+        bg-surface-overlay-chip chip rounded-full text-basic-100 px-3.5 py-1.5'
         onClick={() => handleResearchFestival()}>이 지역 재검색</span>
       {/* 현재 위치로 이동 */}
-      <Target size={32} className={`absolute ${isShowBottomSheet ? "bottom-100" : "bottom-16"} right-0 bg-white`}
+      <img src="/Target.svg" alt="target" className={`absolute ${isShowBottomSheet ? "bottom-100" : "bottom-16"} 
+      right-3 bg-white p-2.5 rounded-full floating`}
         onClick={() => handleGoMyPos()} />
+
     </div >
   );
 }

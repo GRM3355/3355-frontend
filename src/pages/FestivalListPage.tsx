@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header';
 import type { FestivalAPI } from '@/types/api';
 import Tab from '@/components/common/Tab';
 import Select from '@/components/common/Select';
+import FestivalListSection from '@/components/festival/FestivalListSection';
 
 export const REGIONS = [
   { key: "SEOUL", label: "서울" },
@@ -38,27 +39,6 @@ export default function FestivalListPage() {
 
 
   //페스티벌
-  const {
-    data,
-    isFetching,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage
-  } = useGetFestivalsInfinite({ region });
-
-  const festivals = data?.pages.flatMap(page => page.content) ?? [];
-
-  //무한 스크롤 감지
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    if (scrollHeight - scrollTop <= clientHeight + 50 && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  };
-
-  //현재 지역 페스티벌 개수
-  const { data: festivalCount } = useGetFestivalCount({ region });
 
   // const {
   //   data: festivalCount,
@@ -72,7 +52,6 @@ export default function FestivalListPage() {
 
   // console.log(festivalCount);
 
-  if (!data) return <></>
 
   return (
     <>
@@ -84,31 +63,8 @@ export default function FestivalListPage() {
           selected={region}
           onSelect={setRegion}
         />
+        <FestivalListSection region={region} />
 
-        {/* 정렬 */}
-        <div className='flex gap-1 items-center justify-between p-4'>
-          <span className='title1-sb text-text-primary'>진행/예정 페스티벌</span>
-          <span className='flex-1 label2-r text-text-tertiary'>{festivalCount?.count ?? 0}</span>
-          {/* <Select
-            items={FILTER}
-            selected={filter}
-            onSelect={setFilter}
-          /> */}
-        </div>
-
-        {/* 진행중인 페스티벌 */}
-        <div className='grid grid-cols-2 h-full gap-2 overflow-y-auto p-4 scrollbar-hide pb-16'
-          onScroll={handleScroll}>
-          {/* > */}
-          {(festivals && festivals.length > 0) ? (festivals.map((festival: FestivalAPI, i) => (
-            <FestivalItem key={`${i}-${festival.festivalId}`} festivalData={festival} />))
-          ) : (
-            <div className='col-span-2 flex flex-col w-full h-full items-center justify-center pb-16'>
-              <p>현재 개최중인</p>
-              <p>페스티벌이 없습니다.</p>
-            </div>
-          )}
-        </div>
       </div>
     </>
   )

@@ -14,11 +14,11 @@ type TabProps = {
 export default function Tab({ items, selected, onSelect }: TabProps) {
   return (
     <>
-      <div className='flex h-max p-4 overflow-x-auto whitespace-nowrap scrollbar-hide'>
+      <div className='flex h-max p-4 overflow-x-auto whitespace-nowrap scrollbar-hide snap-x'>
         {items.map((item: TabItem) => (
           <div key={item.key} className="flex flex-col w-max h-max">
             <span
-              className={`p-2 cursor-pointer
+              className={`p-2 cursor-pointer snap-start
                       ${selected === item.key ? "text-text-brand h-9 label1-sb" : "text-text-primary label2-r"}`}
               onClick={() => onSelect(item.key)}>
               {item.label}</span>
