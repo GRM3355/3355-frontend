@@ -5,12 +5,13 @@ import type { FeatureCollection, Point } from 'geojson';
 import type { FestivalAPI } from '@/types/api';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type { GeoJSONFeature } from 'mapbox-gl';
-import { Circle, CircleSolid, Target } from '@mynaui/icons-react';
+import { ChevronDownLeftSolid, Circle, CircleSolid, InfoCircle, InfoTriangleSolid, Target, Triangle } from '@mynaui/icons-react';
 import { metersToPixels } from '@/utils/map';
 import { useAsyncError } from 'react-router-dom';
 import SinglePoints from './SinglePoints';
 import GroupPoints from './GroupPoints';
 import { isFestivalActive } from '@/utils/date';
+import ZoneInfoItem from './ZoneInfoItem';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -278,14 +279,17 @@ export default function MyMap({
       {/* 클러스터 색깔 정보 */}
       <div className='absolute w-max h-max top-0 left-0'
         onClick={() => setShowColorInfo(prev => !prev)}>
-        <p className='absolute top-5 left-5 w-6 h-6 bg-white text-center self-center'>i</p>
+        <InfoCircle size={30} className='absolute top-5 left-5 bg-white text-center self-center rounded-full floating p-1' />
         {showColorInfo && (
           <>
-            <div className='absolute top-10 left-10 w-max h-max bg-white '>
-              <p>매우 혼잡</p>
-              <p>보통 혼잡</p>
-              <p>여유 있음</p>
-              <p>예정 축제</p>
+            <div className='absolute top-16 left-10 w-max h-max flex flex-col gap-1 bg-white rounded-4 tooltip p-3 rounded-tl-none'>
+              <ZoneInfoItem label="매우 혼잡" info='(0,000 ~ 0,000)' />
+              <ZoneInfoItem color="bg-state-zone-yellow-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
+              <ZoneInfoItem color="bg-state-zone-green-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
+              <ZoneInfoItem color="bg-state-zone-gray-primary" label="예정 축제" />
+              <hr className='text-line-divider-primary my-2' />
+              <p className='caption3-r text-text-tertiary'>* 인원수 기준</p>
+              <ChevronDownLeftSolid className='absolute -top-3 -left-2 text-white' />
             </div>
           </>
         )}
