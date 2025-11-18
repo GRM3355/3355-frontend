@@ -1,3 +1,4 @@
+import useAuthStore from "@/stores/useAuthStore";
 import { useConfirmStore } from "@/stores/useConfirmStore";
 import useLoginStore from "@/stores/useLoginStore";
 import { ChevronLeft, Logout, Search, User } from "@mynaui/icons-react";
@@ -71,6 +72,22 @@ export default function Header({
     //TODO 방떠나는 api 연결
   }
 
+  const { setTempToken, setUserId, userId } = useAuthStore();
+
+  const handleTestUser = (n: number) => {
+    if (n == 1) {
+      console.log("현재 테스트 유저: 1");
+      setTempToken('eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMDFfa2FrYW8iLCJpYXQiOjE3NjMzODAwMzQsImV4cCI6MTc2MzQ2NjQzNCwiYXV0aCI6IlVTRVIifQ.8DXXEph42xZeim_Tt-nRmPA79u9eFTPU9Q8zCXMGa09MMB5wZpBWyPTH7b14QcbRcllpRUWh-KFZfeY8yqQG2Q');
+      setUserId('1234');
+    }
+    else {
+      console.log("현재 테스트 유저: 2");
+      setTempToken('eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMDFfa2FrYW8iLCJpYXQiOjE3NjMzODAwODEsImV4cCI6MTc2MzQ2NjQ4MSwiYXV0aCI6IlVTRVIifQ.-aEyFGjw16r32z_WP8iFnmpWomfN6RN3ZbZjhiuPyAUvdRN7s5pY8S6WvFShEyCDOevVrXCGVzaHbl8OAK29fA');
+      setUserId('5678');
+    }
+
+  }
+
   return (
     <div className='flex items-center justify-between w-full h-13 px-4 py-[14]'>
       {showBack && <ChevronLeft size={24} onClick={() => handleClickBack()} />}
@@ -91,6 +108,9 @@ export default function Header({
         {showSettings && <span>환경설정</span>}
         {showLeaveRoom && <Logout size={24} />}
       </div>
+      <span onClick={() => handleTestUser(1)}>1</span>
+      <span onClick={() => handleTestUser(2)}>2</span>
+      <span>{userId}</span>
     </div>
   )
 }
