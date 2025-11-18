@@ -8,18 +8,18 @@ export default function Nav() {
   const isActive = (path: string) => location.pathname.includes(path);
 
   return (
-    <div className="flex h-18 bg-white items-center justify-between p-4 z-10 border-t border-gray-200 px-16 pb-8">
+    <div className="flex h-18 bg-white items-center justify-center p-4 z-10 border-t border-gray-200 px-8 pb-6 mt-2">
       <div
         onClick={() => navigate('/')}
-        className={`cursor-pointer ${location.pathname == ('/') ? 'text-text-primary' : 'text-icon-container-tertiary'} 
+        className={`flex-1 gap-1 cursor-pointer ${location.pathname == ('/') ? 'text-text-primary' : 'text-icon-container-tertiary'} 
         flex flex-col items-center justify-center`}
       >
         <LocationHomeSolid size={24} />
-        <span className='label6-sb'>지도</span>
+        <span className='label6-sb'>축제 현장</span>
       </div>
       <div
         onClick={() => navigate('/festival-list')}
-        className={`cursor-pointer ${isActive('/festival-list') || isActive('/room-list') ? 'text-text-primary' : 'text-icon-container-tertiary'} 
+        className={`flex-1 gap-1 cursor-pointer ${isActive('/festival-list') || isActive('/room-list') ? 'text-text-primary' : 'text-icon-container-tertiary'} 
         flex flex-col items-center justify-center`}
       >
         <ChatMessagesSolid size={24} />
@@ -27,7 +27,7 @@ export default function Nav() {
       </div>
       <div
         onClick={() => navigate('/my-chat')}
-        className={`cursor-pointer ${isActive('/my-chat') ? 'text-text-primary' : 'text-icon-container-tertiary'} 
+        className={`flex-1 gap-1 cursor-pointer ${isActive('/my-chat') ? 'text-text-primary' : 'text-icon-container-tertiary'} 
         flex flex-col items-center justify-center`}
       >
         <ChatSolid size={24} />
