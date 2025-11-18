@@ -48,3 +48,4 @@ jobs:
         run: |
           # CloudFront ID 사용
           aws cloudfront create-invalidation --distribution-id EMI7Z9QR7FLVW --paths "/*"
+          
