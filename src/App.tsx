@@ -34,9 +34,6 @@ function App() {
 
   const { isLoginModalOpen, closeLoginModal } = useLoginStore();
 
-
-  const [userId, setUserId] = useState<string>();
-
   const LAT = 37.56813168
   const LON = 126.9696496
 

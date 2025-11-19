@@ -19,7 +19,6 @@ export default function Tab({ items, selected, onSelect }: TabProps) {
     if (!scroll) return;
 
     const onWheel = (e: WheelEvent) => {
-      console.log("wheel fired", e.deltaY);
       if (e.deltaY === 0) return; // 세로 스크롤 감지
       e.preventDefault(); //패시브 모드에서는 금지
       scroll.scrollLeft += e.deltaY; // 세로휠 가로로

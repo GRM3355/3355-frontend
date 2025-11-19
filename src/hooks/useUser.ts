@@ -10,7 +10,7 @@ export const useKakaoLogin = () => {
 
   return useMutation({
     mutationFn: kakaoLogin,
-    onSuccess: (res) => {
+    onSuccess: () => {
       closeLoginModal();
       // refetch();
     },
