@@ -9,22 +9,25 @@ import Input from "@/components/common/Input";
 
 export default function CreateRoomPage() {
   const { festivalId } = useParams();
-  const { tempToken } = useAuthStore();
+  const { accessToken } = useAuthStore();
   const [roomTitle, setRoomTitle] = useState("");
 
   // const { mutate, isPending } = useCreateRoom();
   const { mutate, isPending } = useCreateRoom();
+  const { lat, lon } = useAuthStore();
 
   const handleCreateRoom = () => {
-    if (!tempToken || !festivalId) return;
+    if (!accessToken || !festivalId) return;
 
-    console.log("채팅방 생성 시도:", { festivalId, roomTitle, token: tempToken });
+    const id = parseInt(festivalId);
+    console.log("채팅방 생성 시도:", { festivalId, token: accessToken, roomTitle, lat, lon });
     mutate({
-      festivalId,
+      festivalId: id,
+      token: accessToken,
       title: roomTitle,
-      token: tempToken,
+      lat,
+      lon
     });
-
   }
 
   if (!festivalId) return <div>페스티벌 ID가 없습니다.</div>;

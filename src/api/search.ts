@@ -1,8 +1,8 @@
 import axios from "axios";
 import api from "./axios";
 
-export const getSearch = async ({ queryKey }: any) => {
-  const [, params] = queryKey;
+export const getSearch = async (params: any) => {
+  console.log("검색 api")
 
   const res = await api.get('/api/v1/search', { params });
   return res.data.data;

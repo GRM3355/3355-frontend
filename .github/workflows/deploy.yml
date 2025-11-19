@@ -28,6 +28,8 @@ jobs:
           VITE_MONGODB_URI: ${{ secrets.VITE_MONGODB_URI }}
           VITE_KAKAO_API_KEY: ${{ secrets.VITE_KAKAO_API_KEY }}
           VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI }}
+          VITE_RETURN_URI: ${{ secrets.VITE_RETURN_URI }}
+          VITE_API_URI: ${{ secrets.VITE_API_URI }}
         run: npm run build 
 
       - name: Configure AWS Credentials
@@ -46,3 +48,4 @@ jobs:
         run: |
           # CloudFront ID 사용
           aws cloudfront create-invalidation --distribution-id EMI7Z9QR7FLVW --paths "/*"
+          

@@ -18,59 +18,68 @@ import SearchPage from './pages/SearchPage'
 import EchoTest from './pages/EchoTest'
 import api from './api/axios'
 import ComponentTestPage from './pages/ComponentTestPage'
-
+import MyPage from './pages/MyPage'
+import { jwtDecode } from "jwt-decode";
+import KakaoLoginModal from './components/main/KakaoLoginModal'
+import useLoginStore from './stores/useLoginStore'
+import KakaoRedirectPage from './pages/KakaoRedirectPage'
+import useCurrentLocation from './hooks/useCurrentLocation'
+import KakaoLogout from './pages/KakaoLogout'
+import Quit from './pages/MyQuit'
 
 function App() {
   //확인 모달용
   const { isOpen, title, message, confirmText, cancelText,
     onConfirm, onCancel, closeConfirm, } = useConfirmStore();
+
+  const { isLoginModalOpen, closeLoginModal } = useLoginStore();
+
+
   const [userId, setUserId] = useState<string>();
 
-  //TODO: 로컬로 id 저장하는 거 없애고 아래 토큰 쓰기!!!
+  const LAT = 37.56813168
+  const LON = 126.9696496
+
+  const { location, error } = useCurrentLocation();
+
+  const { setCoord } = useAuthStore();
+
   // useEffect(() => {
-  //   const storedId = localStorage.getItem("tempUserId");
-  //   if (storedId && storedId !== "undefined") {
-  //     setUserId(storedId);
-  //     return;
+  //   // 토큰 없으면 서버에서 발급
+  //   if (!tempToken) {
+  //     api.post('/api/auth/tokens', {
+  //       lat: LAT,
+  //       lon: LON,
+  //       validCoordinates: true,
+  //     },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         }
+  //       })
+  //       .then(response => {
+  //         const newToken = response.data.data.accessToken;
+  //         const payload: any = jwtDecode(newToken);
+  //         console.log(payload.auth);
+  //         setTempToken(newToken);
+  //         setCoord(LAT, LON);
+  //         console.log('임시 토큰 발급 성공:', newToken);
+  //         setUserId(newToken);
+  //       })
+  //       .catch(error => {
+  //         console.error('임시 토큰 발급 실패:', error);
+  //         console.error('에러 상세:', error.response?.data);
+  //       });
   //   }
-
-  //   fetch("http://localhost:3000/api/user")
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       console.log("임시 유저 아이디 발급:", data);
-  //       localStorage.setItem("tempUserId", data.userId);
-  //       setUserId(data.userId);
-  //     })
-  //     .catch(err => console.error(err));
-  // }, []);
-
-  //임시 토큰
-  const { tempToken, setTempToken } = useAuthStore();
+  // }, [tempToken, setTempToken]);
 
   useEffect(() => {
-    // 토큰 없으면 서버에서 발급
-    if (!tempToken) {
-      api.post('/api/v1/auth/token-register', {
-        lat: "35.1011951345",
-        lon: "129.0323594995"
-      },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => {
-          const newToken = response.data.data.accessToken;
-          setTempToken(newToken);
-          console.log('임시 토큰 발급 성공:', newToken);
-          setUserId(newToken);
-        })
-        .catch(error => {
-          console.error('임시 토큰 발급 실패:', error);
-          console.error('에러 상세:', error.response?.data);
-        });
-    }
-  }, [tempToken, setTempToken]);
+    setCoord(LAT, LON);
+
+  }, [])
+
+  if (error) return <div>위치 정보 가져오기 실패: {error}</div>;
+  if (!location) return <div>위치 가져오는 중...</div>;
 
   // console.log("임시 토큰:", tempToken);
   return (
@@ -85,12 +94,16 @@ function App() {
             <Route path='/room-list/:festivalId' element={<RoomListPage />} />
             <Route path='/create-room/:festivalId' element={<CreateRoomPage />} />
             <Route path='/my-chat' element={<MyChatPage />} />
+            <Route path='/mypage' element={<MyPage />} />
             <Route path='/chat/:roomId' element={<ChatPage />} />
             <Route path='/report' element={<ReportPage />} />
             <Route path='/search' element={<SearchPage />} />
             <Route path='echo' element={<EchoTest />} />
             <Route path='*' element={<NotFound />} />
-            <Route path='test' element={<ComponentTestPage />} /> {/*//TODO 추후 삭제 */}
+            {/* <Route path='test' element={<ComponentTestPage />} /> //TODO 추후 삭제 */}
+            <Route path='/kakao-redirect' element={<KakaoRedirectPage />} />
+            <Route path='/logout' element={<KakaoLogout />} />
+            <Route path='/quit' element={<Quit />} />
           </Routes>
         </div>
       </div>
@@ -108,6 +121,9 @@ function App() {
         onClose={closeConfirm}
       />
 
+      <KakaoLoginModal
+        isOpen={isLoginModalOpen}
+        onClose={closeLoginModal} />
     </div>
   )
 }

@@ -8,7 +8,6 @@ export const getRoomByRoomId = async (id: string) => {
   return res.data.data;
 };
 
-
 // 유저 아이디, 축제 아이디, 방제목으로 새 방 생성
 // export const createRoom = async (roomData: {
 //   userId: string;
@@ -30,14 +29,14 @@ export const getRoomByRoomId = async (id: string) => {
 //     });
 //   return data.data;
 // }
-export const createRoom = async ({ festivalId, title, token }: PostRoomParams) => {
-  console.log('방 생성 요청:', { festivalId, title });
+export const createRoom = async ({ festivalId, token, title, lat, lon }: PostRoomParams) => {
+  console.log('방 생성 요청:', { festivalId, title, token });
   console.log('URL:', `/api/v1/festivals/${festivalId}/chat-rooms`);
 
   try {
     const { data } = await api.post(
       `/api/v1/festivals/${festivalId}/chat-rooms`,
-      { title },
+      { title, lat, lon },
       {
         headers: {
           'Content-Type': 'application/json',
@@ -48,12 +47,7 @@ export const createRoom = async ({ festivalId, title, token }: PostRoomParams) =
     console.log('응답:', data);
     return data.data;
   } catch (error: any) {
-    console.error('에러 상세:', {
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      url: error.config?.url,
-    });
+
     throw error;
   }
 };
@@ -70,6 +64,7 @@ export const getRoomsByUserId = async ({ queryKey }: any) => {
   const res = await api.get('/api/v1/chat-rooms/my-rooms',
     {
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
       params: queryParams

@@ -21,17 +21,18 @@ export interface FestivalAPI {
   lon: number;
   region: 'SEOUL' | 'JEOLLA' | 'GYEONGGI' | 'BUSAN' | string;
   chatRoomCount: number;
+  totalParticipantCount: number;
 }
 
 export type RoomAPI = {
-  chatRoomId: string;       // 채팅방 고유 ID
-  festivalId: number;       // 축제 ID
-  userId: string;           // 방 생성자/유저 ID
-  title: string;            // 방 이름/제목
-  lat: number;              // 위도
-  lon: number;              // 경도
-  festivalTitle: string;    // 축제 이름
-  participantCount: number; // 현재 참여자 수
+  chatRoomId: string;
+  festivalId: number;
+  userId: string;
+  title: string;
+  lat: number;
+  lon: number;
+  festivalTitle: string;
+  participantCount: number;
 };
 
 export type SearchResponse = {
@@ -53,4 +54,13 @@ export type ChatAPI = {
   content: string;
   type: "TEXT" | string;
   createdAt: string;
+  likeCount: number;
+  liked: boolean;
 }
+
+export type User = {
+  userId: string;
+  profileNickName: string;
+  accountEmail: string;
+  createdAt: string;
+};

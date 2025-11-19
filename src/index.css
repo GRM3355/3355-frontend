@@ -1,3 +1,4 @@
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
 @import "tailwindcss";
 
 /* 스크롤은 가능하지만 스크롤바는 안 보이게 */
@@ -11,6 +12,8 @@
 }
 
 @theme {
+  --font-sans: 'Wanted Sans Variable', sans-serif;
+
   /* grayscale */
   --color-grayscale-50: #fafafa;
   --color-grayscale-100: #f5f5f5;
@@ -45,6 +48,12 @@
   --color-alpha-green-52: #2cdea785;
   --color-alpha-green-16: #2cdea729;
 
+  --color-alpha-violet-16: #9451ff29;
+  --color-alpha-violet-52: #9451ff85;
+  --color-alpha-violet-70: #9451ffb3;
+  --color-alpha-black-38: #00000061;
+  --color-alpha-white-30: #ffffff4d;
+  
   --color-alpha-gray-70: #616161b3;
   --color-alpha-gray-52: #61616185;
   --color-alpha-gray-16: #61616129;
@@ -68,6 +77,9 @@
   /* Green */
   --color-green-500: #2cdea7;
 
+  /* violet */
+  --color-violet-500: #9451ff;
+
   /* text */
   --color-text-primary: var(--color-grayscale-900);
   --color-text-tertiary: var(--color-grayscale-700);
@@ -89,6 +101,10 @@
   --color-surface-container-chat-header: var(--color-alpha-white-95);
   --color-surface-container-brand-2: var(--color-orange-50);
   --color-surface-container-searchbar-default: var(--color-grayscale-100);
+  --color-surface-container-grabber: var(--color-grayscale-700);
+  --color-surface-bg-notice: var(--color-grayscale-100);
+  --color-surface-overlay-btn: var(--color-alpha-white-30);
+  --color-surface-overlay-chip: var(--color-alpha-black-38);
 
   /* surface.overlay */
   --color-surface-overlay-dim-modal-sheet: var(--color-alpha-black-50);
@@ -126,6 +142,12 @@
   --color-state-zone-gray-primary: var(--color-alpha-gray-70);
   --color-state-zone-gray-secondary: var(--color-alpha-gray-52);
   --color-state-zone-gray-tertiary: var(--color-alpha-gray-16);
+
+    /* state zone violet */
+    --color-state-zone-violet-primary: var(--color-alpha-violet-70);
+    --color-state-zone-violet-secondary: var(--color-alpha-violet-52);
+    --color-state-zone-violet-tertiary: var(--color-alpha-violet-16);
+    --color-state-zone-violet-text: var(--color-violet-500);
 
   /* state.zone.brand */
   --color-state-zone-brand-primary: var(--color-orange-500);
@@ -204,3 +226,4 @@
   @apply px-4 py-2 h-10 rounded-max bg-surface-container-default text-text-primary;
   @apply border border-line-border-secondary;
 }
+

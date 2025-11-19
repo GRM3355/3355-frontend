@@ -1,31 +1,38 @@
+import { ChatMessagesSolid, ChatSolid, LocationHomeSolid } from '@mynaui/icons-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Nav() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname.includes(path);
 
   return (
-    <div className="flex h-16 bg-white items-center justify-between p-4 z-10 border-t border-gray-200">
-      <span
+    <div className="flex h-18 bg-white items-center justify-center p-4 z-10 border-t border-gray-200 px-8 pb-6 mt-2">
+      <div
         onClick={() => navigate('/')}
-        className={`cursor-pointer ${isActive('/') ? 'text-blue-500 font-semibold' : 'text-gray-700'}`}
+        className={`flex-1 gap-1 cursor-pointer ${location.pathname == ('/') ? 'text-text-primary' : 'text-icon-container-tertiary'} 
+        flex flex-col items-center justify-center`}
       >
-        지도
-      </span>
-      <span
+        <LocationHomeSolid size={24} />
+        <span className='label6-sb'>축제 현장</span>
+      </div>
+      <div
         onClick={() => navigate('/festival-list')}
-        className={`cursor-pointer ${isActive('/festival-list') ? 'text-blue-500 font-semibold' : 'text-gray-700'}`}
+        className={`flex-1 gap-1 cursor-pointer ${isActive('/festival-list') || isActive('/room-list') ? 'text-text-primary' : 'text-icon-container-tertiary'} 
+        flex flex-col items-center justify-center`}
       >
-        페스티벌 리스트
-      </span>
-      <span
+        <ChatMessagesSolid size={24} />
+        <span className='label6-sb'>축제 채팅존</span>
+      </div>
+      <div
         onClick={() => navigate('/my-chat')}
-        className={`cursor-pointer ${isActive('/my-chat') ? 'text-blue-500 font-semibold' : 'text-gray-700'}`}
+        className={`flex-1 gap-1 cursor-pointer ${isActive('/my-chat') ? 'text-text-primary' : 'text-icon-container-tertiary'} 
+        flex flex-col items-center justify-center`}
       >
-        나의 채팅방
-      </span>
+        <ChatSolid size={24} />
+        <span className='label6-sb'>나의 채팅방</span>
+      </div>
     </div>
   )
 }

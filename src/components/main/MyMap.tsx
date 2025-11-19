@@ -1,132 +1,205 @@
-import { useRef, useState } from 'react';
-import Map, { Source, Layer } from 'react-map-gl/mapbox';
-import type { MapRef } from 'react-map-gl/mapbox';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import MapGL, { Source, Layer, Marker } from 'react-map-gl/mapbox';
+import type { MapRef, ViewState } from 'react-map-gl/mapbox';
 import type { FeatureCollection, Point } from 'geojson';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { metersToPixels } from '@/utils/map';
-import type { Festival } from '@/types';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { useDebounce } from 'use-debounce';
 import type { FestivalAPI } from '@/types/api';
-import { useGetFestivals } from '@/hooks/useFestival';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import type { GeoJSONFeature } from 'mapbox-gl';
+import { ChevronDownLeftSolid, Circle, CircleSolid, InfoCircle, InfoTriangleSolid, Target, Triangle } from '@mynaui/icons-react';
+import { metersToPixels } from '@/utils/map';
+import { useAsyncError } from 'react-router-dom';
+import SinglePoints from './SinglePoints';
+import GroupPoints from './GroupPoints';
+import { isFestivalActive } from '@/utils/date';
+import ZoneInfoItem from './ZoneInfoItem';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
-
 type MyMapProps = {
+  data?: FestivalAPI[];
   onSelectFestival: (data: FestivalAPI) => void;
+  isShowBottomSheet: boolean;
   onShowBottomSheet: () => void;
+  onCloseBottomSheet: () => void;
+  onSearchFestivalByLocation: (state: ViewState) => void;
 }
 
-export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProps) {
+export type SinglePoint = {
+  id: number;
+  longitude: number;
+  latitude: number;
+  name: string;
+  status: 'upcoming' | 'low' | 'medium' | 'high';
+}
 
-  //TODO: 유저 현재 위치로 변경
-  const [viewport, setViewport] = useState({
-    latitude: 35.1011951345,
-    longitude: 129.0323594995,
-    zoom: 16,
-  });
+export type GroupPoint = {
+  longitude: number;
+  latitude: number;
+  points: SinglePoint[];
+};
 
-  const [debouncedViewport] = useDebounce(viewport, 1000);
-  //navigator.geolocation.getCurrentPositio
-
+export default function MyMap({
+  data,
+  onSelectFestival,
+  isShowBottomSheet,
+  onShowBottomSheet,
+  onCloseBottomSheet,
+  onSearchFestivalByLocation }: MyMapProps) {
   const mapRef = useRef<MapRef>(null);
+  //유저 실제 위치 좌표 
+  const [myViewport, setMyViewport] = useState<ViewState>({
+    latitude: 37.5681,
+    longitude: 126.9696,
+    zoom: 14,
+  } as ViewState);
 
-  const { data, isError, error } = useGetFestivals();
+  //화면 움직일때의 좌표
+  const [viewport, setViewport] = useState<ViewState>({
+    latitude: 37.5681,
+    longitude: 126.9696,
+    zoom: 14,
+  } as ViewState);
 
-  // const { data, isLoading, isError, error } = useQuery({
-  //   queryKey: ['festivals-by-location', debouncedViewport.latitude, debouncedViewport.longitude, debouncedViewport.zoom],
-  //   queryFn: async () => {
-  //     const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
-  //     const res = await axios.get('/api/festival/locationBasedList2', {
-  //       params: {
-  //         serviceKey: API_KEY,
-  //         _type: 'json',
-  //         pageNo: 1,
-  //         numOfRows: 20,
-  //         MobileApp: 'AppTest',
-  //         MobileOS: 'ETC',
-  //         contentTypeId: 15,
-  //         mapX: debouncedViewport.longitude,
-  //         mapY: debouncedViewport.latitude,
-  //         radius: 10000 / debouncedViewport.zoom,
-  //       },
-  //     });
+  const [selectedFestivalPoint, setSeletedFestivalPoint] = useState<SinglePoint | null>(null);
 
-  //     console.log("지도 기반 축제 데이터:", res.data);
-  //     const items = res.data?.response?.body?.items?.item ?? [];
+  // 클러스터 색깔 정보
+  const [showColorInfo, setShowColorInfo] = useState<boolean>(false);
 
-  //     return items.map((item: any): Festival => ({
-  //       id: String(item.contentid),
-  //       name: item.title ?? '',
-  //       longitude: parseFloat(item.mapx ?? 0),
-  //       latitude: parseFloat(item.mapy ?? 0),
-  //       mainImage: item.firstimage ?? '',
-  //       date: item.eventstartdate
-  //         ? `${item.eventstartdate} ~ ${item.eventenddate}`
-  //         : '',
-  //       address: item.addr1 ?? '',
-  //       category: item.cat3 ?? '',
-  //       region: item.areacode ?? '',
-  //     }));
-  //   },
-  //   refetchOnWindowFocus: false, // 창 포커스 시 재호출 방지
-  //   staleTime: 1000 * 60 * 2, // 2분간 캐시 유지
-  //   gcTime: 1000 * 60 * 10, // 10분 후 가비지 컬렉션
-  //   placeholderData: (prevData) => prevData, //이전 데이터 유지
-  // });
-
-  //GeoJSON 변환
-  const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = {
+  // GeoJSON으로 변환
+  const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = useMemo(() => ({
     type: 'FeatureCollection',
-    features:
-      data?.content.map((festival: FestivalAPI) => ({
-        type: 'Feature', //MapBox용
-        properties: { id: festival.festivalId, name: festival.title }, //Point 외의 정보 저장용
-        geometry: {
-          type: 'Point',
-          coordinates: [festival.lon, festival.lat],
-        },
-      })) ?? [],
-  };
+    features: data?.map(festival => ({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [festival.lon, festival.lat] },
+      properties: {
+        id: festival.festivalId, name: festival.title, ㅜㅜ: festival.totalParticipantCount,
+        status: !isFestivalActive(festival.eventStartDate, festival.eventEndDate)
+          ? 'upcoming'
+          : festival.totalParticipantCount >= 3
+            ? 'high'
+            : festival.totalParticipantCount >= 2
+              ? 'medium'
+              : 'low'
+      }
+    })) ?? [],
+  }), [data]);
 
-  // const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = {
-  //   type: 'FeatureCollection',
-  //   features: testPoints.map(({ id, lat, lon, name }) => ({
-  //     type: 'Feature', //MapBox용
-  //     properties: { id, name }, //Point 외의 정보 저장용
-  //     geometry: { type: 'Point', coordinates: [lon, lat] },
-  //   })),
-  // };
+  // 클러스터가 아닌 포인트만 담을 state
+  const [singlePoints, setSinglePoints] = useState<SinglePoint[]>();
+  const [groupPoints, setGroupPoints] = useState<GroupPoint[]>();
 
-  if (isError) {
-    console.error(error);
-    return <p>에러 발생!!</p>
+  const handleResearchFestival = () => {
+    console.log(viewport);
+    onSearchFestivalByLocation(viewport);
+    handleSetPoints();
+  }
+
+  const handleSetPoints = () => {
+    if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
+
+    const points = mapRef.current.querySourceFeatures('points', {
+      filter: ['!', ['has', 'point_count']]
+    }) ?? [];
+
+    const singlePoints: SinglePoint[] = points
+      .filter(
+        (f): f is GeoJSONFeature & { geometry: { type: 'Point'; coordinates: [number, number] }; properties: { id: number; name: string } } =>
+          f.geometry.type === 'Point' && f.properties?.id != null && typeof f.properties.name === 'string'
+      )
+      .map(f => ({
+        id: f.properties.id,
+        name: f.properties.name,
+        longitude: f.geometry.coordinates[0],
+        latitude: f.geometry.coordinates[1],
+        status: f.properties.status
+      }));
+
+    //중복 제거
+    const uniqueSinglePoints = Array.from(
+      new Map(singlePoints.map(p => [p.id, p])).values()
+    );
+
+
+    const groupMap = new Map<string, GroupPoint>();
+
+    uniqueSinglePoints.forEach(point => {
+      const key = `${point.longitude.toFixed(6)}_${point.latitude.toFixed(6)}`;
+      if (!groupMap.has(key)) {
+        groupMap.set(key, { longitude: point.longitude, latitude: point.latitude, points: [point] });
+      } else {
+        groupMap.get(key)?.points.push(point);
+      }
+    });
+
+    //그룹에 있는 포인트는 개별 포인트에서 제외
+    const filteredSinglePoints = uniqueSinglePoints.filter(point => {
+      const key = `${point.longitude.toFixed(6)}_${point.latitude.toFixed(6)}`;
+      return groupMap.get(key)!.points.length === 1; // 
+    });
+
+    const filteredGroupPoints = [...groupMap.values()].filter(g => g.points.length > 1);
+
+    setSinglePoints(filteredSinglePoints);
+    setGroupPoints(filteredGroupPoints);
+  }
+
+  const handleClickPoint = (festivalPoint: SinglePoint) => {
+
+
+    if (!isShowBottomSheet)
+      onShowBottomSheet();
+    else if (isShowBottomSheet && selectedFestivalPoint?.id == festivalPoint.id)
+      handleCloseBottomSheet();
+
+    setSeletedFestivalPoint(festivalPoint);
+
+    const selectedFestival = data?.find(
+      (f: FestivalAPI) => f.festivalId == festivalPoint.id
+    );
+
+    if (selectedFestival) {
+      onSelectFestival(selectedFestival);
+    }
+
+    handleFlyTo(festivalPoint.longitude, festivalPoint.latitude, 16);
+  }
+
+  const handleFlyTo = (lon: number, lat: number, zoom: number, center?: boolean) => {
+    if (mapRef.current) {
+      mapRef.current.flyTo({
+        center: [lon, lat],
+        zoom,
+        speed: 2,
+        curve: 1.42,
+        offset: center ? [0, 0] : [0, -window.innerHeight * 0.18]
+      });
+    }
+  }
+
+  const handleGoMyPos = () => {
+    handleFlyTo(myViewport.longitude, myViewport.latitude, myViewport.zoom, true);
+    handleCloseBottomSheet();
+  }
+
+  const handleCloseBottomSheet = () => {
+    setSeletedFestivalPoint(null);
+    onCloseBottomSheet();
   }
 
   return (
-    <div className='relative w-full h-full'>
-      {/* {data && data.map((d: Festival) => (
-        <p>{d.name}</p>
-      ))} */}
-      <Map
-        ref={mapRef} //flyTo용 설정
-        initialViewState={viewport} //시작 위치
-        mapStyle='mapbox://styles/mapbox/streets-v12' //맵 스타일
-        mapboxAccessToken={MAPBOX_TOKEN} //토큰
-        onMoveEnd={(evt) => setViewport(evt.viewState)} //줌 레벨과 실제 거리 계산용
+    <div className="relative w-full h-full">
+      <MapGL
+        ref={mapRef}
+        initialViewState={viewport}
+        mapStyle="mapbox://styles/mapbox/light-v11"
+        mapboxAccessToken={MAPBOX_TOKEN}
         style={{ width: '100%', height: '100%' }}
         interactiveLayerIds={['clusters', 'unclustered-point']}
-        language='ko'
         onClick={(evt) => {
-
           const features = evt.features;
           if (!features) return;
 
           const cluster = features.find(f => f.layer?.id === 'clusters');
-
-          const point = features.find(f => f.layer?.id === 'unclustered-point');
 
           if (cluster && cluster.geometry.type === 'Point') {
             const [longitude, latitude] = cluster.geometry.coordinates;
@@ -136,93 +209,104 @@ export default function MyMap({ onSelectFestival, onShowBottomSheet }: MyMapProp
               zoom: 16, // 원하는 줌 레벨
             });
           }
-          else if (point && point.geometry.type === 'Point') {
-            const [longitude, latitude] = point.geometry.coordinates;
 
-            const selectedFestival = data?.content.find(
-              (f: FestivalAPI) => f.festivalId === point.properties?.id
-            );
+          handleCloseBottomSheet();
+        }}
+        onMoveEnd={(evt) => setViewport(evt.viewState)}
+        onLoad={(evt) => {
+          const map = evt.target;
+          if (!mapRef.current) return;
 
-            if (selectedFestival) {
-              onSelectFestival(selectedFestival);
+          if (map.hasImage("cluster-icon")) return;
+
+          map.loadImage('/cluster.png', (error, image) => {
+            if (error || !image) {
+              console.error("이미지 로드 실패:", error);
+              return;
             }
 
-            mapRef.current?.flyTo({
-              center: [longitude, latitude],
-              zoom: 20,
-              offset: [0, -window.innerHeight * 0.18],
-            });
+            map.addImage("cluster-icon", image);
+            console.log("클러스터 아이콘 등록 완료");
+          });
 
-            onShowBottomSheet();
-          }
-
+          handleSetPoints();
         }}
-
+        onZoomEnd={() => {
+          handleSetPoints();
+        }}
       >
         <Source
-          id='points'
-          type='geojson'
+          id="points"
+          type="geojson"
           data={geoJsonPoints}
-          cluster={true} //집합 시킬건지
-          clusterMaxZoom={14} //해당 줌 레벨 이하에서 클러스터링
-          clusterRadius={30} //클러스터 반경
+          cluster={true}
+          clusterMaxZoom={13}
+          clusterRadius={40}
         >
-          {/* Cluster 원 */}
+          {/* 클러스터 심볼 */}
           <Layer
             id='clusters' //클릭 이벤트 판별용으로 추가한 id
-            type='circle' //레이어 타입. circle, symbol, line, fill 등이 있음
+            type='symbol' //레이어 타입. circle, symbol, line, fill 등이 있음
             source='points' //데이터를 가져올 소스 id
             filter={['has', 'point_count']}
-            paint={{
-              'circle-color': '#3b82f6',
-              'circle-radius': ['step', ['get', 'point_count'], 20, 5, 30, 10, 40],
-              'circle-stroke-width': 2,
-              'circle-stroke-color': '#fff',
+            layout={{
+              "icon-image": "cluster-icon", // 위에서 등록한 이름
+              "icon-size": 0.8, // 아이콘 크기 조절
+              "icon-allow-overlap": true, // 겹쳐도 표시
             }}
-
           />
-          {/* Cluster 숫자 */}
           <Layer
-            id='cluster-count'
-            type='symbol'
-            source='points'
+            id="clusters-count"
+            type="symbol"
+            source="points"
             filter={['has', 'point_count']}
             layout={{
-              'text-field': '{point_count_abbreviated}', //기본제공. 클러스터 내 포인트 카운팅
-              //TODO: 폰트 지정 가능
+              'text-field': '{point_count_abbreviated}',
+              'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
               'text-size': 12,
-            }}
-          />
-          {/* 개별 포인트 */}
-          <Layer
-            id='unclustered-point'
-            type='circle'
-            source='points'
-            filter={['!', ['has', 'point_count']]}
-            paint={{
-              'circle-color': '#f87171',
-              'circle-radius': metersToPixels(100, viewport.latitude, viewport.zoom), // 10m 기준
-              'circle-stroke-width': 2,
-              'circle-stroke-color': '#fff',
-              'circle-opacity': 0.2,
-            }}
-          />
-          <Layer
-            id='unclustered-point-label'
-            type='symbol'
-            filter={['!', ['has', 'point_count']]}
-            layout={{
-              'text-field': ['get', 'name'], // GeoJSON properties.name 사용
-              'text-size': 12,
-              'text-offset': [0, 1.5], // 원 아래로 위치
-              'text-anchor': 'top',
-            }}
-            paint={{
-              'text-color': '#000',
             }}
           />
         </Source>
-      </Map>
+        {singlePoints && <SinglePoints selectedFestivalId={selectedFestivalPoint?.id ?? null}
+          viewport={viewport} singlePoints={singlePoints} onClickPoint={handleClickPoint} />}
+        {groupPoints && <GroupPoints selectedFestivalId={selectedFestivalPoint?.id ?? null}
+          viewport={viewport} groupPoints={groupPoints} onClickPoint={handleClickPoint}
+          isShowBottomSheet={isShowBottomSheet} onCloseBottomSheet={handleCloseBottomSheet} />}
+
+        {/* 내위치 */}
+        <Marker
+          longitude={myViewport.longitude}
+          latitude={myViewport.latitude}>
+          <CircleSolid size={12} className='z-999' />
+        </Marker>
+      </MapGL>
+      {/* 클러스터 색깔 정보 */}
+      <div className='absolute w-max h-max top-0 left-0'
+        onClick={() => setShowColorInfo(prev => !prev)}>
+        <InfoCircle size={30} className='absolute top-4 left-4 bg-white text-center self-center rounded-full floating p-1' />
+        {showColorInfo && (
+          <>
+            <div className='absolute top-16 left-8 w-max h-max flex flex-col gap-1 bg-white rounded-4 tooltip p-3 rounded-tl-none'>
+              <ZoneInfoItem label="매우 혼잡" info='(0,000 ~ 0,000)' />
+              <ZoneInfoItem color="bg-state-zone-yellow-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
+              <ZoneInfoItem color="bg-state-zone-green-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
+              <ZoneInfoItem color="bg-state-zone-gray-primary" label="예정 축제" />
+              <hr className='text-line-divider-primary my-2' />
+              <p className='caption3-r text-text-tertiary'>* 인원수 기준</p>
+              <ChevronDownLeftSolid className='absolute -top-3 -left-2 text-white' />
+            </div>
+          </>
+        )}
+
+      </div>
+      {/* 재검색 버튼 */}
+      <span className='absolute top-4 left-1/2 -translate-x-1/2 label5-r
+        bg-surface-overlay-chip chip rounded-full text-basic-100 px-3.5 py-1.5'
+        onClick={() => handleResearchFestival()}>이 지역 재검색</span>
+      {/* 현재 위치로 이동 */}
+      <img src="/Target.svg" alt="target" className={`absolute ${isShowBottomSheet ? "bottom-100" : "bottom-16"} 
+      right-3 bg-white p-2.5 rounded-full floating`}
+        onClick={() => handleGoMyPos()} />
 
     </div >
   );

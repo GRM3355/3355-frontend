@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createRoom, getRoomByRoomId, getRoomsByUserId } from "@/api/room";
 import { useNavigate } from "react-router-dom";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
+import useAuthStore from "@/stores/useAuthStore";
+import { useConfirmStore } from "@/stores/useConfirmStore";
 
 // 특정 방 정보 가져오기
 export const useGetRoomById = (roomId: string) => {
@@ -34,19 +36,40 @@ export const useGetRoomById = (roomId: string) => {
 export const useCreateRoom = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { lat, lon } = useAuthStore();
+
+  const { openConfirm, closeConfirm } = useConfirmStore();
+
+  const handleConfirm = () => {
+    closeConfirm();
+    navigate(-1);
+  }
 
   return useMutation({
     mutationFn: createRoom,
     onSuccess: (newRoom: RoomAPI) => {
       console.log('방 생성 성공:', newRoom);
-
+      // setUserId(newRoom.userId);
       // 해당 축제 방 목록만 갱신
       queryClient.invalidateQueries({ queryKey: ['festivalRooms', { festivalId: newRoom.festivalId }] });
 
       // 생성된 방으로 이동
-      navigate(`/chat/${newRoom.chatRoomId}`);
+      navigate(`/chat/${newRoom.chatRoomId}`, { replace: true });
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.error('에러 상세:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url,
+        message: error.response?.data?.error?.message
+      });
+      if (error.response?.data?.error?.message == '채팅방 개설 반경(1.0km)을 벗어났습니다.') {
+        openConfirm('ERROR',
+          '채팅방 개설 반경(1.0km)을 벗어났습니다.', handleConfirm, undefined, '확인');
+      }
+
+
       console.error('방 생성 실패:', { error });
     },
   });
