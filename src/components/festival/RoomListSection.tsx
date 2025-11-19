@@ -16,7 +16,7 @@ type RoomListSectionProps = {
 
 const FILTER = [
   { key: "participant", label: "참여자순" },
-  { key: "ABC", label: "최신순" },
+  { key: "latest", label: "최신순" },
 ]
 
 export default function RoomListSection({ festivalData, roomDatas }: RoomListSectionProps) {
@@ -34,6 +34,9 @@ export default function RoomListSection({ festivalData, roomDatas }: RoomListSec
     setShowFestivalModal(true)
   }
 
+  const filteredRooms = filter === "participant"
+    ? [...roomDatas].sort((a, b) => b.participantCount - a.participantCount)
+    : roomDatas;
 
   return (
     <div className="flex flex-col h-full p-4 pt-0">
@@ -59,7 +62,7 @@ export default function RoomListSection({ festivalData, roomDatas }: RoomListSec
       <div className='flex flex-col h-full gap-2 '>
 
         {/* <div className='flex flex-col h-full gap-2 overflow-y-auto scrollbar-hide'> */}
-        {roomDatas.map((room: RoomAPI) => (
+        {filteredRooms.map((room: RoomAPI) => (
           <RoomItem key={room.chatRoomId} room={room} />
         ))}
       </div>
