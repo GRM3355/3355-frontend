@@ -1,4 +1,5 @@
 // src/api/apiClient.js
+import useAuthStore from "@/stores/useAuthStore";
 import axios from "axios";
 
 type FailedRequest = {
@@ -32,8 +33,9 @@ const apiClient = axios.create({
 // 요청 인터셉터 - Authorization 자동 설정
 apiClient.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+    console.log("request interceptor 실행");
+    const token = useAuthStore.getState().accessToken;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)
@@ -44,8 +46,6 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    alert("1111");
 
     // AccessToken 만료 → refresh 시도
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -69,10 +69,12 @@ apiClient.interceptors.response.use(
           {},
           { withCredentials: true }
         );
+
         const newAccessToken = refreshResponse.data.data.accessToken;
 
+        console.log("새 토큰 발급:", newAccessToken);
         // 새 토큰 저장
-        localStorage.setItem("accessToken", newAccessToken);
+        useAuthStore.getState().setAccessToken(newAccessToken);
 
         // 대기 중 요청 처리
         processQueue(null, newAccessToken);
@@ -85,11 +87,10 @@ apiClient.interceptors.response.use(
 
         // refreshToken도 만료됨 → 강제 로그아웃
         processQueue(err, null);
-        localStorage.removeItem("accessToken");
+        useAuthStore.getState().logout();
         window.location.href = "/";
         return Promise.reject(err);
       } finally {
-        console.log("에러 발생2222 ");
         isRefreshing = false;
       }
     }

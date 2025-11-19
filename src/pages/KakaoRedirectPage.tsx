@@ -57,31 +57,24 @@ import useAuthStore from '@/stores/useAuthStore';
 
 export default function KakaoRedirectPage() {
   const navigate = useNavigate();
+  const { setAccessToken } = useAuthStore();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const accessToken = params.get('accessToken');
 
     if (accessToken) {
-      // 토큰 저장
-      localStorage.setItem('accessToken', accessToken);
-
-      // Zustand store 업데이트
-      //useAuthStore.getState().setToken(accessToken);
-
-      console.log('로그인 성공!');
-
-      // 메인 페이지로 이동
-      navigate('/');
+      console.log('로그인 성공!', accessToken);
+      setAccessToken(accessToken); // store에 저장
     } else {
-      //alert('로그인 실패'); // 두번호출되어서 주석처리
-      navigate('/');
+      console.log("로그인 실패! accessToken이 없습니다.");
     }
-  }, [navigate]);
+
+    navigate('/', { replace: true });
+  }, [navigate, setAccessToken]);
 
   return (
     <div className="flex items-center justify-center h-screen">
-
       <p>로그인 처리 중...</p>
     </div>
   );

@@ -30,7 +30,7 @@ export const getRoomByRoomId = async (id: string) => {
 //   return data.data;
 // }
 export const createRoom = async ({ festivalId, token, title, lat, lon }: PostRoomParams) => {
-  console.log('방 생성 요청:', { festivalId, title });
+  console.log('방 생성 요청:', { festivalId, title, token });
   console.log('URL:', `/api/v1/festivals/${festivalId}/chat-rooms`);
 
   try {

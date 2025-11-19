@@ -67,34 +67,34 @@ function App() {
 
 
 
-  useEffect(() => {
-    // 토큰 없으면 서버에서 발급
-    if (!tempToken) {
-      api.post('/api/auth/tokens', {
-        lat: LAT,
-        lon: LON,
-        validCoordinates: true,
-      },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => {
-          const newToken = response.data.data.accessToken;
-          const payload: any = jwtDecode(newToken);
-          console.log(payload.auth);
-          setTempToken(newToken);
-          setCoord(LAT, LON);
-          console.log('임시 토큰 발급 성공:', newToken);
-          setUserId(newToken);
-        })
-        .catch(error => {
-          console.error('임시 토큰 발급 실패:', error);
-          console.error('에러 상세:', error.response?.data);
-        });
-    }
-  }, [tempToken, setTempToken]);
+  // useEffect(() => {
+  //   // 토큰 없으면 서버에서 발급
+  //   if (!tempToken) {
+  //     api.post('/api/auth/tokens', {
+  //       lat: LAT,
+  //       lon: LON,
+  //       validCoordinates: true,
+  //     },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         }
+  //       })
+  //       .then(response => {
+  //         const newToken = response.data.data.accessToken;
+  //         const payload: any = jwtDecode(newToken);
+  //         console.log(payload.auth);
+  //         setTempToken(newToken);
+  //         setCoord(LAT, LON);
+  //         console.log('임시 토큰 발급 성공:', newToken);
+  //         setUserId(newToken);
+  //       })
+  //       .catch(error => {
+  //         console.error('임시 토큰 발급 실패:', error);
+  //         console.error('에러 상세:', error.response?.data);
+  //       });
+  //   }
+  // }, [tempToken, setTempToken]);
 
   if (error) return <div>위치 정보 가져오기 실패: {error}</div>;
   if (!location) return <div>위치 가져오는 중...</div>;

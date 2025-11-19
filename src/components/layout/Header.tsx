@@ -36,6 +36,7 @@ export default function Header({
 
   const { openConfirm, closeConfirm } = useConfirmStore();
   const { isLoggedIn, openLoginModal } = useLoginStore();
+  const { accessToken } = useAuthStore();
 
   const handleBackConfirm = () => {
     closeConfirm();
@@ -58,7 +59,7 @@ export default function Header({
   }
 
   const handleClickUser = () => {
-    if (isLoggedIn)
+    if (accessToken)
       navigate(`/mypage`)
     else
       openLoginModal();
@@ -72,18 +73,18 @@ export default function Header({
     //TODO 방떠나는 api 연결
   }
 
-  const { setTempToken, setUserId, userId } = useAuthStore();
+  const { setTempToken } = useAuthStore();
 
   const handleTestUser = (n: number) => {
     if (n == 1) {
       console.log("현재 테스트 유저: 1");
       setTempToken('eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMDFfa2FrYW8iLCJpYXQiOjE3NjMzODAwMzQsImV4cCI6MTc2MzQ2NjQzNCwiYXV0aCI6IlVTRVIifQ.8DXXEph42xZeim_Tt-nRmPA79u9eFTPU9Q8zCXMGa09MMB5wZpBWyPTH7b14QcbRcllpRUWh-KFZfeY8yqQG2Q');
-      setUserId('1234');
+      // setUserId('1234');
     }
     else {
       console.log("현재 테스트 유저: 2");
       setTempToken('eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMDFfa2FrYW8iLCJpYXQiOjE3NjMzODAwODEsImV4cCI6MTc2MzQ2NjQ4MSwiYXV0aCI6IlVTRVIifQ.-aEyFGjw16r32z_WP8iFnmpWomfN6RN3ZbZjhiuPyAUvdRN7s5pY8S6WvFShEyCDOevVrXCGVzaHbl8OAK29fA');
-      setUserId('5678');
+      // setUserId('5678');
     }
 
   }
@@ -114,7 +115,7 @@ export default function Header({
       </div>
       <span onClick={() => handleTestUser(1)}>1</span>
       <span onClick={() => handleTestUser(2)}>2</span>
-      <span>{userId}</span>
+      {/* <span>{userId}</span> */}
     </div>
   )
 }
