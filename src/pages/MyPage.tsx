@@ -7,26 +7,15 @@ import useAuthStore from '@/stores/useAuthStore';
 import { useGetUserInfo } from '@/hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 import { useConfirmStore } from '@/stores/useConfirmStore';
+import { ChevronRight } from '@mynaui/icons-react';
 
-type UserInfo = {
-  userId: number;
-  profileNickName: string;
-  accountEmail: string;
-  profileImage: string;
-  createdAt: string;
-};
+const Terms = ['서비스 이용약관', '위치기반 서비스 이용약관', '개인정보 처리방침', '운영 정책'];
 
 const MyPage = () => {
-  // const [user, setUser] = useState<UserInfo | null>(null);
-  // const [loading, setLoading] = useState<boolean>(false);
-  // const { openLoginModal } = useLoginStore();
-
   const navigate = useNavigate();
   const { accessToken, logout } = useAuthStore();
   const { openConfirm, closeConfirm } = useConfirmStore();
   const { data } = useGetUserInfo(accessToken);
-  const { closeLoginModal } = useLoginStore();
-
 
   const handleDeleteAccount = async () => {
     const accessToken = localStorage.getItem("accessToken");
@@ -86,16 +75,36 @@ const MyPage = () => {
       <div className='flex flex-col p-4 h-full pb-20'>
         <div className='flex-1'>
           <p className='title4-sb text-text-brand'>나의 정보</p>
-          <p>{data.accountEmail}</p>
-          <p>가입일: {data.createdAt.split('T')[0]}</p>
-          <hr />
+          <p className='pt-3 title3-sb text-text-primary'>{data.accountEmail}</p>
+          <p className='pb-4 caption2-r text-text-quaternary'>가입일: {data.createdAt.split('T')[0]}</p>
+          <hr className='text-line-border-primary h-px pt-4' />
           <p className='title4-sb text-text-brand'>약관 및 정책</p>
-          <div className='flex'>
-            <span className='flex-1'>서비스 이용약관</span>
-            <span className='px-4'>&gt;</span>
+
+          {/* 약관 */}
+          <div>
+            <div className='flex py-2'
+              onClick={() => window.open('https://www.notion.so/goormkdx/2abc0ff4ce31803aafc4f96fbf7a346d?source=copy_link', '_blank')}>
+              <span className='flex items-center flex-1 title3-sb text-text-primary'>서비스 이용약관</span>
+              <ChevronRight size={40} className='p-2' />
+            </div>
+            <div className='flex py-2'
+              onClick={() => window.open('https://www.notion.so/goormkdx/2a9c0ff4ce318059a59adbadb12899f5', '_blank')}>
+              <span className='flex items-center flex-1 title3-sb text-text-primary'>위치기반 서비스 이용약관</span>
+              <ChevronRight size={40} className='p-2' />
+            </div>
+            <div className='flex py-2'
+              onClick={() => window.open('https://www.notion.so/goormkdx/2aec0ff4ce318015a81bec2158eec86d', '_blank')}>
+              <span className='flex items-center flex-1 title3-sb text-text-primary'>개인정보 처리방침</span>
+              <ChevronRight size={40} className='p-2' />
+            </div>
+            <div className='flex py-2'
+              onClick={() => window.open('https://www.notion.so/goormkdx/Zony-2aac0ff4ce31803297c5c1ea7a9f6986?source=copy_link', '_blank')}>
+              <span className='flex items-center flex-1 title3-sb text-text-primary'>운영 정책</span>
+              <ChevronRight size={40} className='p-2' />
+            </div>
           </div>
         </div>
-        <div className='flex gap-4'>
+        <div className='flex justify-center gap-4 text-text-quaternary'>
           <span onClick={() => openConfirm('탈퇴하시겠어요?',
             `탈퇴하기 버튼을 누르면
             탈퇴 처리됩니다.`,
