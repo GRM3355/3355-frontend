@@ -71,7 +71,7 @@ export default function FestivalListBottomSheet({
     e.stopPropagation();
 
     if (festivalData)
-      navigate(`/create-room/${festivalData.festivalId}`);
+      navigate(`/create-room/${festivalData.festivalId}`, { replace: true });
 
     // if (!tempToken || !festivalId) return;
 

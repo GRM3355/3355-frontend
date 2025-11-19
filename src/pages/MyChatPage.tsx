@@ -9,35 +9,8 @@ import { useParams } from "react-router-dom";
 
 
 export default function MyChatPage() {
-  const { tempToken } = useAuthStore();
-  const { data, isLoading, isError } = useGetRoomsByToken({ token: tempToken });
-
-
-  // if (isLoading) return <div>로딩 중...</div>;
-  // if (isError) return <div>에러 발생!</div>;
-
-  // return (
-  //   <>
-  //     <Header showLogo={true} showUser={true} showSearch={true} />
-  //     <div className="w-full h-full">
-  //       {data?.content.length ? (
-  //         <div>
-  //           {data?.content.map((room: RoomAPI) => (
-  //             <div key={room.chatRoomId}>
-  //               <p>{room.title}</p>
-  //             </div>
-  //           ))}
-  //         </div>
-  //       ) : (
-  //         <div className="flex w-full h-full items-center justify-center">
-  //           <p>현재 참여중인 방이 없습니다.</p>
-  //         </div>
-  //       )}
-
-  //     </div>
-  //   </>
-
-  // )
+  const { accessToken } = useAuthStore();
+  const { data, isLoading, isError } = useGetRoomsByToken({ token: accessToken });
 
   const testRooms: RoomAPI[] = [
     {

@@ -47,12 +47,7 @@ export const createRoom = async ({ festivalId, token, title, lat, lon }: PostRoo
     console.log('응답:', data);
     return data.data;
   } catch (error: any) {
-    console.error('에러 상세:', {
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      url: error.config?.url,
-    });
+
     throw error;
   }
 };

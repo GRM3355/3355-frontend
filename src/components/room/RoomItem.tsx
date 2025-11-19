@@ -29,7 +29,6 @@ export default function RoomItem({ room, showDetail, isNew }: RoomItemProps) {
     closeConfirm();
     // navigate(`/ chat / 1`)
     navigate(`/chat/${room.chatRoomId}`)
-
   }
 
   // if (room.participantCount >= 30)

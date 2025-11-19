@@ -48,10 +48,8 @@ export default function RoomListPage() {
 
 
   const handleCreateRoom = () => {
-    navigate(`/create-room/${festivalData.festivalId}`);
+    navigate(`/create-room/${festivalData.festivalId}`, { replace: true });
   }
-
-
 
   return (
     <>

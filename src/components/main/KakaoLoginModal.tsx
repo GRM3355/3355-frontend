@@ -28,6 +28,7 @@
 
 import React from 'react';
 import Modal from '../common/Modal';
+import Button from '../common/Button';
 
 type KakaoLoginModalProps = {
   isOpen: boolean;
@@ -62,14 +63,15 @@ export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProp
       onClose={onClose}
       className="w-full h-max p-5 m-10 rounded-2xl bg-surface-bg-modal-sheet"
     >
-      <div className="flex flex-col items-center gap-4">
-        <h2 className="text-xl font-bold">카카오 로그인</h2>
-        <button
-          onClick={handleClickLogin}
-          className="px-6 py-3 bg-yellow-400 text-gray-800 rounded-lg hover:bg-yellow-500 transition-colors font-semibold"
-        >
-          카카오로 시작하기
-        </button>
+      <div className="flex flex-col  gap-2">
+        <p className="title2-sb text-text-primary ">로그인</p>
+        <p className='body1-r text-text-secondary mb-4'>로그인이 필요한 서비스입니다.</p>
+        <div className='flex px-3 py-2 justify-center gap-2 w-full bg-yellow-300 rounded-2 '
+          onClick={handleClickLogin}>
+          <img src="/Kakao.svg" alt="" />
+          <span>카카오 로그인</span>
+        </div>
+        <Button onClick={() => onClose()}>다음에 하기</Button>
       </div>
     </Modal>
   );

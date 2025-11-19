@@ -37,35 +37,12 @@ function App() {
 
   const [userId, setUserId] = useState<string>();
 
-  //TODO: 로컬로 id 저장하는 거 없애고 아래 토큰 쓰기!!!
-  // useEffect(() => {
-  //   const storedId = localStorage.getItem("tempUserId");
-  //   if (storedId && storedId !== "undefined") {
-  //     setUserId(storedId);
-  //     return;
-  //   }
-
-  //   fetch("http://localhost:3000/api/user")
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       console.log("임시 유저 아이디 발급:", data);
-  //       localStorage.setItem("tempUserId", data.userId);
-  //       setUserId(data.userId);
-  //     })
-  //     .catch(err => console.error(err));
-  // }, []);
-
-  //임시 토큰
-  const { tempToken, setTempToken, setCoord } = useAuthStore();
-
-
   const LAT = 37.56813168
   const LON = 126.9696496
 
   const { location, error } = useCurrentLocation();
 
-
-
+  const { setCoord } = useAuthStore();
 
   // useEffect(() => {
   //   // 토큰 없으면 서버에서 발급
@@ -95,6 +72,11 @@ function App() {
   //       });
   //   }
   // }, [tempToken, setTempToken]);
+
+  useEffect(() => {
+    setCoord(LAT, LON);
+
+  }, [])
 
   if (error) return <div>위치 정보 가져오기 실패: {error}</div>;
   if (!location) return <div>위치 가져오는 중...</div>;
