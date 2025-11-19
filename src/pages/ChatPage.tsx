@@ -4,11 +4,12 @@ import Input from "@/components/common/Input";
 import Header, { type HeaderRoomInfo } from "@/components/layout/Header";
 import { useMessagesInfinite } from "@/hooks/useRoom";
 import useAuthStore from "@/stores/useAuthStore";
+import { useConfirmStore } from "@/stores/useConfirmStore";
 import type { ChatAPI } from "@/types/api";
 import { Client } from "@stomp/stompjs";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 // const tempToken = "bf7bb5bb-d975-4d23-8786-1cfd65039570";
 // const roomId = "4c9a54b6-f935-44cf-bd50-5657b43d9374";
@@ -123,6 +124,8 @@ export default function ChatPage() {
   const [userId, setUserId] = useState();
   // const { roomId: rawRoomId } = useParams();
   // const roomId = rawRoomId ? decodeURIComponent(rawRoomId) : undefined;
+  const navigate = useNavigate();
+  const { openConfirm, closeConfirm } = useConfirmStore();
 
   const { lat, lon } = useAuthStore();
 
@@ -235,9 +238,27 @@ export default function ChatPage() {
     setMessage("");
   };
 
+
+  //퇴장
+  const handleLeaveRoom = () => {
+    if (!stompClientRef.current) return;
+
+    stompClientRef.current.publish({
+      destination: `/app/chat-rooms/${roomId}/leave`,
+      body: JSON.stringify({ lat, lon }),
+      headers: { "content-type": "application/json" },
+    });
+
+    closeConfirm();
+    navigate("/my-chat", { replace: true });
+  }
+
   return (
     <>
-      <Header showBack={true} info={{ title, festivalTitle, participantCount }} showLeaveRoom={true} />
+      <Header showBack={true} info={{ title, festivalTitle, participantCount }}
+        onLeaveRoom={() => openConfirm('채팅방을 나가시겠어요?',
+          "모든 채팅 기록이 사라집니다.",
+          handleLeaveRoom, undefined, '나가기', '취소')} />
       <div className="flex flex-col h-full pb-16">
         <div className="flex-1 overflow-y-auto">
           {/* {beforeMessage && beforeMessage.map(m => (

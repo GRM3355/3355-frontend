@@ -4,44 +4,18 @@ import RoomItem from "@/components/room/RoomItem";
 import { useGetRoomsByToken } from "@/hooks/useRoom";
 import useAuthStore from "@/stores/useAuthStore";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
+import { useEffect } from "react";
 // import type { ChatRoom } from "@/types";
 import { useParams } from "react-router-dom";
 
 
 export default function MyChatPage() {
   const { accessToken } = useAuthStore();
-  const { data, isLoading, isError } = useGetRoomsByToken({ token: accessToken });
+  const { data, isLoading, isError, refetch } = useGetRoomsByToken({ token: accessToken });
 
-  const testRooms: RoomAPI[] = [
-    {
-      chatRoomId: "room-1",
-      festivalId: 1,
-      userId: "user-1",
-      title: "테스트 방 1",
-      lat: 37.5665,
-      lon: 126.9780,
-      festivalTitle: "테스트 페스티벌 A",
-      participantCount: 5,
-    },
-    {
-      chatRoomId: "room-2",
-      festivalId: 1,
-      userId: "user-2",
-      title: "테스트 방 2",
-      lat: 37.5651,
-      lon: 126.9895,
-      festivalTitle: "테스트 페스티벌 B",
-      participantCount: 3,
-    },
-  ];
-
-  if (isLoading) {
-    console.log("채팅방 로딩 중...");
-  } else if (isError) {
-    console.error("채팅방 조회 실패");
-  } else {
-    console.log("내 채팅방 목록:", data);
-  }
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return (
     <>

@@ -18,7 +18,7 @@ type HeaderProps = {
   showUser?: boolean;
   showSearch?: boolean;
   showSettings?: boolean;
-  showLeaveRoom?: boolean;
+  onLeaveRoom?: () => void;
 };
 
 export default function Header({
@@ -29,7 +29,7 @@ export default function Header({
   showUser = false,
   showSearch = false,
   showSettings = false,
-  showLeaveRoom = false,
+  onLeaveRoom
 }: HeaderProps) {
   const navigate = useNavigate()
   const location = useLocation();
@@ -111,7 +111,8 @@ export default function Header({
         {showUser && <User size={40} onClick={() => handleClickUser()} className="p-2" />}
         {showSearch && <Search size={40} onClick={() => handleClickSearch()} className="p-2" />}
         {showSettings && <span>환경설정</span>}
-        {showLeaveRoom && <Logout size={40} className="p-2" />}
+        {onLeaveRoom && <Logout size={40} className="p-2"
+          onClick={() => onLeaveRoom()} />}
       </div>
       {/* <span onClick={() => handleTestUser(1)}>1</span>
       <span onClick={() => handleTestUser(2)}>2</span> */}
