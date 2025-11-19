@@ -8,17 +8,18 @@ import type { FestivalAPI } from '@/types/api';
 import Tab from '@/components/common/Tab';
 import Select from '@/components/common/Select';
 import FestivalListSection from '@/components/festival/FestivalListSection';
+import { regions } from '@/utils/map';
 
-export const REGIONS = [
-  { key: "SEOUL", label: "서울" },
-  { key: "GYEONGGI", label: "경기/인천" },
-  { key: "CHUNGCHEONG", label: "충청/대전/세종" },
-  { key: "GANGWON", label: "강원" },
-  { key: "GYEONGBUK", label: "경북/대구/울산" },
-  { key: "GYEONGNAM", label: "경남/부산" },
-  { key: "JEOLLA", label: "전라/광주" },
-  { key: "JEJU", label: "제주" },
-]
+// export const REGIONS = [
+//   { key: "SEOUL", label: "서울" },
+//   { key: "GYEONGGI", label: "경기/인천" },
+//   { key: "CHUNGCHEONG", label: "충청/대전/세종" },
+//   { key: "GANGWON", label: "강원" },
+//   { key: "GYEONGBUK", label: "경북/대구/울산" },
+//   { key: "GYEONGNAM", label: "경남/부산" },
+//   { key: "JEOLLA", label: "전라/광주" },
+//   { key: "JEJU", label: "제주" },
+// ]
 
 const FILTER = [
   { key: "DATE", label: "개최순" },
@@ -61,7 +62,7 @@ export default function FestivalListPage() {
 
           {/* 지역 필터링 */}
           <Tab
-            items={REGIONS}
+            items={regions}
             selected={region}
             onSelect={setRegion}
           />

@@ -1,7 +1,8 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueries, useQuery } from '@tanstack/react-query';
 import { getFestivals, getRoomsByFestivalId, getFestivalByFestivalId, getFestivalCountByRegion } from '@/api/festival';
 import type { FestivalAPI, RoomAPI } from '@/types/api';
 import type { GetFestivalByLocationParams, GetFestivalsParams } from '@/types/params';
+import { regions } from '@/utils/map';
 
 // 모든 축제 리스트
 // export const useGetFestivals = () => {
@@ -117,4 +118,27 @@ export const useGetFestivalCount = (params: any = {}) => {
     queryKey: ['festivalCount', params],
     queryFn: () => getFestivalCountByRegion({ ...defaultParams, ...params }),
   });
+}
+
+export const useGetFestivalCounts = () => {
+  const queries = useQueries({
+    queries: regions.map(region => ({
+      queryKey: ['festivalCount', region.key],
+      queryFn: () => getFestivalCountByRegion({ region: region.key }),
+      cacheTime: 1000 * 60 * 10
+    })),
+  });
+
+  // const data = new Map<string, number>();
+  // regions.forEach((region, i) => {
+  //   data.set(region.key, queries[i].data.data.count ?? 0);
+  // });
+
+  const data = new Map<string, number>();
+  regions.forEach((region, i) => {
+    const count = queries[i].data?.count ?? 0;
+    data.set(region.key, count);
+  });
+
+  return data;
 }

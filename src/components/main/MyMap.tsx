@@ -5,13 +5,14 @@ import type { FeatureCollection, Point } from 'geojson';
 import type { FestivalAPI } from '@/types/api';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type { GeoJSONFeature } from 'mapbox-gl';
-import { ChevronDownLeftSolid, Circle, CircleSolid, InfoCircle, InfoTriangleSolid, Target, Triangle } from '@mynaui/icons-react';
-import { metersToPixels } from '@/utils/map';
+import { ChevronDownLeftSolid, ChevronUpLeftSolid, Circle, CircleSolid, InfoCircle, InfoTriangleSolid, Target, Triangle } from '@mynaui/icons-react';
+import { metersToPixels, regions } from '@/utils/map';
 import { useAsyncError } from 'react-router-dom';
 import SinglePoints from './SinglePoints';
 import GroupPoints from './GroupPoints';
 import { isFestivalActive } from '@/utils/date';
 import ZoneInfoItem from './ZoneInfoItem';
+import { useGetFestivalCounts } from '@/hooks/useFestival';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -38,6 +39,8 @@ export type GroupPoint = {
   points: SinglePoint[];
 };
 
+
+
 export default function MyMap({
   data,
   onSelectFestival,
@@ -60,7 +63,13 @@ export default function MyMap({
     zoom: 14,
   } as ViewState);
 
+  //선택된 축제 포인트
   const [selectedFestivalPoint, setSeletedFestivalPoint] = useState<SinglePoint | null>(null);
+
+  //페스티벌 개수
+  const festivalCounts = useGetFestivalCounts();
+
+
 
   // 클러스터 색깔 정보
   const [showColorInfo, setShowColorInfo] = useState<boolean>(false);
@@ -206,8 +215,10 @@ export default function MyMap({
 
             mapRef.current?.flyTo({
               center: [longitude, latitude],
-              zoom: 16, // 원하는 줌 레벨
+              zoom: 14, // 원하는 줌 레벨
             });
+
+            handleSetPoints();
           }
 
           handleCloseBottomSheet();
@@ -240,7 +251,7 @@ export default function MyMap({
           type="geojson"
           data={geoJsonPoints}
           cluster={true}
-          clusterMaxZoom={13}
+          clusterMaxZoom={12}
           clusterRadius={40}
         >
           {/* 클러스터 심볼 */}
@@ -254,6 +265,7 @@ export default function MyMap({
               "icon-size": 0.8, // 아이콘 크기 조절
               "icon-allow-overlap": true, // 겹쳐도 표시
             }}
+            minzoom={6}
           />
           <Layer
             id="clusters-count"
@@ -265,13 +277,42 @@ export default function MyMap({
               'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
               'text-size': 12,
             }}
+            minzoom={6}
           />
         </Source>
+
+        {/* 싱글, 그룹 포인트 */}
         {singlePoints && <SinglePoints selectedFestivalId={selectedFestivalPoint?.id ?? null}
           viewport={viewport} singlePoints={singlePoints} onClickPoint={handleClickPoint} />}
         {groupPoints && <GroupPoints selectedFestivalId={selectedFestivalPoint?.id ?? null}
           viewport={viewport} groupPoints={groupPoints} onClickPoint={handleClickPoint}
           isShowBottomSheet={isShowBottomSheet} onCloseBottomSheet={handleCloseBottomSheet} />}
+
+        {/* 전국 지역 축제 */}
+        {viewport.zoom <= 6 && regions.map(region => (
+          <Marker
+            key={region.key}
+            longitude={region.lon}
+            latitude={region.lat}
+          >
+            <img src="cluster.png" alt={region.label} className='z-0' />
+            <span className='absolute inset-0 flex items-center justify-center title1-sb text-text-primary'>
+              {festivalCounts.get(region.key) ?? 0}</span>
+          </Marker>
+        ))}
+        {viewport.zoom <= 6 && regions.map(region => (
+          <Marker
+            key={region.key}
+            longitude={region.lon}
+            latitude={region.lat}
+          >
+            <div
+              className={`absolute w-max h-max left-0 bottom-6 bg-white rounded-3 rounded-bl-none p-2 z-10 tooltip`}>
+              {region.label}
+              <ChevronUpLeftSolid className='absolute -bottom-3 -left-[7px] text-white' />
+            </div>
+          </Marker>
+        ))}
 
         {/* 내위치 */}
         <Marker
