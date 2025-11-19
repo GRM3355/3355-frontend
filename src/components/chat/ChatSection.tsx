@@ -13,15 +13,46 @@ function getBubblePosition(messages: ChatAPI[], index: number) {
   const prev = messages[index - 1];
   const next = messages[index + 1];
 
-  const isPrevSame = prev && prev.userId === curr.userId;
-  const isNextSame = next && next.userId === curr.userId;
+  const isPrevSameUser = prev && prev.userId === curr.userId;
+  const isNextSameUser = next && next.userId === curr.userId;
 
-  if (!isPrevSame && isNextSame) return "top";     // 맨 위
-  else if (isPrevSame && isNextSame) return "middle";   // 중간
-  else if (isPrevSame && !isNextSame) return "bottom";  // 맨 아래
+  const isPrevSameTime = prev && isSameMinute(prev.createdAt, curr.createdAt);
+  const isNextSameTime = next && isSameMinute(next.createdAt, curr.createdAt);
+
+  const isPrevSame = isPrevSameUser && isPrevSameTime;
+  const isNextSame = isNextSameUser && isNextSameTime;
+
+  if (!isPrevSame && isNextSame) return "top";       // 맨 위
+  else if (isPrevSame && isNextSame) return "middle"; // 중간
+  else if (isPrevSame && !isNextSame) return "bottom"; // 맨 아래
   return "single"; // 혼자
 }
 
+
+function isSameDate(dateStr1: string, dateStr2: string) {
+  const d1 = new Date(dateStr1);
+  const d2 = new Date(dateStr2);
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  );
+}
+
+function isSameMinute(dateStr1: string, dateStr2: string) {
+  if (!dateStr1 || !dateStr2) return false;
+
+  const d1 = new Date(dateStr1);
+  const d2 = new Date(dateStr2);
+
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate() &&
+    d1.getHours() === d2.getHours() &&
+    d1.getMinutes() === d2.getMinutes()
+  );
+}
 
 export default function ChatSection({ userId, messages, onScrollUp }: ChatSectionProps) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -92,13 +123,17 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
 
   return (
     <>
-      <div className="flex w-full h-full relative"
-      >
+      <div className="flex w-full h-full relative">
         <div className="flex flex-col flex-1 overflow-y-auto p-2 gap-1 scrollbar-hide"
           ref={scrollRef} onScroll={handleScroll}>
           {messages.map((m, i) => {
             const bubblePosition = getBubblePosition(messages, i);
-            return (<ChatItem key={i} chat={m} isMine={m.userId == userId} bubblePosition={bubblePosition} />)
+            const prev = messages[i - 1];
+            const sameDate = prev ? isSameDate(prev.createdAt, m.createdAt) : false;
+
+            return (<ChatItem key={i} chat={m} isMine={m.userId == userId}
+              bubblePosition={bubblePosition}
+              isSameDate={sameDate} />)
           }
           )}
         </div>
@@ -112,8 +147,6 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
           </button>
         )}
       </div>
-
     </>
-
   )
 }
