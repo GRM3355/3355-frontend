@@ -16,7 +16,7 @@ export default function RoomItem({ room, showDetail, isNew }: RoomItemProps) {
 
   const handleClick = () => {
     if (location.pathname === '/my-chat') {
-      navigate(`/chat/${room.chatRoomId}`);
+      handleGoRoom();
       return;
     }
 
@@ -28,9 +28,18 @@ export default function RoomItem({ room, showDetail, isNew }: RoomItemProps) {
   const handleConfirm = () => {
     closeConfirm();
     // navigate(`/ chat / 1`)
-    navigate(`/chat/${room.chatRoomId}`)
+    handleGoRoom();
   }
 
+  const handleGoRoom = () => {
+    navigate(`/chat/${room.chatRoomId}`, {
+      state: {
+        title: room.title,
+        festivalTitle: room.festivalTitle,
+        participantCount: room.participantCount,
+      }
+    })
+  }
   // if (room.participantCount >= 30)
 
   return (

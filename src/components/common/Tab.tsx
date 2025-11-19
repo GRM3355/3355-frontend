@@ -32,7 +32,7 @@ export default function Tab({ items, selected, onSelect }: TabProps) {
     <>
       <div
         ref={scrollRef}
-        className='flex h-max m-4 overflow-x-auto whitespace-nowrap scrollbar-hide'>
+        className='flex h-max overflow-x-auto whitespace-nowrap scrollbar-hide'>
         {items.map((item: TabItem) => (
           <div key={item.key} className="flex flex-col w-max h-max">
             <span

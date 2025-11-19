@@ -1,6 +1,7 @@
 import type { PostRoomParams } from "@/types/params";
 import axios from "axios";
 import api from "./axios";
+import apiClient from "./apiClient";
 
 // 방 아이디로 방 정보 조회
 export const getRoomByRoomId = async (id: string) => {
@@ -70,4 +71,19 @@ export const getRoomsByUserId = async ({ queryKey }: any) => {
       params: queryParams
     });
   return res.data.data;
+};
+
+
+type getMessagesParams = {
+  roomId: string;
+  before?: string | null;
+}
+//채팅방 과거 메세지 조회
+export const getMessages = async ({ roomId, before }: getMessagesParams) => {
+  console.log("getMessages 호출 - roomId:", roomId, "before:", before);
+  const { data } = await apiClient.get(`/api/v1/chat-rooms/${roomId}/messages`, {
+    params: { before },
+  });
+  console.log("getMessages 응답:", data);
+  return data.data;
 };

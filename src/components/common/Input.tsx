@@ -49,6 +49,15 @@ export default function Input({
             disabled={isDisabled}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            onKeyDown={(e) => {
+              if (e.nativeEvent.isComposing) return; //한글 입력 중복 문제 해결용
+
+              if (e.key === "Enter" && rest.value && onSend) {
+                e.preventDefault();
+                e.stopPropagation();
+                onSend();
+              }
+            }}
             className="focus:outline-none focus:ring-0 flex-1"
           />
 

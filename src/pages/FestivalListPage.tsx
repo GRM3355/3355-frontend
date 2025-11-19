@@ -57,12 +57,15 @@ export default function FestivalListPage() {
     <>
       <Header showLogo={true} showUser={true} showSearch={true} />
       <div className='flex flex-col h-full '>
-        {/* 지역 필터링 */}
-        <Tab
-          items={REGIONS}
-          selected={region}
-          onSelect={setRegion}
-        />
+        <div className='flex-1'>
+
+          {/* 지역 필터링 */}
+          <Tab
+            items={REGIONS}
+            selected={region}
+            onSelect={setRegion}
+          />
+        </div>
         <FestivalListSection region={region} />
 
       </div>

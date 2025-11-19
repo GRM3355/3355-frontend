@@ -1,5 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createRoom, getRoomByRoomId, getRoomsByUserId } from "@/api/room";
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { createRoom, getMessages, getRoomByRoomId, getRoomsByUserId } from "@/api/room";
 import { useNavigate } from "react-router-dom";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
 import useAuthStore from "@/stores/useAuthStore";
@@ -54,7 +54,14 @@ export const useCreateRoom = () => {
       queryClient.invalidateQueries({ queryKey: ['festivalRooms', { festivalId: newRoom.festivalId }] });
 
       // 생성된 방으로 이동
-      navigate(`/chat/${newRoom.chatRoomId}`, { replace: true });
+      navigate(`/chat/${newRoom.chatRoomId}`, {
+        replace: true,
+        state: {
+          title: newRoom.title,
+          festivalTitle: newRoom.festivalTitle,
+          participantCount: newRoom.participantCount,
+        }
+      });
     },
     onError: (error: any) => {
       console.error('에러 상세:', {
@@ -83,5 +90,54 @@ export const useGetRoomsByToken = (params: any = {}) => {
     queryKey: ["myRooms", { ...defaultParams, ...params }],
     queryFn: getRoomsByUserId,
     enabled: !!params.token,
+  });
+};
+
+//메세지 무한 스크롤
+
+interface Message {
+  id: string;
+  chatRoomId: string;
+  userId: string;
+  nickname: string;
+  content: string;
+  type: string;
+  createdAt: string;
+  likeCount: number;
+  liked: boolean;
+}
+
+interface MessagesResponse {
+  content: Message[];
+  hasNext: boolean;
+}
+
+export const useMessagesInfinite = (roomId: string) => {
+
+  return useInfiniteQuery<MessagesResponse>({
+    queryKey: ["messages", roomId],
+
+    queryFn: ({ pageParam }) => {
+      console.log("📡 API 호출 - pageParam:", pageParam); // 로그 1
+      return getMessages({
+        roomId,
+        before: pageParam as string,
+      });
+    },
+
+    initialPageParam: null,
+
+    getNextPageParam: (lastPage) => {
+      const messages = lastPage?.content;
+
+      if (!messages || messages.length === 0) return undefined;
+      if (!lastPage.hasNext) return undefined;
+
+      // 다음 요청용 before = 가장 오래된 메시지 id
+      return messages[messages.length - 1].id;
+    },
+
+    staleTime: Infinity,
+    gcTime: 5 * 60 * 1000,
   });
 };

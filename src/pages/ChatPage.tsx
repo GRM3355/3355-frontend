@@ -2,11 +2,13 @@ import ChatItem from "@/components/chat/ChatItem";
 import ChatSection from "@/components/chat/ChatSection";
 import Input from "@/components/common/Input";
 import Header, { type HeaderRoomInfo } from "@/components/layout/Header";
+import { useMessagesInfinite } from "@/hooks/useRoom";
 import useAuthStore from "@/stores/useAuthStore";
 import type { ChatAPI } from "@/types/api";
 import { Client } from "@stomp/stompjs";
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 // const tempToken = "bf7bb5bb-d975-4d23-8786-1cfd65039570";
 // const roomId = "4c9a54b6-f935-44cf-bd50-5657b43d9374";
@@ -112,28 +114,47 @@ export const bubbleTestData: ChatAPI[] = [
   },
 ];
 
-
-
 export default function ChatPage() {
   const [messages, setMessages] = useState<ChatAPI[]>([]);
   const [message, setMessage] = useState("");
   const stompClientRef = useRef<Client | null>(null);
-  const { tempToken, userId } = useAuthStore();
+  const { accessToken } = useAuthStore();
   const { roomId } = useParams();
-
+  const [userId, setUserId] = useState();
   // const { roomId: rawRoomId } = useParams();
   // const roomId = rawRoomId ? decodeURIComponent(rawRoomId) : undefined;
 
   const { lat, lon } = useAuthStore();
 
+  const location = useLocation();
+
+  const { title,
+    festivalTitle,
+    participantCount } = location.state as HeaderRoomInfo;
+
+  if (!roomId) return;
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch
+  } = useMessagesInfinite(roomId);
+
+
   useEffect(() => {
     if (!roomId) return;
+
+    const payload: any = jwtDecode(accessToken);
+    console.log(payload?.sub || null);
+    setUserId(payload?.sub)
 
     const client = new Client({
       brokerURL: "wss://ws.zony.kro.kr/chat",
       connectHeaders: {
         // Authorization: `Bearer ${tempToken}`,
-        Authorization: `Bearer ${tempToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       debug: (str) => console.log("STOMP DEBUG:", str),
 
@@ -164,12 +185,31 @@ export default function ChatPage() {
     client.activate();
     stompClientRef.current = client;
 
+    //이전대화
+    refetch();
+
     return () => {
       if (client.active) {
         client.deactivate();
       }
     };
   }, [roomId]);
+
+  //무한 스크롤 감지
+  const handleScrollUp = () => {
+    // 스크롤이 최상단 근처에 도달하면 과거 메시지 로드
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      const beforeMessage = data?.pages.flatMap(page => page.content).reverse();
+      setMessages(prev => [...beforeMessage, ...prev]);
+      console.log("불러옴")
+    }
+  }, [data]);
 
 
   //메세지 전송
@@ -195,38 +235,15 @@ export default function ChatPage() {
     setMessage("");
   };
 
-
-  const testUserId = '1234'
-
-  const testRoomInfo: HeaderRoomInfo = {
-    roomTitle: "테스트 방",
-    festivalTitle: " 테스트 축제명",
-    count: 4
-  }
-
   return (
     <>
-      <Header showBack={true} info={testRoomInfo} showLeaveRoom={true} />
+      <Header showBack={true} info={{ title, festivalTitle, participantCount }} showLeaveRoom={true} />
       <div className="flex flex-col h-full pb-16">
-        {/*<div className="flex flex-col flex-1 overflow-y-auto p-2 gap-2 scrollbar-hide">
-           {testChatData.map((m, i) => (
-          <ChatItem key={i} chat={m} isMine={m.userId == testUserId} />
-        ))} */}
-        {/* {bubbleTestData.map((chat, i) => {
-            const bubblePosition = getBubblePosition(bubbleTestData, i);
-
-            return (
-              <ChatItem
-                key={chat.id}
-                chat={chat}
-                isMine={chat.userId === testUserId}
-                bubblePosition={bubblePosition}
-              />
-            );
-          })} 
-        </div>*/}
         <div className="flex-1 overflow-y-auto">
-          <ChatSection userId={userId} messages={messages} />
+          {/* {beforeMessage && beforeMessage.map(m => (
+            <p>{m.content}</p>
+          ))} */}
+          <ChatSection userId={userId} messages={messages} onScrollUp={handleScrollUp} />
         </div>
         <div className="px-2">
           <Input
@@ -238,7 +255,7 @@ export default function ChatPage() {
             focusStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
             completeStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
             disabledStyle="px-4 py-2 h-10 rounded-2 text-text-disabled bg-state-interacion-container-disabled"
-            // isDisabled={true}
+            // isDisabled={accessToken == ''}
             onSend={() => sendMessage()}
             onClear={() => setMessage('')}
           />

@@ -5,9 +5,9 @@ import { ChevronLeft, Logout, Search, User } from "@mynaui/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export type HeaderRoomInfo = {
-  roomTitle: string;
+  title: string;
   festivalTitle: string;
-  count: number;
+  participantCount: number;
 }
 
 type HeaderProps = {
@@ -35,7 +35,7 @@ export default function Header({
   const location = useLocation();
 
   const { openConfirm, closeConfirm } = useConfirmStore();
-  const { isLoggedIn, openLoginModal } = useLoginStore();
+  const { openLoginModal } = useLoginStore();
   const { accessToken } = useAuthStore();
 
   const handleBackConfirm = () => {
@@ -91,7 +91,7 @@ export default function Header({
 
   return (
     <div className='flex items-center justify-between w-full h-13 px-4 py-[14]'>
-      {showBack && <ChevronLeft size={24} onClick={() => handleClickBack()} />}
+      {showBack && <ChevronLeft size={40} onClick={() => handleClickBack()} className="p-2" />}
       {showLogo && <div className="flex gap-1.5" onClick={() => handleClickLogo()}>
         <img src="/ZonyLogo.svg" alt="" />
         <span className="label1-sb">Zony</span>
@@ -101,17 +101,17 @@ export default function Header({
       {info &&
         <div className="flex flex-col mr-auto">
           <div className="flex gap-1">
-            <span>{info.roomTitle}</span>
-            <span>{info.count}</span>
+            <span className="title3-sb text-text-primary">{info.title}</span>
+            <span className="title3-sb text-text-tertiary">{info.participantCount}</span>
           </div>
-          <span>{info.festivalTitle}</span>
+          <span className="caption3-r text-text-primary">{info.festivalTitle}</span>
 
         </div>}
       <div className="flex gap-4">
-        {showUser && <User size={24} onClick={() => handleClickUser()} />}
-        {showSearch && <Search size={24} onClick={() => handleClickSearch()} />}
+        {showUser && <User size={40} onClick={() => handleClickUser()} className="p-2" />}
+        {showSearch && <Search size={40} onClick={() => handleClickSearch()} className="p-2" />}
         {showSettings && <span>환경설정</span>}
-        {showLeaveRoom && <Logout size={24} />}
+        {showLeaveRoom && <Logout size={40} className="p-2" />}
       </div>
       {/* <span onClick={() => handleTestUser(1)}>1</span>
       <span onClick={() => handleTestUser(2)}>2</span> */}

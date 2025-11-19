@@ -55,11 +55,11 @@ export default function MyChatPage() {
           <span className="title3-sb text-text-primary">현재 참여중인 채팅방</span>
           <span className="label5-r text-text-tertiary">6</span>
         </div>
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           {testRooms.map(room => (
             <RoomItem room={room} showDetail={true} />
           ))}
-        </div>
+        </div> */}
         <div className="flex flex-col gap-2">
           {data?.content.map(room => (
             <RoomItem room={room} showDetail={true} />

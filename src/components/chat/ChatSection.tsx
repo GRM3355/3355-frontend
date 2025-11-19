@@ -3,8 +3,9 @@ import ChatItem from "./ChatItem";
 import { useEffect, useRef, useState } from "react";
 
 type ChatSectionProps = {
-  userId: string;
+  userId: string | undefined;
   messages: ChatAPI[];
+  onScrollUp: () => void;
 }
 
 function getBubblePosition(messages: ChatAPI[], index: number) {
@@ -22,30 +23,51 @@ function getBubblePosition(messages: ChatAPI[], index: number) {
 }
 
 
-export default function ChatSection({ userId, messages }: ChatSectionProps) {
+export default function ChatSection({ userId, messages, onScrollUp }: ChatSectionProps) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const isAtBottom = () => {
     if (!scrollRef.current) return false;
 
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-    return scrollTop + clientHeight >= scrollHeight - 10; // 10px 오차 허용
+    return scrollTop + clientHeight >= scrollHeight - 50; // 50px 오차 허용
   };
 
+  const isAtTop = () => {
+    if (!scrollRef.current) return false;
+
+    const { scrollTop } = scrollRef.current;
+    return scrollTop <= 50;
+  }
+
+  //들어오자마자 이전 대화 전부 불러오는거 방지(맨 아래에서 시작)
   useEffect(() => {
     if (!scrollRef.current) return;
 
-    console.log("isAtBottom", isAtBottom)
-    if (showScrollDown) {
-      setShowScrollDown(true);
-    } else {
-      scrollToBottom();
+
+  }, []);
+
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    if (messages.length === 0) return;
+
+
+
+    if (!isMounted) {
+      // 처음 로딩 시 맨 아래로 이동
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: "auto",
+      });
+
+      setIsMounted(true);
     }
   }, [messages]);
 
   const handleScroll = () => {
-    if (!scrollRef.current) return;
+    if (!isMounted) return;
 
     if (isAtBottom()) {
       setShowScrollDown(false);
@@ -53,6 +75,9 @@ export default function ChatSection({ userId, messages }: ChatSectionProps) {
     else {
       setShowScrollDown(true);
     }
+
+    if (isAtTop())
+      onScrollUp();
   };
 
   const scrollToBottom = () => {
@@ -64,28 +89,26 @@ export default function ChatSection({ userId, messages }: ChatSectionProps) {
     setShowScrollDown(false);
   };
 
+
   return (
     <>
       <div className="flex w-full h-full relative"
       >
-
-        <div className="flex flex-col flex-1 overflow-y-auto p-2 gap-2 scrollbar-hide"
+        <div className="flex flex-col flex-1 overflow-y-auto p-2 gap-1 scrollbar-hide"
           ref={scrollRef} onScroll={handleScroll}>
           {messages.map((m, i) => {
             const bubblePosition = getBubblePosition(messages, i);
-
             return (<ChatItem key={i} chat={m} isMine={m.userId == userId} bubblePosition={bubblePosition} />)
-
           }
           )}
         </div>
         {showScrollDown && (
           <button
             onClick={scrollToBottom}
-            className=" left-1/2 -translate-x-1/2 bg-primar px-4 py-2 rounded-full 
-            absolute bottom-4"
+            className=" left-1/2 -translate-x-1/2 bg-surface-overlay-chip chip px-4 py-1 rounded-full 
+            absolute bottom-4 label5-r text-basic-100"
           >
-            최신 메시지 보기
+            새로운 메시지로 이동
           </button>
         )}
       </div>
