@@ -7,12 +7,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import type { GeoJSONFeature } from 'mapbox-gl';
 import { ChevronDownLeftSolid, ChevronUpLeftSolid, Circle, CircleSolid, InfoCircle, InfoTriangleSolid, Target, Triangle } from '@mynaui/icons-react';
 import { metersToPixels, regions } from '@/utils/map';
-import { useAsyncError } from 'react-router-dom';
+import { useAsyncError, useLocation } from 'react-router-dom';
 import SinglePoints from './SinglePoints';
 import GroupPoints from './GroupPoints';
 import { isFestivalActive } from '@/utils/date';
 import ZoneInfoItem from './ZoneInfoItem';
 import { useGetFestivalCounts } from '@/hooks/useFestival';
+import useLocationStore from '@/stores/useLocationStore';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -39,8 +40,6 @@ export type GroupPoint = {
   points: SinglePoint[];
 };
 
-
-
 export default function MyMap({
   data,
   onSelectFestival,
@@ -49,8 +48,13 @@ export default function MyMap({
   onCloseBottomSheet,
   onSearchFestivalByLocation }: MyMapProps) {
   const mapRef = useRef<MapRef>(null);
+
+  const { lat, lon, isAllowed } = useLocationStore();
+
   //유저 실제 위치 좌표 
   const [myViewport, setMyViewport] = useState<ViewState>({
+    // latitude: lat,
+    // longitude: lon,
     latitude: 37.5681,
     longitude: 126.9696,
     zoom: 14,
@@ -58,8 +62,8 @@ export default function MyMap({
 
   //화면 움직일때의 좌표
   const [viewport, setViewport] = useState<ViewState>({
-    latitude: 37.5681,
-    longitude: 126.9696,
+    latitude: lat ?? 37.5701342,
+    longitude: lon ?? 126.9772235,
     zoom: 14,
   } as ViewState);
 
@@ -186,6 +190,7 @@ export default function MyMap({
   }
 
   const handleGoMyPos = () => {
+
     handleFlyTo(myViewport.longitude, myViewport.latitude, myViewport.zoom, true);
     handleCloseBottomSheet();
   }
@@ -345,10 +350,11 @@ export default function MyMap({
         bg-surface-overlay-chip chip rounded-full text-basic-100 px-3.5 py-1.5'
         onClick={() => handleResearchFestival()}>이 지역 재검색</span>
       {/* 현재 위치로 이동 */}
-      <img src="/Target.svg" alt="target" className={`absolute ${isShowBottomSheet ? "bottom-100" : "bottom-16"} 
+      {isAllowed && (
+        <img src="/Target.svg" alt="target" className={`absolute ${isShowBottomSheet ? "bottom-100" : "bottom-16"} 
       right-3 bg-white p-2.5 rounded-full floating`}
-        onClick={() => handleGoMyPos()} />
-
+          onClick={() => handleGoMyPos()} />
+      )}
     </div >
   );
 }

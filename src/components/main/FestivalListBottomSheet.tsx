@@ -1,4 +1,4 @@
-import React, { useEffect, type MouseEvent } from 'react'
+import React, { useEffect, useState, type MouseEvent } from 'react'
 import RoomItem from '../room/RoomItem'
 import BottomSheet from '../common/BottomSheet'
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { useGetRoomsByFestivalId } from '@/hooks/useFestival';
 import type { ChatRoomAPI, FestivalAPI, RoomAPI } from '@/types/api';
 import { ArrowRight, Info, Plus, UserSolid } from '@mynaui/icons-react';
 import RoomListSection from '../festival/RoomListSection';
+import useLocationStore from '@/stores/useLocationStore';
+import { LngLat } from 'mapbox-gl';
 
 type FestivalListBottomSheetProps = {
   festivalData?: FestivalAPI;
@@ -28,12 +30,12 @@ function formatDateWithWeekday(dateStr: string) {
 export default function FestivalListBottomSheet({
   festivalData,
   isShowBottomSheet,
-  // onHideBottomSheet,
-  onShowFestivalModal
 }: FestivalListBottomSheetProps
 ) {
   const navigate = useNavigate()
 
+  const { lat, lon, isAllowed } = useLocationStore();
+  const [distance, setDistance] = useState<number>(3000);
   const {
     data: roomDatas,
     isLoading: isRoomLoading,
@@ -43,18 +45,18 @@ export default function FestivalListBottomSheet({
 
   useEffect(() => {
     if (festivalData?.festivalId) refetch();
-  }, [refetch, festivalData?.festivalId]);
 
+    if (isAllowed && lat && lon && festivalData) {
+      const p1 = new LngLat(lon, lat);
+      const p2 = new LngLat(festivalData.lon, festivalData.lat);
 
-  const handleClick = () => {
-    if (festivalData)
-      navigate(`/create-room/${festivalData.festivalId}`);
-  }
+      const dist = p1.distanceTo(p2);
+      setDistance(dist);
+      console.log(dist);
+    }
 
-  const handleShowInfo = (e: MouseEvent) => {
-    e.stopPropagation();
-    onShowFestivalModal();
-  }
+  }, [refetch, festivalData?.festivalId, isAllowed]);
+
 
   const handleShowDetail = () => {
     if (festivalData)
@@ -73,19 +75,8 @@ export default function FestivalListBottomSheet({
     if (festivalData)
       navigate(`/create-room/${festivalData.festivalId}`, { replace: true });
 
-    // if (!tempToken || !festivalId) return;
-
-    // const id = parseInt(festivalId);
-    // console.log("채팅방 생성 시도:", { festivalId, token: tempToken, roomTitle, lat, lon });
-    // mutate({
-    //   festivalId: id,
-    //   token: tempToken,
-    //   title: roomTitle,
-    //   lat,
-    //   lon
-    // });
-
   }
+
   if (!festivalData || !roomDatas?.content) return null;
 
   return (
@@ -110,27 +101,8 @@ export default function FestivalListBottomSheet({
       </div>
       <p className="label5-r text-text-tertiary bg-gray-100 px-3 py-2">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
       <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
-      <Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1 floating"
-        onClick={(e) => handleCreateRoom(e)} />
+      {(isAllowed && distance <= 500) && (<Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1 floating"
+        onClick={(e) => handleCreateRoom(e)} />)}
     </BottomSheet>
   )
 }
-
-// <div className='flex items-center justify-between gap-4'>
-// <div className='flex w-full flex-col py-8 gap-1'>
-//   <div className='flex w-full gap-1 items-center'>
-//     <p className='title1-sb text-text-primary'>{festivalData.title}</p>
-//     <Info size={16} onClick={(e) => handleShowInfo(e)}
-//       className=" border rounded-full border-text-primary " />
-//     <ArrowRight className='ml-auto' />
-//   </div>
-//   <p className='caption2-r text-text-tertiary'>페스티벌 Zone 내에서 채팅이 가능합니다.</p>
-// </div>
-// {/* <button onClick={() => handleClick()}>채팅방 생성 버튼</button> */}
-// </div>
-
-// <div>
-// {roomDatas?.content.map((room: RoomAPI) => (
-//   <RoomItem key={room.chatRoomId} room={room} />
-// ))}
-// </div>

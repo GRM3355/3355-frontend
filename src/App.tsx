@@ -26,6 +26,7 @@ import KakaoRedirectPage from './pages/KakaoRedirectPage'
 import useCurrentLocation from './hooks/useCurrentLocation'
 import KakaoLogout from './pages/KakaoLogout'
 import Quit from './pages/MyQuit'
+import useLocationStore from './stores/useLocationStore'
 
 function App() {
   //확인 모달용
@@ -37,9 +38,9 @@ function App() {
   const LAT = 37.56813168
   const LON = 126.9696496
 
-  const { location, error } = useCurrentLocation();
+  // const { error } = useCurrentLocation();
 
-  const { setCoord } = useAuthStore();
+  // const { setCoord } = useAuthStore();
 
   // useEffect(() => {
   //   // 토큰 없으면 서버에서 발급
@@ -70,15 +71,31 @@ function App() {
   //   }
   // }, [tempToken, setTempToken]);
 
-  useEffect(() => {
-    setCoord(LAT, LON);
+  // useEffect(() => {
+  //   setCoord(LAT, LON);
 
-  }, [])
-
-  if (error) return <div>위치 정보 가져오기 실패: {error}</div>;
-  if (!location) return <div>위치 가져오는 중...</div>;
+  // }, [])
 
   // console.log("임시 토큰:", tempToken);
+  const { setIsAllowed, setLocation } = useLocationStore();
+
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setIsAllowed();
+        const { latitude, longitude } = pos.coords;
+        //TODO 추후 위치 변경
+        // setLocation(latitude, longitude);
+        setLocation(37.5681, 126.9696)
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }, []);
+
+
   return (
     <div className='flex flex-col h-dvh w-full sm:w-100 mx-auto relative overflow-hidden'>
       {/* <p>{tempToken}</p> */}

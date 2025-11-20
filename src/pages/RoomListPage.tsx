@@ -1,33 +1,27 @@
 import { useGetFestivalByFestivalId, useGetRoomsByFestivalId } from "@/hooks/useFestival";
 import FestivalInfoModal from "@/components/main/FestivalInfoModal";
 import RoomItem from "@/components/room/RoomItem";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
 import Header from "@/components/layout/Header";
 import AD from "@/components/common/AD";
 import { Info, Plus, UserSolid } from "@mynaui/icons-react";
 import RoomListSection from "@/components/festival/RoomListSection";
+import useLocationStore from "@/stores/useLocationStore";
+import { LngLat } from "mapbox-gl";
 
 
 export default function RoomListPage() {
   const { festivalId } = useParams();
   const [isShowFestivalModal, setShowFestivalModal] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { lat, lon, isAllowed } = useLocationStore();
 
   const [isFixed, setIsFixed] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [distance, setDistance] = useState<number>(3000);
 
-  const handleScroll = () => {
-    if (!scrollRef.current) return;
-    const scrollTop = scrollRef.current.scrollTop;
-
-    if (scrollTop >= 200) {
-      setIsFixed(true); // 200px 이후 화면 고정
-    } else {
-      setIsFixed(false); // 초반은 스크롤 따라감
-    }
-  };
 
   const {
     data: roomDatas,
@@ -40,6 +34,30 @@ export default function RoomListPage() {
     isLoading: isFestivalLoading,
     isError: isFestivalError,
   } = useGetFestivalByFestivalId({ festivalId });
+
+  useEffect(() => {
+    if (isAllowed && lat && lon && festivalData) {
+      const p1 = new LngLat(lon, lat);
+      const p2 = new LngLat(festivalData.lon, festivalData.lat);
+
+      const dist = p1.distanceTo(p2);
+      setDistance(dist);
+    }
+
+  }, [festivalData?.festivalId, isAllowed]);
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const scrollTop = scrollRef.current.scrollTop;
+
+    if (scrollTop >= 200) {
+      setIsFixed(true); // 200px 이후 화면 고정
+    } else {
+      setIsFixed(false); // 초반은 스크롤 따라감
+    }
+  };
+
+
 
   if (isRoomLoading || isFestivalLoading) return <div>로딩 중...</div>;
   if (isRoomError || isFestivalError) return <div>에러 발생!</div>;
@@ -90,8 +108,9 @@ export default function RoomListPage() {
           <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
         </div>
       </div >
-      <Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1"
-        onClick={() => handleCreateRoom()} />
+
+      {(isAllowed && distance <= 500) && (<Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1"
+        onClick={() => handleCreateRoom()} />)}
       <FestivalInfoModal
         festivalData={festivalData}
         isOpen={isShowFestivalModal}

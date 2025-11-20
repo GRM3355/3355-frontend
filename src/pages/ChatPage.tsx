@@ -5,6 +5,7 @@ import Header, { type HeaderRoomInfo } from "@/components/layout/Header";
 import { useMessagesInfinite } from "@/hooks/useRoom";
 import useAuthStore from "@/stores/useAuthStore";
 import { useConfirmStore } from "@/stores/useConfirmStore";
+import useLocationStore from "@/stores/useLocationStore";
 import type { ChatAPI } from "@/types/api";
 import { Client } from "@stomp/stompjs";
 import { jwtDecode } from "jwt-decode";
@@ -126,9 +127,7 @@ export default function ChatPage() {
   // const roomId = rawRoomId ? decodeURIComponent(rawRoomId) : undefined;
   const navigate = useNavigate();
   const { openConfirm, closeConfirm } = useConfirmStore();
-
-  const { lat, lon } = useAuthStore();
-
+  const { lat, lon } = useLocationStore();
   const location = useLocation();
 
   const { title,

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useCreateRoom } from "@/hooks/useRoom";
 import Header from "@/components/layout/Header";
 import Input from "@/components/common/Input";
+import useLocationStore from "@/stores/useLocationStore";
 
 export default function CreateRoomPage() {
   const { festivalId } = useParams();
@@ -14,10 +15,10 @@ export default function CreateRoomPage() {
 
   // const { mutate, isPending } = useCreateRoom();
   const { mutate, isPending } = useCreateRoom();
-  const { lat, lon } = useAuthStore();
+  const { lat, lon } = useLocationStore();
 
   const handleCreateRoom = () => {
-    if (!accessToken || !festivalId) return;
+    if (!accessToken || !festivalId || !lat || !lon) return;
 
     const id = parseInt(festivalId);
     console.log("채팅방 생성 시도:", { festivalId, token: accessToken, roomTitle, lat, lon });

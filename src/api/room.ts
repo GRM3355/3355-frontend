@@ -35,7 +35,7 @@ export const createRoom = async ({ festivalId, token, title, lat, lon }: PostRoo
   console.log('URL:', `/api/v1/festivals/${festivalId}/chat-rooms`);
 
   try {
-    const { data } = await api.post(
+    const { data } = await apiClient.post(
       `/api/v1/festivals/${festivalId}/chat-rooms`,
       { title, lat, lon },
       {
@@ -62,7 +62,7 @@ export const getRoomsByUserId = async ({ queryKey }: any) => {
   const [, params] = queryKey;
   const { token, ...queryParams } = params;
 
-  const res = await api.get('/api/v1/chat-rooms/my-rooms',
+  const res = await apiClient.get('/api/v1/chat-rooms/my-rooms',
     {
       headers: {
         'Content-Type': 'application/json',

@@ -36,7 +36,6 @@ export const useGetRoomById = (roomId: string) => {
 export const useCreateRoom = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { lat, lon } = useAuthStore();
 
   const { openConfirm, closeConfirm } = useConfirmStore();
 
