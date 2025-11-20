@@ -1,7 +1,7 @@
 import ChatSection from "@/components/chat/ChatSection";
 import Input from "@/components/common/Input";
 import Header from "@/components/layout/Header";
-import { useMessagesInfinite } from "@/hooks/useRoom";
+import { useLeaveRoom, useMessagesInfinite } from "@/hooks/useRoom";
 import useAuthStore from "@/stores/useAuthStore";
 import { useConfirmStore } from "@/stores/useConfirmStore";
 import useLocationStore from "@/stores/useLocationStore";
@@ -132,6 +132,8 @@ export default function ChatPage() {
   const location = useLocation();
 
   const { roomInfo } = location.state as { roomInfo: RoomAPI };
+
+  const { mutate, isPending } = useLeaveRoom();
 
   if (!roomInfo) {
     navigate("/my-chat", { replace: true });
@@ -280,16 +282,22 @@ export default function ChatPage() {
 
   //퇴장
   const handleLeaveRoom = () => {
-    if (!stompClientRef.current) return;
+    // if (!stompClientRef.current) return;
 
-    stompClientRef.current.publish({
-      destination: `/app/chat-rooms/${roomId}/leave`,
-      body: JSON.stringify({ lat, lon }),
-      headers: { "content-type": "application/json" },
+    // stompClientRef.current.publish({
+    //   destination: `/app/chat-rooms/${roomId}/leave`,
+    //   body: JSON.stringify({ lat, lon }),
+    //   headers: { "content-type": "application/json" },
+    // });
+
+    if (!accessToken || !roomInfo.chatRoomId) return;
+    mutate({
+      roomId: roomInfo.chatRoomId,
+      token: accessToken,
     });
 
     closeConfirm();
-    navigate("/my-chat", { replace: true });
+
   }
 
   return (

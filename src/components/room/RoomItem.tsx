@@ -45,7 +45,6 @@ export default function RoomItem({ room, showDetail, isNew }: RoomItemProps) {
     closeConfirm();
 
     if (!accessToken || !room.chatRoomId) return;
-    console.log("wfgqergeq")
     mutate({
       roomId: room.chatRoomId,
       token: accessToken,

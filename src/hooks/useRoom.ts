@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { createRoom, getMessages, getRoomByRoomId, getRoomsByUserId, joinRoom, likeMessage } from "@/api/room";
+import { createRoom, getMessages, getRoomByRoomId, getRoomsByUserId, joinRoom, leaveRoom, likeMessage } from "@/api/room";
 import { useNavigate } from "react-router-dom";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
 import useAuthStore from "@/stores/useAuthStore";
@@ -98,6 +98,30 @@ export const useJoinRoom = (roomInfo: RoomAPI) => {
       });
       navigate(-1);
       console.error('방 생성 실패:', { error });
+    },
+  });
+};
+
+
+export const useLeaveRoom = () => {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: leaveRoom,
+    onSuccess: (data: any) => {
+      console.log('방 떠나기 성공:', data);
+      navigate("/my-chat", { replace: true });
+    },
+    onError: (error: any) => {
+      console.error('에러 상세:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url,
+        message: error.response?.data?.error?.message
+      });
+      navigate(-1);
+      console.error('방 떠나기 실패:', { error });
     },
   });
 };
