@@ -5,6 +5,7 @@ import { useLeaveRoom, useMessagesInfinite } from "@/hooks/useRoom";
 import useAuthStore from "@/stores/useAuthStore";
 import { useConfirmStore } from "@/stores/useConfirmStore";
 import useLocationStore from "@/stores/useLocationStore";
+import useRoomStore from "@/stores/useRoomStore";
 import type { ChatAPI, RoomAPI } from "@/types/api";
 import { Client } from "@stomp/stompjs";
 import { jwtDecode } from "jwt-decode";
@@ -135,6 +136,9 @@ export default function ChatPage() {
 
   const { mutate, isPending } = useLeaveRoom();
 
+  const { updateRoomActivity } = useRoomStore();
+
+
   if (!roomInfo) {
     navigate("/my-chat", { replace: true });
     return;
@@ -213,6 +217,9 @@ export default function ChatPage() {
       if (client.active) {
         client.deactivate();
       }
+
+      const curTime = new Date;
+      updateRoomActivity({ roomId, lastViewedAt: curTime, hasNewChat: false })
     };
   }, [roomId]);
 

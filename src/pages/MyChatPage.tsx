@@ -3,6 +3,7 @@ import Header from "@/components/layout/Header";
 import RoomItem from "@/components/room/RoomItem";
 import { useGetRoomsByToken } from "@/hooks/useRoom";
 import useAuthStore from "@/stores/useAuthStore";
+import useRoomStore from "@/stores/useRoomStore";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
 import { useEffect } from "react";
 // import type { ChatRoom } from "@/types";
@@ -13,8 +14,12 @@ export default function MyChatPage() {
   const { accessToken } = useAuthStore();
   const { data, isLoading, isError, refetch } = useGetRoomsByToken({ token: accessToken });
 
+  const { roomActivities, updateRoomActivity, getRoomActivity } = useRoomStore();
+
   useEffect(() => {
     refetch();
+
+
   }, []);
 
   return (
@@ -35,9 +40,16 @@ export default function MyChatPage() {
           ))}
         </div> */}
         <div className="flex flex-col gap-2">
-          {data?.content.map(room => (
-            <RoomItem key={room.chatRoomId} room={room} showDetail={true} />
-          ))}
+          {data?.content.map(room => {
+            const local = getRoomActivity(room.chatRoomId)?.lastViewedAt;
+            const back = new Date(room.lastMessageAt);
+
+            const hasNew = local ? back > local : false;
+
+            return (
+              <RoomItem key={room.chatRoomId} room={room} showDetail={true} hasNew={hasNew} />
+            )
+          })}
         </div>
       </div>
     </>

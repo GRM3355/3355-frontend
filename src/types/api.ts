@@ -33,6 +33,8 @@ export type RoomAPI = {
   lon: number;
   festivalTitle: string;
   participantCount: number;
+  lastMessageAt: string;
+  lastContent: string;
 };
 
 export type SearchResponse = {

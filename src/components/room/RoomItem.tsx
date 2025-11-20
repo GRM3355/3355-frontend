@@ -9,10 +9,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 type RoomItemProps = {
   room: RoomAPI;
   showDetail?: boolean;
-  isNew?: boolean;
+  hasNew?: boolean;
 }
 
-export default function RoomItem({ room, showDetail, isNew }: RoomItemProps) {
+export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -69,7 +69,7 @@ export default function RoomItem({ room, showDetail, isNew }: RoomItemProps) {
           <span className="caption2-r text-text-quaternary">{room.participantCount}</span>
         </div>
       </div>
-      {isNew && <span className="ml-auto w-4 h-4 flex items-center justify-center text-xs
+      {hasNew && <span className="ml-auto w-4 h-4 flex items-center justify-center text-xs
       bg-text-brand text-text-inverse rounded-full">
         N
       </span>
