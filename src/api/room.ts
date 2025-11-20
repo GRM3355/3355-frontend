@@ -53,6 +53,28 @@ export const createRoom = async ({ festivalId, token, title, lat, lon }: PostRoo
   }
 };
 
+// 입장
+export const joinRoom = async ({ roomId, token, }: { roomId: string; token: string; }) => {
+  console.log('방 join 요청:', { roomId });
+  console.log('URL:', `/api/v1/chat-rooms/${roomId}/join`);
+
+  try {
+    const { data } = await apiClient.post(
+      `/api/v1/chat-rooms/${roomId}/join`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      }
+    );
+    console.log('응답:', data);
+    return data.data;
+  } catch (error: any) {
+    throw error;
+  }
+};
+
 // 유저 아이디로 참여 중인 방 목록 조회
 // export const getRoomsByUserId = async (userId: string) => {
 //   const res = await axios.get(`http://localhost:3000/api/room/user/${userId}`);
@@ -86,4 +108,15 @@ export const getMessages = async ({ roomId, before }: getMessagesParams) => {
   });
   console.log("getMessages 응답:", data);
   return data.data;
+};
+
+//좋아요
+export const likeMessage = async ({ messageId }: { messageId: string }) => {
+  try {
+    const { data } = await apiClient.post(`/api/v1/messages/${messageId}/like`,);
+    console.log('응답:', data);
+    return data.data;
+  } catch (error: any) {
+    throw error;
+  }
 };

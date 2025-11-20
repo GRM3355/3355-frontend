@@ -1,3 +1,4 @@
+import { useLikeMessage } from "@/hooks/useRoom";
 import type { ChatAPI } from "@/types/api"
 import { formatDate } from "@/utils/date";
 import { LikeSolid } from "@mynaui/icons-react";
@@ -11,21 +12,24 @@ type ChatItemProps = {
 };
 
 export default function ChatItem({ chat, isMine, bubblePosition, isSameDate }: ChatItemProps) {
-  const formattedTime = new Date(chat.createdAt.split('.')[0]).toLocaleTimeString("ko-KR", {
+
+  const formattedTime = new Date(chat.createdAt?.split('.')[0]).toLocaleTimeString("ko-KR", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
   });
 
   // long press like
-  const [isLiked, setIsLiked] = useState(chat.liked);
+  // const [isLiked, setIsLiked] = useState(chat.liked);
   const timerRef = useRef<number | null>(null);
+  const { mutate } = useLikeMessage();
 
   const handlePointerDown = () => {
-    timerRef.current = window.setTimeout(() => {
-      setIsLiked(true);
-      console.log("좋아요!");
-    }, 500);
+    if (!timerRef.current)
+      timerRef.current = window.setTimeout(() => {
+        console.log("좋아요!");
+        mutate({ messageId: chat.id })
+      }, 500);
   };
 
   const handlePointerUp = () => {
@@ -97,15 +101,15 @@ export default function ChatItem({ chat, isMine, bubblePosition, isSameDate }: C
         </div>
 
         {/* 좋아요 버튼 */}
-        {(chat.likeCount > 0 || (chat.likeCount == 0 && isLiked)) && (
+        {(chat.likeCount > 0 || (chat.likeCount == 0 && chat.liked)) && (
           <div
             className="w-max flex gap-0.5 px-0.75 py-0.5 bg-state-interacion-container-bubble-default items-center
             rounded-full">
             <LikeSolid
               size={12}
-              className={isLiked ? "text-alpha-yellow-70" : "text-icon-container-tertiary"}
+              className={chat.liked ? "text-alpha-yellow-70" : "text-icon-container-tertiary"}
             />
-            <span className={`${isLiked ? "text-text-brand" : "text-text-primary"} caption5-r`}>{chat.likeCount}</span>
+            <span className={`${chat.liked ? "text-text-brand" : "text-text-primary"} caption5-r`}>{chat.likeCount}</span>
           </div>
         )}
       </div>

@@ -1,4 +1,8 @@
+import { useJoinRoom } from "@/hooks/useRoom";
+import useAuthStore from "@/stores/useAuthStore";
 import { useConfirmStore } from "@/stores/useConfirmStore";
+import useLocationStore from "@/stores/useLocationStore";
+import useLoginStore from "@/stores/useLoginStore";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -13,38 +17,44 @@ export default function RoomItem({ room, showDetail, isNew }: RoomItemProps) {
   const location = useLocation();
 
   const { openConfirm, closeConfirm } = useConfirmStore();
+  const { accessToken } = useAuthStore();
+  const { openLoginModal } = useLoginStore();
 
-  const handleClick = () => {
-    if (location.pathname === '/my-chat') {
-      handleGoRoom();
+  const { mutate, isPending } = useJoinRoom(room);
+  const { lat, lon } = useLocationStore();
+
+  const handleEnterRoom = () => {
+    if (!accessToken) {
+      openLoginModal();
       return;
     }
 
+    if (location.pathname == '/my-chat') {
+      navigate(`/chat/${room.chatRoomId}`, {
+        state: { roomInfo: room },
+      });
+      return;
+    }
+
+    //마이룸 아니면 참여 확인 문구 
     openConfirm('채팅방에 참여하시겠어요?',
       '내 채팅 목록에 채팅방이 생성됩니다.', handleConfirm, undefined, '확인', '취소');
-
   }
 
   const handleConfirm = () => {
     closeConfirm();
-    // navigate(`/ chat / 1`)
-    handleGoRoom();
-  }
 
-  const handleGoRoom = () => {
-    navigate(`/chat/${room.chatRoomId}`, {
-      state: {
-        title: room.title,
-        festivalTitle: room.festivalTitle,
-        participantCount: room.participantCount,
-      }
-    })
+    if (!accessToken || !room.chatRoomId) return;
+    console.log("wfgqergeq")
+    mutate({
+      roomId: room.chatRoomId,
+      token: accessToken,
+    });
   }
-  // if (room.participantCount >= 30)
 
   return (
     <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-4 rounded-3'
-      onClick={() => handleClick()}>
+      onClick={() => handleEnterRoom()}>
       <img src="/testImg.png" alt="Festival Image"
         className="h-full aspect-square rounded-full" />
       <div>

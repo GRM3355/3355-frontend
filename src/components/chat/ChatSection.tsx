@@ -1,6 +1,6 @@
 import type { ChatAPI } from "@/types/api";
 import ChatItem from "./ChatItem";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 type ChatSectionProps = {
   userId: string | undefined;
@@ -58,12 +58,13 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const isAtBottom = () => {
     if (!scrollRef.current) return false;
 
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-    return scrollTop + clientHeight >= scrollHeight - 50; // 50px 오차 허용
+    return scrollTop + clientHeight >= scrollHeight - 100; // 50px 오차 허용
   };
 
   const isAtTop = () => {
@@ -73,27 +74,18 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
     return scrollTop <= 50;
   }
 
-  //들어오자마자 이전 대화 전부 불러오는거 방지(맨 아래에서 시작)
-  useEffect(() => {
-    if (!scrollRef.current) return;
-
-
-  }, []);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!scrollRef.current) return;
     if (messages.length === 0) return;
 
-
-
     if (!isMounted) {
-      // 처음 로딩 시 맨 아래로 이동
-      scrollRef.current.scrollTo({
-        top: scrollRef.current.scrollHeight,
-        behavior: "auto",
-      });
-
+      scrollToBottom();
       setIsMounted(true);
+    }
+
+    if (isAtBottom()) {
+      // 메세지 추가됐을때 바닥이면 자동 스크롤
+      scrollToBottom();
     }
   }, [messages]);
 
@@ -115,27 +107,28 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
     if (!scrollRef.current) return;
     scrollRef.current.scrollTo({
       top: scrollRef.current.scrollHeight,
-      behavior: "smooth",
+      behavior: "auto",
     });
+
     setShowScrollDown(false);
   };
-
 
   return (
     <>
       <div className="flex w-full h-full relative">
-        <div className="flex flex-col flex-1 overflow-y-auto p-2 gap-1 scrollbar-hide"
+        <div className={`flex flex-col flex-1 overflow-y-auto p-2 gap-1 scrollbar-hide`}
           ref={scrollRef} onScroll={handleScroll}>
           {messages.map((m, i) => {
             const bubblePosition = getBubblePosition(messages, i);
             const prev = messages[i - 1];
             const sameDate = prev ? isSameDate(prev.createdAt, m.createdAt) : false;
 
-            return (<ChatItem key={i} chat={m} isMine={m.userId == userId}
+            return (<ChatItem key={`${m.id}_${i}`} chat={m} isMine={m.userId == userId}
               bubblePosition={bubblePosition}
               isSameDate={sameDate} />)
           }
           )}
+
         </div>
         {showScrollDown && (
           <button
@@ -146,6 +139,7 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
             새로운 메시지로 이동
           </button>
         )}
+
       </div>
     </>
   )

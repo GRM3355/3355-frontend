@@ -8,6 +8,8 @@ import Header from "@/components/layout/Header";
 import AD from "@/components/common/AD";
 import { Info, Plus, X } from "@mynaui/icons-react";
 import Select from "../common/Select";
+import { useGetRoomsByToken } from "@/hooks/useRoom";
+import useAuthStore from "@/stores/useAuthStore";
 
 type RoomListSectionProps = {
   festivalData: FestivalAPI;
@@ -23,20 +25,20 @@ export default function RoomListSection({ festivalData, roomDatas }: RoomListSec
   const [isShowFestivalModal, setShowFestivalModal] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>('participant');
 
-  const navigate = useNavigate();
+  const { accessToken } = useAuthStore();
+  const { data, isLoading, isError, refetch } = useGetRoomsByToken({ token: accessToken });
 
-  const handleCreateRoom = () => {
-    navigate(`/create-room/${festivalData.festivalId}`);
-  }
+  //유저 방 목록에 없는 방만
+  const unjoinedRooms = !data
+    ? roomDatas
+    : roomDatas.filter(
+      room => !data.content.some(r => r.chatRoomId === room.chatRoomId)
+    );
 
-  const handleShowInfo = (e: MouseEvent) => {
-    e.stopPropagation();
-    setShowFestivalModal(true)
-  }
-
+  //필터링
   const filteredRooms = filter === "participant"
-    ? [...roomDatas].sort((a, b) => b.participantCount - a.participantCount)
-    : roomDatas;
+    ? [...unjoinedRooms].sort((a, b) => b.participantCount - a.participantCount)
+    : unjoinedRooms;
 
   return (
     <div className="flex flex-col h-full p-4 pt-0">
@@ -66,11 +68,6 @@ export default function RoomListSection({ festivalData, roomDatas }: RoomListSec
           <RoomItem key={room.chatRoomId} room={room} />
         ))}
       </div>
-
-      {/* <div className="absolute bottom-8 right-8 border bg-white"
-              onClick={() => handleCreateRoom()}>채팅방 생성</div> */}
-
-
     </div>
   )
 }

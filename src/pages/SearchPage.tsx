@@ -12,6 +12,7 @@ import Tab from '@/components/common/Tab';
 import { useNavigate } from 'react-router-dom';
 import FestivalItem from '@/components/festival/FestivalItem';
 import RoomItem from '@/components/room/RoomItem';
+import AD from '@/components/common/AD';
 
 const FILTER = [
   { key: "ALL", label: "전체" },
@@ -62,6 +63,8 @@ export default function SearchPage() {
             onClear={() => setKeyword('')}
           />
         </div>
+        {(keyword == "" || searchResultCount == 0) && <AD />}
+
         {/* 검색 결과 */}
         {keyword == "" || searchResultCount == 0 ? (
           <div className='flex w-full h-full items-center justify-center'>

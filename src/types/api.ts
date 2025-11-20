@@ -19,7 +19,7 @@ export interface FestivalAPI {
   firstImage: string;
   lat: number;
   lon: number;
-  region: 'SEOUL' | 'JEOLLA' | 'GYEONGGI' | 'BUSAN' | string;
+  region: string;
   chatRoomCount: number;
   totalParticipantCount: number;
 }

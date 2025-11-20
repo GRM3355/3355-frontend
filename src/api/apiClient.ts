@@ -33,9 +33,11 @@ const apiClient = axios.create({
 // 요청 인터셉터 - Authorization 자동 설정
 apiClient.interceptors.request.use(
   (config) => {
-    console.log("request interceptor 실행");
     const token = useAuthStore.getState().accessToken;
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => Promise.reject(error)

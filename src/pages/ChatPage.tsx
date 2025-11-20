@@ -1,14 +1,14 @@
-import ChatItem from "@/components/chat/ChatItem";
 import ChatSection from "@/components/chat/ChatSection";
 import Input from "@/components/common/Input";
-import Header, { type HeaderRoomInfo } from "@/components/layout/Header";
+import Header from "@/components/layout/Header";
 import { useMessagesInfinite } from "@/hooks/useRoom";
 import useAuthStore from "@/stores/useAuthStore";
 import { useConfirmStore } from "@/stores/useConfirmStore";
 import useLocationStore from "@/stores/useLocationStore";
-import type { ChatAPI } from "@/types/api";
+import type { ChatAPI, RoomAPI } from "@/types/api";
 import { Client } from "@stomp/stompjs";
 import { jwtDecode } from "jwt-decode";
+import { LngLat } from "mapbox-gl";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
@@ -123,16 +123,20 @@ export default function ChatPage() {
   const { accessToken } = useAuthStore();
   const { roomId } = useParams();
   const [userId, setUserId] = useState();
+  const [distance, setDistance] = useState<number>(3000);
   // const { roomId: rawRoomId } = useParams();
   // const roomId = rawRoomId ? decodeURIComponent(rawRoomId) : undefined;
   const navigate = useNavigate();
   const { openConfirm, closeConfirm } = useConfirmStore();
-  const { lat, lon } = useLocationStore();
+  const { isAllowed, lat, lon } = useLocationStore();
   const location = useLocation();
 
-  const { title,
-    festivalTitle,
-    participantCount } = location.state as HeaderRoomInfo;
+  const { roomInfo } = location.state as { roomInfo: RoomAPI };
+
+  if (!roomInfo) {
+    navigate("/my-chat", { replace: true });
+    return;
+  }
 
   if (!roomId) return;
 
@@ -173,7 +177,20 @@ export default function ChatPage() {
           console.log("서버 메시지 원본:", frame.body);
           const msg = JSON.parse(frame.body);
           console.log("파싱된 메시지:", msg);
-          setMessages((prev) => [...prev, msg]);
+
+          if ('content' in msg) {
+            // 일반 채팅 메시지
+            setMessages(prev => [...prev, msg]);
+          } else {
+            // 좋아요 이벤트
+            setMessages(prev =>
+              prev.map(m =>
+                m.id === msg.messageId
+                  ? { ...m, liked: msg.liked, likeCount: msg.likeCount }
+                  : m
+              )
+            );
+          }
         });
 
         client.subscribe('/user/queue/errors', (frame) => {
@@ -208,7 +225,10 @@ export default function ChatPage() {
   useEffect(() => {
     if (data) {
       const beforeMessage = data?.pages.flatMap(page => page.content).reverse();
-      setMessages(prev => [...beforeMessage, ...prev]);
+      setMessages(prev => {
+        const newMessages = beforeMessage.filter(m => !prev.some(p => p.id === m.id));
+        return [...newMessages, ...prev];
+      });
       console.log("불러옴")
     }
   }, [data]);
@@ -238,6 +258,26 @@ export default function ChatPage() {
   };
 
 
+  useEffect(() => {
+    if (isAllowed && lat && lon && roomInfo) {
+      const p1 = new LngLat(lon, lat);
+      const p2 = new LngLat(roomInfo.lon, roomInfo.lat);
+
+      const dist = p1.distanceTo(p2);
+      setDistance(dist);
+      console.log("채팅방 진입 시 거리", dist);
+      console.log(roomInfo.festivalTitle, lon, lat, roomInfo.lon, roomInfo.lat);
+
+
+      if (dist > 500) {
+        openConfirm('읽기 모드로 전환됩니다',
+          `해당 축제의 존 이외의 공간에서는
+          읽기 모드로만 탐색하실 수 있어요.`,
+          closeConfirm, undefined, '확인')
+      }
+    }
+  }, [roomInfo.chatRoomId, isAllowed]);
+
   //퇴장
   const handleLeaveRoom = () => {
     if (!stompClientRef.current) return;
@@ -254,7 +294,7 @@ export default function ChatPage() {
 
   return (
     <>
-      <Header showBack={true} info={{ title, festivalTitle, participantCount }}
+      <Header showBack={true} info={roomInfo}
         onLeaveRoom={() => openConfirm('채팅방을 나가시겠어요?',
           "모든 채팅 기록이 사라집니다.",
           handleLeaveRoom, undefined, '나가기', '취소')} />
@@ -275,7 +315,7 @@ export default function ChatPage() {
             focusStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
             completeStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
             disabledStyle="px-4 py-2 h-10 rounded-2 text-text-disabled bg-state-interacion-container-disabled"
-            // isDisabled={accessToken == ''}
+            isDisabled={distance > 500}
             onSend={() => sendMessage()}
             onClear={() => setMessage('')}
           />

@@ -36,7 +36,7 @@ export default function MyChatPage() {
         </div> */}
         <div className="flex flex-col gap-2">
           {data?.content.map(room => (
-            <RoomItem room={room} showDetail={true} />
+            <RoomItem key={room.chatRoomId} room={room} showDetail={true} />
           ))}
         </div>
       </div>
