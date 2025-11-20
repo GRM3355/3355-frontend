@@ -51,7 +51,7 @@ export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProp
       `&redirect_uri=${REDIRECT_URI}` +
       `&response_type=code` +
       '&prompt=login consent' +
-      '&scope=account_email,profile_nickname,profile_image' +
+      '&scope=account_email' +
       `&state=${encodeURIComponent(RETURN_URI)}`;
 
     window.location.href = kakaoAuthUrl;
