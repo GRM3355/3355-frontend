@@ -2,8 +2,6 @@ import { isFestivalActive } from '@/utils/date';
 import type { FestivalAPI } from '@/types/api';
 import { CalendarSolid } from '@mynaui/icons-react';
 import { useNavigate } from 'react-router-dom';
-import useAuthStore from '@/stores/useAuthStore';
-import { useGetRoomsByToken } from '@/hooks/useRoom';
 
 
 type RoomItemProps = {

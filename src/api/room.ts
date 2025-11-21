@@ -102,19 +102,15 @@ export const leaveRoom = async ({ roomId, token, }: { roomId: string; token: str
 //   const res = await axios.get(`http://localhost:3000/api/room/user/${userId}`);
 //   return res.data.data;
 // };
-export const getRoomsByUserId = async ({ queryKey }: any) => {
-  const [, params] = queryKey;
-  const { token, ...queryParams } = params;
-
-  const res = await apiClient.get('/api/v1/chat-rooms/my-rooms',
-    {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      params: queryParams
-    });
+export const getRoomsByUserId = async (token: string) => {
+  const res = await apiClient.get('/api/v1/chat-rooms/my-rooms', {
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    params: { page: 1, pageSize: 30 }, // 필요하면 고정값
+  });
   return res.data.data;
 };
 

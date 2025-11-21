@@ -19,7 +19,7 @@ export default function RoomListSection({ roomDatas }: RoomListSectionProps) {
   const [filter, setFilter] = useState<string>('participant');
 
   const { accessToken } = useAuthStore();
-  const { data, isLoading, isError, refetch } = useGetRoomsByToken({ token: accessToken });
+  const { data, isLoading, isError, refetch } = useGetRoomsByToken(accessToken);
 
   //유저 방 목록에 없는 방만
   const unjoinedRooms = !data

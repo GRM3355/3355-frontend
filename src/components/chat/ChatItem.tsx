@@ -12,11 +12,13 @@ type ChatItemProps = {
 };
 
 export default function ChatItem({ chat, isMine, bubblePosition, isSameDate }: ChatItemProps) {
-
-  const formattedTime = new Date(chat.createdAt?.split('.')[0]).toLocaleTimeString("ko-KR", {
+  const utcDate = new Date(chat.createdAt);
+  const seoulDate = new Date(utcDate.getTime() + (9 * 60 * 60 * 1000));
+  const formattedTime = seoulDate.toLocaleTimeString("ko-KR", {
+    timeZone: "Asia/Seoul",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hour12: false
   });
 
   // long press like

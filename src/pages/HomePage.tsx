@@ -72,7 +72,7 @@ export default function HomePage() {
       <FestivalListBottomSheet
         festivalData={festivalData}
         isShowBottomSheet={isShowBottomSheet}
-        // onHideBottomSheet={() => setShowBottomSheet(false)}
+        onHideBottomSheet={() => setShowBottomSheet(false)}
         onShowFestivalModal={() => setShowFestivalModal(true)} />
       <FestivalInfoModal
         festivalData={festivalData}

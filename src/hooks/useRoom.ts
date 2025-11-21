@@ -129,18 +129,16 @@ export const useLeaveRoom = () => {
 
 
 // 유저의 방 목록 가져오기
-export const useGetRoomsByToken = (params: any = {}) => {
-  const defaultParams = { page: 1, pageSize: 10, order: '', keyword: '' };
-
+export const useGetRoomsByToken = (token: string) => {
+  console.log("방 목록 가져오기")
   return useQuery<{ content: RoomAPI[] }>({
-    queryKey: ["myRooms", { ...defaultParams, ...params }],
-    queryFn: getRoomsByUserId,
-    enabled: !!params.token,
+    queryKey: ["myRooms", token], // 토큰만 키로
+    queryFn: () => getRoomsByUserId(token),
+    enabled: !!token, // 토큰 있을 때만 호출
   });
 };
 
 //메세지 무한 스크롤
-
 interface Message {
   id: string;
   chatRoomId: string;

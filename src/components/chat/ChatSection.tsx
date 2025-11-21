@@ -71,7 +71,7 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
     if (!scrollRef.current) return false;
 
     const { scrollTop } = scrollRef.current;
-    return scrollTop <= 50;
+    return scrollTop <= 0;
   }
 
   useLayoutEffect(() => {

@@ -13,7 +13,7 @@ import { LngLat } from 'mapbox-gl';
 type FestivalListBottomSheetProps = {
   festivalData?: FestivalAPI;
   isShowBottomSheet: boolean;
-  // onHideBottomSheet: () => void;
+  onHideBottomSheet: () => void;
   onShowFestivalModal: () => void;
 }
 
@@ -29,6 +29,7 @@ function formatDateWithWeekday(dateStr: string) {
 
 export default function FestivalListBottomSheet({
   festivalData,
+  onHideBottomSheet,
   isShowBottomSheet,
 }: FestivalListBottomSheetProps
 ) {
@@ -82,7 +83,7 @@ export default function FestivalListBottomSheet({
   return (
     <BottomSheet
       isOpen={isShowBottomSheet}
-    // onClose={() => onHideBottomSheet()}
+      onClose={() => onHideBottomSheet()}
     >
       <div className='flex p-4 gap-2'>
         <img src={festivalData.firstImage || '/testImg.png'} alt=""
@@ -100,7 +101,10 @@ export default function FestivalListBottomSheet({
         </div>
       </div>
       <p className="label5-r text-text-tertiary bg-gray-100 px-3 py-2">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
-      <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
+      <div className='h-full overflow-y-auto relative scrollbar-hide'>
+        <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
+
+      </div>
       {(isAllowed && distance <= 500) && (<Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1 floating"
         onClick={(e) => handleCreateRoom(e)} />)}
     </BottomSheet>

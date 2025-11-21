@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 
 export default function MyChatPage() {
   const { accessToken } = useAuthStore();
-  const { data, isLoading, isError, refetch } = useGetRoomsByToken({ token: accessToken });
+  const { data, isLoading, isError, refetch } = useGetRoomsByToken(accessToken);
 
   const { roomActivities, updateRoomActivity, getRoomActivity } = useRoomStore();
   const checkLogin = useCheckLogin();
@@ -33,7 +33,7 @@ export default function MyChatPage() {
       <div className="p-4">
         <div className="flex gap-1 items-center pb-4">
           <span className="title3-sb text-text-primary">현재 참여중인 채팅방</span>
-          <span className="label5-r text-text-tertiary">6</span>
+          <span className="label5-r text-text-tertiary">{data?.content.length ?? 0}</span>
         </div>
         {/* <div className="flex flex-col gap-2">
           {testRooms.map(room => (
