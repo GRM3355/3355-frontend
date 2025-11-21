@@ -101,7 +101,7 @@ export default function RoomListPage() {
                 <p className="">{festivalData.totalParticipantCount}명 참여중</p>
 
               </div>
-              <p className="text-4xl my-2">{festivalData.title}</p>
+              <p className="title5-sb my-2">{festivalData.title}</p>
               <p className="label6-sb">{festivalData.eventStartDate} - {festivalData.eventEndDate}</p>
               <p className="label7-r">{festivalData.addr1}</p>
             </div>

@@ -1,6 +1,10 @@
 @import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
 @import "tailwindcss";
 
+html, body {
+  overscroll-behavior: none; /* 스크롤 끝에서 바운스 방지 */
+}
+
 /* 스크롤은 가능하지만 스크롤바는 안 보이게 */
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
