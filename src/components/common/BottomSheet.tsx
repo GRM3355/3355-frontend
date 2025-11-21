@@ -27,7 +27,7 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
     setHeight(newHeight);
   };
 
-  const onPointerUp = (e: React.PointerEvent) => {
+  const onPointerUp = () => {
     dragging.current = false;
 
     const screenHeight = window.innerHeight;
