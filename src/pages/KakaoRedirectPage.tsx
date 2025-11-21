@@ -70,7 +70,9 @@ export default function KakaoRedirectPage() {
       console.log("로그인 실패! accessToken이 없습니다.");
     }
 
-    navigate('/', { replace: true });
+    // navigate('/', { replace: true });
+    navigate(-3);
+    navigate('.', { replace: true });
   }, [navigate, setAccessToken]);
 
   return (

@@ -52,30 +52,34 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
   }
 
   return (
-    <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-4 rounded-3'
-      onClick={() => handleEnterRoom()}>
-      <img src="/testImg.png" alt="Festival Image"
-        className="h-full aspect-square rounded-full" />
-      <div>
-        {showDetail && (
-          <div>
-            <p className="caption3-r text-text-tertiary">{room.festivalTitle}</p>
+    <>
+      <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-4 rounded-3'
+        onClick={() => handleEnterRoom()}>
+        <img src="/testImg.png" alt="Festival Image"
+          className="h-full aspect-square rounded-full" />
+        <div>
+          {showDetail && (
+            <div>
+              <p className="caption3-r text-text-tertiary">{room.festivalTitle}</p>
+            </div>
+          )}
+          <div className="flex gap-2 items-center">
+            <span className="title3-sb text-text-primary">
+              {room.title}
+            </span>
+            <span className="caption2-r text-text-quaternary">{room.participantCount}</span>
           </div>
-        )}
-        <div className="flex gap-2 items-center">
-          <span className="title3-sb text-text-primary">
-            {room.title}
-          </span>
-          <span className="caption2-r text-text-quaternary">{room.participantCount}</span>
         </div>
-      </div>
-      {hasNew && <span className="ml-auto w-4 h-4 flex items-center justify-center text-xs
+        {hasNew && <span className="ml-auto w-4 h-4 flex items-center justify-center text-xs
       bg-text-brand text-text-inverse rounded-full">
-        N
-      </span>
-      }
+          N
+        </span>
+        }
+      </div>
+
+    </>
 
 
-    </div>
+
   )
 }

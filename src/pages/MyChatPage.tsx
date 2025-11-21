@@ -1,7 +1,9 @@
 import AD from "@/components/common/AD";
 import Header from "@/components/layout/Header";
 import RoomItem from "@/components/room/RoomItem";
+import { useCheckLogin } from "@/hooks/useCheckLogin";
 import { useGetRoomsByToken } from "@/hooks/useRoom";
+import { useGetUserInfo } from "@/hooks/useUser";
 import useAuthStore from "@/stores/useAuthStore";
 import useRoomStore from "@/stores/useRoomStore";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
@@ -15,11 +17,10 @@ export default function MyChatPage() {
   const { data, isLoading, isError, refetch } = useGetRoomsByToken({ token: accessToken });
 
   const { roomActivities, updateRoomActivity, getRoomActivity } = useRoomStore();
-
+  const checkLogin = useCheckLogin();
   useEffect(() => {
+    checkLogin();
     refetch();
-
-
   }, []);
 
   return (
@@ -45,7 +46,6 @@ export default function MyChatPage() {
             const back = new Date(room.lastMessageAt);
 
             const hasNew = local ? back > local : false;
-
             return (
               <RoomItem key={room.chatRoomId} room={room} showDetail={true} hasNew={hasNew} />
             )

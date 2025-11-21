@@ -1,5 +1,6 @@
 // src/api/apiClient.js
 import useAuthStore from "@/stores/useAuthStore";
+import useLoginStore from "@/stores/useLoginStore";
 import axios from "axios";
 
 type FailedRequest = {
@@ -90,7 +91,9 @@ apiClient.interceptors.response.use(
         // refreshToken도 만료됨 → 강제 로그아웃
         processQueue(err, null);
         useAuthStore.getState().logout();
-        window.location.href = "/";
+        // window.location.href = "/";
+        useLoginStore.getState().openLoginModal();
+        //TODO 여기는 토큰 만료(401)외 에러 쪽이니 로그인 여는거 401 쪽으로 옮겨주자
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

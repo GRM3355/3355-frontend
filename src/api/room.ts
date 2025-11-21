@@ -108,6 +108,7 @@ export const getRoomsByUserId = async ({ queryKey }: any) => {
 
   const res = await apiClient.get('/api/v1/chat-rooms/my-rooms',
     {
+      withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,

@@ -15,7 +15,7 @@ const MyPage = () => {
   const navigate = useNavigate();
   const { accessToken, logout } = useAuthStore();
   const { openConfirm, closeConfirm } = useConfirmStore();
-  const { data } = useGetUserInfo(accessToken);
+  const { data, isError } = useGetUserInfo(accessToken);
 
   const handleDeleteAccount = async () => {
     const accessToken = localStorage.getItem("accessToken");

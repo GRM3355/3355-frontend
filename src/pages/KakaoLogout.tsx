@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '@/stores/useAuthStore';
-import axios from "axios"; 
+import axios from "axios";
 import apiClient from "@/api/apiClient";
 
 const API_LOGOUT_URL = "/api/auth/logout"; // 백엔드 로그아웃 엔드포인트
@@ -43,7 +43,7 @@ const Logout = () => {
     }
   };
 
-  // ⬇️ 컴포넌트가 처음 렌더링될 때 자동 실행
+  //컴포넌트가 처음 렌더링될 때 자동 실행
   useEffect(() => {
     handleLogout();
   }, []); // 빈 배열 → 최초 1회 실행

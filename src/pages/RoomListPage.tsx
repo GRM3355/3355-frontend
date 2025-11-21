@@ -10,6 +10,9 @@ import { Info, Plus, UserSolid } from "@mynaui/icons-react";
 import RoomListSection from "@/components/festival/RoomListSection";
 import useLocationStore from "@/stores/useLocationStore";
 import { LngLat } from "mapbox-gl";
+import useAuthStore from "@/stores/useAuthStore";
+import { useCheckLogin } from "@/hooks/useCheckLogin";
+
 
 
 export default function RoomListPage() {
@@ -17,6 +20,8 @@ export default function RoomListPage() {
   const [isShowFestivalModal, setShowFestivalModal] = useState<boolean>(false);
   const navigate = useNavigate();
   const { lat, lon, isAllowed } = useLocationStore();
+  const checkLogin = useCheckLogin();
+
 
   const [isFixed, setIsFixed] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -66,7 +71,8 @@ export default function RoomListPage() {
 
 
   const handleCreateRoom = () => {
-    navigate(`/create-room/${festivalData.festivalId}`, { replace: true });
+    if (checkLogin())
+      navigate(`/create-room/${festivalData.festivalId}`, { replace: true });
   }
 
   return (
