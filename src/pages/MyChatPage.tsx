@@ -42,10 +42,15 @@ export default function MyChatPage() {
         </div> */}
         <div className="flex flex-col gap-2">
           {data?.content.map(room => {
-            const local = getRoomActivity(room.chatRoomId)?.lastViewedAt;
-            const back = new Date(room.lastMessageAt);
+            const activity = getRoomActivity(room.chatRoomId);
+            let hasNew = false;
+            if (activity?.lastViewedAt) {
+              const localDate = new Date(activity.lastViewedAt);
+              const backDate = new Date(room.lastMessageAt);
 
-            const hasNew = local ? back > local : false;
+              hasNew = backDate > localDate;
+            }
+
             return (
               <RoomItem key={room.chatRoomId} room={room} showDetail={true} hasNew={hasNew} />
             )
