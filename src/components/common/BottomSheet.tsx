@@ -27,6 +27,20 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
     setHeight(newHeight);
   };
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    dragging.current = true;
+    startY.current = e.touches[0].clientY;
+    startHeight.current = height;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!dragging.current) return;
+    const dy = startY.current - e.touches[0].clientY;
+    const newHeight = Math.max(80, Math.min(startHeight.current + dy, window.innerHeight - 50));
+    setHeight(newHeight);
+  };
+
+
   const onPointerUp = () => {
     dragging.current = false;
 
@@ -57,6 +71,9 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onPointerUp}
         >
           <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
         </div>
