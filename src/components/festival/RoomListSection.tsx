@@ -39,7 +39,7 @@ export default function RoomListSection({ roomDatas }: RoomListSectionProps) {
       </div>
       <div className="flex gap-1 pb-3">
         <span className="title3-sb text-text-primary">단체 채팅방</span>
-        <span className="flex-1 label5-r text-text-tertiary">{roomDatas.length}</span>
+        <span className="flex-1 label5-r text-text-tertiary">{filteredRooms.length}</span>
         <Select
           items={FILTER}
           selected={filter}
