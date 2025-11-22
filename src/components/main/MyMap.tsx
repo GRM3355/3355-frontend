@@ -74,7 +74,6 @@ export default function MyMap({
   const festivalCounts = useGetFestivalCounts();
 
 
-
   // 클러스터 색깔 정보
   const [showColorInfo, setShowColorInfo] = useState<boolean>(false);
 
@@ -220,7 +219,7 @@ export default function MyMap({
 
             mapRef.current?.flyTo({
               center: [longitude, latitude],
-              zoom: 14, // 원하는 줌 레벨
+              zoom: viewport.zoom + 2, // 원하는 줌 레벨
             });
 
             handleSetPoints();
@@ -257,7 +256,7 @@ export default function MyMap({
           data={geoJsonPoints}
           cluster={true}
           clusterMaxZoom={12}
-          clusterRadius={40}
+          clusterRadius={20}
         >
           {/* 클러스터 심볼 */}
           <Layer
@@ -299,6 +298,20 @@ export default function MyMap({
             key={region.key}
             longitude={region.lon}
             latitude={region.lat}
+            onClick={() => {
+
+              onSearchFestivalByLocation({
+                latitude: region.lat,
+                longitude: region.lon,
+                zoom: 7,
+              } as ViewState);
+
+              mapRef.current?.flyTo({
+                center: [region.lon, region.lat],
+                zoom: 7, // 원하는 줌 레벨
+              });
+              mapRef.current?.resize();
+            }}
           >
             <img src="cluster.png" alt={region.label} className='z-0' />
             <span className='absolute inset-0 flex items-center justify-center title1-sb text-text-primary'>
@@ -310,6 +323,20 @@ export default function MyMap({
             key={region.key}
             longitude={region.lon}
             latitude={region.lat}
+            onClick={() => {
+
+              onSearchFestivalByLocation({
+                latitude: region.lat,
+                longitude: region.lon,
+                zoom: 7,
+              } as ViewState);
+
+              mapRef.current?.flyTo({
+                center: [region.lon, region.lat],
+                zoom: 7, // 원하는 줌 레벨
+              });
+              mapRef.current?.resize();
+            }}
           >
             <div
               className={`absolute w-max h-max left-0 bottom-6 bg-white rounded-3 rounded-bl-none p-2 z-10 tooltip`}>

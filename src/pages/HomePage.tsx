@@ -1,4 +1,5 @@
 import Header from '@/components/layout/Header';
+import Nav from '@/components/layout/Nav';
 import FestivalInfoModal from '@/components/main/FestivalInfoModal';
 import FestivalListBottomSheet from '@/components/main/FestivalListBottomSheet';
 import MyMap from '@/components/main/MyMap'
@@ -62,22 +63,25 @@ export default function HomePage() {
   return (
     <>
       <Header showLogo={true} showUser={true} showSearch={true} />
-      <MyMap data={data?.content}
-        onShowBottomSheet={() => handleShowBottomSheet()}
-        isShowBottomSheet={isShowBottomSheet}
-        onCloseBottomSheet={() => handleCloseBottomSheet()}
-        onSelectFestival={(data: FestivalAPI) => handleSelectFestival(data)}
-        onSearchFestivalByLocation={(state: ViewState) => setApiViewport(state)} />
-      {/* <MyMapWithProvinces /> */}
-      <FestivalListBottomSheet
-        festivalData={festivalData}
-        isShowBottomSheet={isShowBottomSheet}
-        onHideBottomSheet={() => setShowBottomSheet(false)}
-        onShowFestivalModal={() => setShowFestivalModal(true)} />
-      <FestivalInfoModal
-        festivalData={festivalData}
-        isOpen={isShowFestivalModal}
-        onClose={() => setShowFestivalModal(false)} />
+      <div className='flex-1 w-full h-full relative overflow-hidden'>
+        <MyMap data={data?.content}
+          onShowBottomSheet={() => handleShowBottomSheet()}
+          isShowBottomSheet={isShowBottomSheet}
+          onCloseBottomSheet={() => handleCloseBottomSheet()}
+          onSelectFestival={(data: FestivalAPI) => handleSelectFestival(data)}
+          onSearchFestivalByLocation={(state: ViewState) => setApiViewport(state)} />
+        {/* <MyMapWithProvinces /> */}
+        <FestivalListBottomSheet
+          festivalData={festivalData}
+          isShowBottomSheet={isShowBottomSheet}
+          onHideBottomSheet={() => setShowBottomSheet(false)}
+          onShowFestivalModal={() => setShowFestivalModal(true)} />
+        <FestivalInfoModal
+          festivalData={festivalData}
+          isOpen={isShowFestivalModal}
+          onClose={() => setShowFestivalModal(false)} />
+      </div>
+      <Nav />
     </>
   )
 }

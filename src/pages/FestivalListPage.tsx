@@ -3,6 +3,7 @@ import Header from '@/components/layout/Header';
 import Tab from '@/components/common/Tab';
 import FestivalListSection from '@/components/festival/FestivalListSection';
 import { regions } from '@/utils/map';
+import Nav from '@/components/layout/Nav';
 
 export default function FestivalListPage() {
   const [region, setRegion] = useState<string>('SEOUL');
@@ -10,19 +11,21 @@ export default function FestivalListPage() {
   return (
     <>
       <Header showLogo={true} showUser={true} showSearch={true} />
-      <div className='flex flex-col h-full '>
-        <div className='flex-1'>
+      <div className='flex-1 w-full h-full relative overflow-hidden'>
+        <div className='flex flex-col h-full '>
+          <div className='flex-1'>
 
-          {/* 지역 필터링 */}
-          <Tab
-            items={regions}
-            selected={region}
-            onSelect={setRegion}
-          />
+            {/* 지역 필터링 */}
+            <Tab
+              items={regions}
+              selected={region}
+              onSelect={setRegion}
+            />
+          </div>
+          <FestivalListSection region={region} />
         </div>
-        <FestivalListSection region={region} />
-
       </div>
+      <Nav />
     </>
   )
 }

@@ -109,7 +109,7 @@ export const getRoomsByUserId = async (token: string) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    params: { page: 1, pageSize: 30 }, // 필요하면 고정값
+    params: { page: 1, pageSize: 30, order: "ACTIVE_DESC" }, // 필요하면 고정값
   });
   return res.data.data;
 };

@@ -97,33 +97,33 @@ function App() {
 
 
   return (
-    <div className='flex flex-col h-dvh w-full sm:w-100 mx-auto relative overflow-hidden'>
+    <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative overflow-hidden'>
       {/* <p>{tempToken}</p> */}
       {/*<p>{userId}</p> */}
-      <div className='flex-1 relative w-full'>
+      <div className='flex-1 relative pb-18'>
         <div className='absolute inset-0'>
-          <Routes>
-            <Route path='/' element={<HomePage />} />
-            <Route path='/festival-list' element={<FestivalListPage />} />
-            <Route path='/room-list/:festivalId' element={<RoomListPage />} />
-            <Route path='/create-room/:festivalId' element={<CreateRoomPage />} />
-            <Route path='/my-chat' element={<MyChatPage />} />
-            <Route path='/mypage' element={<MyPage />} />
-            <Route path='/chat/:roomId' element={<ChatPage />} />
-            <Route path='/report' element={<ReportPage />} />
-            <Route path='/search' element={<SearchPage />} />
+          <div className='flex flex-col w-full h-full '>
+            <Routes>
+              <Route path='/' element={<HomePage />} />
+              <Route path='/festival-list' element={<FestivalListPage />} />
+              <Route path='/room-list/:festivalId' element={<RoomListPage />} />
+              <Route path='/create-room/:festivalId' element={<CreateRoomPage />} />
+              <Route path='/my-chat' element={<MyChatPage />} />
+              <Route path='/mypage' element={<MyPage />} />
+              <Route path='/chat/:roomId' element={<ChatPage />} />
+              <Route path='/search' element={<SearchPage />} />
+              <Route path='/kakao-redirect' element={<KakaoRedirectPage />} />
+              <Route path='*' element={<NotFound />} />
+              {/* <Route path='test' element={<ComponentTestPage />} /> //TODO 추후 삭제
+            <Route path='/report' element={<ReportPage />} /> //제보
             <Route path='echo' element={<EchoTest />} />
-            <Route path='*' element={<NotFound />} />
-            {/* <Route path='test' element={<ComponentTestPage />} /> //TODO 추후 삭제 */}
-            <Route path='/kakao-redirect' element={<KakaoRedirectPage />} />
             <Route path='/logout' element={<KakaoLogout />} />
-            <Route path='/quit' element={<Quit />} />
-          </Routes>
+            <Route path='/quit' element={<Quit />} /> */}
+            </Routes>
+          </div>
+
         </div>
       </div>
-      <Nav />
-
-
       <ConfirmModal
         isOpen={isOpen}
         title={title}

@@ -8,7 +8,7 @@ export default function Nav() {
   const isActive = (path: string) => location.pathname.includes(path);
 
   return (
-    <div className="flex h-18 bg-white items-center justify-center p-4 z-10 border-t border-gray-200 px-8 pb-6 mt-2">
+    <div className="flex h-18 bg-white items-center justify-center z-10 border-t border-gray-200">
       <div
         onClick={() => navigate('/')}
         className={`flex-1 gap-1 cursor-pointer ${location.pathname == ('/') ? 'text-text-primary' : 'text-icon-container-tertiary'} 

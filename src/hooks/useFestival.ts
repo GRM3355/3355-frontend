@@ -80,15 +80,6 @@ export const useGetRoomsByFestivalId = (params: any = {}) => {
   });
 };
 
-
-// 단일 축제 조회
-// export const useGetFestivalByFestivalId = (id: string) => {
-//   return useQuery({
-//     queryKey: ['festival', id, 'rooms'],
-//     queryFn: () => getFestivalByFestivalId(id),
-//     enabled: !!id,
-//   });
-// };
 export const useGetFestivalByFestivalId = (params: any = {}) => {
   return useQuery<FestivalAPI>({
     queryKey: ['festival', params],

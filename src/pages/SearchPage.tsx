@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import FestivalItem from '@/components/festival/FestivalItem';
 import RoomItem from '@/components/room/RoomItem';
 import AD from '@/components/common/AD';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const FILTER = [
   { key: "ALL", label: "전체" },
@@ -28,11 +29,10 @@ export default function SearchPage() {
 
   const [activeTab, setActiveTab] = useState<string>("ALL");
 
-  const { data, isLoading, isError, refetch } = useGetSearch({ keyword: debouncedKeyword });
+  const { data, isLoading, isError, refetch, isFetching } = useGetSearch({ keyword: debouncedKeyword });
 
   useEffect(() => {
     if (debouncedKeyword.trim()) {
-      console.log("검색");
       refetch();
     }
   }, [debouncedKeyword, refetch]);
@@ -42,6 +42,7 @@ export default function SearchPage() {
   }
 
   const searchResultCount = (data?.festivals.totalCount ?? 0) + (data?.chatRooms.totalCount ?? 0);
+
 
   return (
     <>
@@ -66,9 +67,15 @@ export default function SearchPage() {
         {(keyword == "" || searchResultCount == 0) && <AD />}
 
         {/* 검색 결과 */}
-        {keyword == "" || searchResultCount == 0 ? (
-          <div className='flex w-full h-full items-center justify-center'>
-            <p className='text-text-primary'>검색결과가 없어요!</p>
+        {(debouncedKeyword === "" || !data) ? (
+          <div className="flex flex-col w-full h-full items-center justify-center gap-4">
+            <img src="/empty/search-guide.svg" alt="" />
+            <p className="text-text-primary body1-r">검색어를 입력해주세요.</p>
+          </div>
+        ) : searchResultCount === 0 ? (
+          <div className="flex flex-col w-full h-full items-center justify-center gap-4">
+            <img src="/empty/search.svg" alt="" />
+            <p className="text-text-primary body1-r">검색결과가 없어요!</p>
           </div>
         ) : (
           <>

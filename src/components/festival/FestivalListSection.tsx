@@ -2,6 +2,7 @@ import { useGetFestivalCount, useGetFestivalsInfinite } from '@/hooks/useFestiva
 import React from 'react'
 import FestivalItem from './FestivalItem';
 import type { FestivalAPI } from '@/types/api';
+import ErrorPage from '@/pages/ErrorPage';
 
 type FestivalListSectionProps = {
   region: string;
@@ -28,7 +29,7 @@ export default function FestivalListSection({ region }: FestivalListSectionProps
   };
 
   //현재 지역 페스티벌 개수
-  const { data: festivalCount } = useGetFestivalCount({ region });
+  const { data: festivalCount, isError: isCountError } = useGetFestivalCount({ region });
 
   if (!data) return <></>
 

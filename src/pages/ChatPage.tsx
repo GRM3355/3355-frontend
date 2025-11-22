@@ -313,32 +313,31 @@ export default function ChatPage() {
         onLeaveRoom={() => openConfirm('채팅방을 나가시겠어요?',
           "모든 채팅 기록이 사라집니다.",
           handleLeaveRoom, undefined, '나가기', '취소')} />
-      <div className="flex flex-col h-full pb-16">
-        <div className="flex-1 overflow-y-auto">
-          {/* {beforeMessage && beforeMessage.map(m => (
+      <div className='flex-1 w-full h-full relative overflow-hidden'>
+        <div className="flex flex-col h-full">
+          <div className="flex-1 overflow-y-auto">
+            {/* {beforeMessage && beforeMessage.map(m => (
             <p>{m.content}</p>
           ))} */}
-          <ChatSection userId={userId} messages={messages} onScrollUp={handleScrollUp} />
+            <ChatSection userId={userId} messages={messages} onScrollUp={handleScrollUp} />
+          </div>
+          <div className="px-2">
+            <Input
+              type="text"
+              placeholder="메세지 입력"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              defaultStyle="px-4 py-2 h-10 border rounded-2 text-text-quaternary border-line-border-secondary bg-surface-container-default"
+              focusStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
+              completeStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
+              disabledStyle="px-4 py-2 h-10 rounded-2 text-text-disabled bg-state-interacion-container-disabled"
+              isDisabled={distance > 500}
+              onSend={() => sendMessage()}
+              onClear={() => setMessage('')}
+            />
+          </div>
         </div>
-        <div className="px-2">
-          <Input
-            type="text"
-            placeholder="메세지 입력"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            defaultStyle="px-4 py-2 h-10 border rounded-2 text-text-quaternary border-line-border-secondary bg-surface-container-default"
-            focusStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
-            completeStyle="px-4 py-2 h-10 border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
-            disabledStyle="px-4 py-2 h-10 rounded-2 text-text-disabled bg-state-interacion-container-disabled"
-            isDisabled={distance > 500}
-            onSend={() => sendMessage()}
-            onClear={() => setMessage('')}
-          />
-        </div>
-
-
       </div>
     </>
-
   );
 }

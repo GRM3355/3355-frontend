@@ -32,7 +32,7 @@ export default function Button({
   return (
     // <button {...rest} className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}>
     <button {...rest} disabled={disabled}
-      className={`w-full rounded-2 hover:brightness-90 
+      className={` ${className ? "" : "w-full"} rounded-2 hover:brightness-90 
     ${variants[variant]} ${sizes[size]} ${className}
     disabled:bg-state-interacion-container-disabled disabled:text-text-disabled`}>
 
