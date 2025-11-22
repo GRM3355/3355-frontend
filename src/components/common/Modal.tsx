@@ -7,7 +7,7 @@ interface ModalProps {
   className?: string;
 }
 
-export default function Modal({ isOpen, onClose, children, className }: ModalProps) {
+export default function Modal({ isOpen, children, className }: ModalProps) {
   if (!isOpen) return null; // 열리지 않았으면 렌더링 안 함
 
   return (
