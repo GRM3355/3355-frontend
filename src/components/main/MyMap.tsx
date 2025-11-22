@@ -378,8 +378,8 @@ export default function MyMap({
         onClick={() => handleResearchFestival()}>이 지역 재검색</span>
       {/* 현재 위치로 이동 */}
       {isAllowed && (
-        <img src="/Target.svg" alt="target" className={`absolute ${isShowBottomSheet ? "bottom-100" : "bottom-16"} 
-      right-3 bg-white p-2.5 rounded-full floating`}
+        <img src="/Target.svg" alt="target" className={`absolute ${isShowBottomSheet ? "bottom-92" : "bottom-4"} 
+      right-3 bg-white p-2.5 rounded-full floating z-10`}
           onClick={() => handleGoMyPos()} />
       )}
     </div >

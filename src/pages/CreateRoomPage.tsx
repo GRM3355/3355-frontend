@@ -1,13 +1,15 @@
 // import { useCreateRoom } from "@/hooks/useRoom";
 import Button from "@/components/common/Button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuthStore from "@/stores/useAuthStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCreateRoom } from "@/hooks/useRoom";
 import Header from "@/components/layout/Header";
 import Input from "@/components/common/Input";
 import useLocationStore from "@/stores/useLocationStore";
 import Nav from "@/components/layout/Nav";
+import ErrorPage from "./ErrorPage";
+import useLoginStore from "@/stores/useLoginStore";
 
 export default function CreateRoomPage() {
   const { festivalId } = useParams();
@@ -15,10 +17,17 @@ export default function CreateRoomPage() {
   const [roomTitle, setRoomTitle] = useState("");
 
   // const { mutate, isPending } = useCreateRoom();
-  const { mutate, isPending } = useCreateRoom();
+  const { mutate, isPending, isError } = useCreateRoom();
   const { lat, lon } = useLocationStore();
+  const { isLoggedIn, openLoginModal } = useLoginStore();
+  const navigate = useNavigate();
 
   const handleCreateRoom = () => {
+    if (!isLoggedIn) {
+      openLoginModal();
+      return;
+    }
+
     if (!accessToken || !festivalId || !lat || !lon) return;
 
     const id = parseInt(festivalId);
@@ -32,7 +41,14 @@ export default function CreateRoomPage() {
     });
   }
 
-  if (!festivalId) return <div>페스티벌 ID가 없습니다.</div>;
+  useEffect(() => {
+    if (!isLoggedIn) {
+      openLoginModal();
+    }
+  }, [festivalId, accessToken, isLoggedIn])
+
+  if (!festivalId) return <ErrorPage />;
+  if (isError) return <ErrorPage />;
 
   return (
     <>

@@ -8,7 +8,7 @@ type BottomSheetProps = {
 
 export default function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
   const sheetRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(300); // 초기 높이
+  const [height, setHeight] = useState(500); // 초기 높이
   const startY = useRef(0);
   const startHeight = useRef(0);
   const dragging = useRef(false);
@@ -47,13 +47,15 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
     const screenHeight = window.innerHeight;
 
     if (height > startHeight.current) {
-      setHeight(screenHeight - 100); // fullscreen
+      // 화면 높이의 90%로 설정
+      setHeight(screenHeight * 1);
       return;
     }
 
     onClose?.(); // 닫는 이벤트 있는 경우
-    setHeight(300);
+    setHeight(500);
   };
+
 
   return (
     <div

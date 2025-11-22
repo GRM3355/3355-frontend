@@ -71,17 +71,18 @@ export default function HomePage() {
           onSelectFestival={(data: FestivalAPI) => handleSelectFestival(data)}
           onSearchFestivalByLocation={(state: ViewState) => setApiViewport(state)} />
         {/* <MyMapWithProvinces /> */}
-        <FestivalListBottomSheet
-          festivalData={festivalData}
-          isShowBottomSheet={isShowBottomSheet}
-          onHideBottomSheet={() => setShowBottomSheet(false)}
-          onShowFestivalModal={() => setShowFestivalModal(true)} />
+
         <FestivalInfoModal
           festivalData={festivalData}
           isOpen={isShowFestivalModal}
           onClose={() => setShowFestivalModal(false)} />
       </div>
       <Nav />
+      <FestivalListBottomSheet
+        festivalData={festivalData}
+        isShowBottomSheet={isShowBottomSheet}
+        onHideBottomSheet={() => setShowBottomSheet(false)}
+        onShowFestivalModal={() => setShowFestivalModal(true)} />
     </>
   )
 }

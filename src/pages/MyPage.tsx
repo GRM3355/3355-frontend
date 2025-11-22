@@ -65,7 +65,7 @@ const MyPage = () => {
   //TODO 리턴 빈 페이지
   if (!accessToken || !data) return (
     <>
-      <p>로그인이 필요한 서비스입니다</p>
+
     </>
   )
 

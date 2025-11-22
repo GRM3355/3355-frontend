@@ -29,13 +29,14 @@ export default function MyChatPage() {
       <Header showLogo={true} showUser={true} showSearch={true} />
       <AD />
       <div className='flex-1 w-full h-full relative overflow-hidden'>
-        <div className="p-4">
+        <div className="h-full p-4">
           <div className="flex gap-1 items-center pb-4">
             <span className="title3-sb text-text-primary">현재 참여중인 채팅방</span>
             <span className="label5-r text-text-tertiary">{data?.content.length ?? 0}</span>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="h-full flex flex-col gap-2 overflow-y-auto scrollbar-hide pb-16">
             {data?.content.map(room => {
+              console.log(room);
               const activity = getRoomActivity(room.chatRoomId);
               let hasNew = false;
               if (activity?.lastViewedAt) {
