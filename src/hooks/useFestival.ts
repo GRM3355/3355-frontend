@@ -71,7 +71,7 @@ export const useGetFestivalsInfinite = (params: any = {}) => {
 //   });
 // };
 export const useGetRoomsByFestivalId = (params: any = {}) => {
-  const defaultParams = { page: 1, pageSize: 10, order: 'DATE_DESC', keyword: '' };
+  const defaultParams = { page: 1, pageSize: 30, order: 'DATE_DESC', keyword: '' };
 
   return useQuery<{ content: RoomAPI[] }>({
     queryKey: ['festivalRooms', { ...defaultParams, ...params }],
