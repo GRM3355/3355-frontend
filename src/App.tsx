@@ -97,7 +97,7 @@ function App() {
 
 
   return (
-    <div className='flex flex-col h-screen w-full sm:w-100 mx-auto relative overflow-hidden'>
+    <div className='flex flex-col h-dvh w-full sm:w-100 mx-auto relative overflow-hidden'>
       {/* <p>{tempToken}</p> */}
       {/*<p>{userId}</p> */}
       <div className='flex-1 relative pb-18'>
