@@ -109,9 +109,9 @@ export default function ChatItem({ chat, isMine, bubblePosition, isSameDate }: C
             rounded-full">
             <LikeSolid
               size={12}
-              className={chat.liked ? "text-alpha-yellow-70" : "text-icon-container-tertiary"}
+              className={chat.likeCount > 0 ? "text-alpha-yellow-70" : "text-icon-container-tertiary"}
             />
-            <span className={`${chat.liked ? "text-text-brand" : "text-text-primary"} caption5-r`}>{chat.likeCount}</span>
+            <span className={`${chat.likeCount > 0 ? "text-text-brand" : "text-text-primary"} caption5-r`}>{chat.likeCount}</span>
           </div>
         )}
       </div>

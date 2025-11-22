@@ -1,10 +1,6 @@
 import Input from '@/components/common/Input';
-import Header from '@/components/layout/Header';
 import { useGetSearch } from '@/hooks/useSearch';
-import type { Festival } from '@/types';
 import type { FestivalAPI, RoomAPI } from '@/types/api';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce';
 import { ArrowLeft, ChevronLeft, ChevronRight, Search } from "@mynaui/icons-react";
@@ -13,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import FestivalItem from '@/components/festival/FestivalItem';
 import RoomItem from '@/components/room/RoomItem';
 import AD from '@/components/common/AD';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const FILTER = [
   { key: "ALL", label: "전체" },

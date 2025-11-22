@@ -1,18 +1,16 @@
 import { useGetFestivalByFestivalId, useGetRoomsByFestivalId } from "@/hooks/useFestival";
 import FestivalInfoModal from "@/components/main/FestivalInfoModal";
-import RoomItem from "@/components/room/RoomItem";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { ChatRoomAPI, RoomAPI } from "@/types/api";
 import Header from "@/components/layout/Header";
-import AD from "@/components/common/AD";
 import { Info, Plus, UserSolid } from "@mynaui/icons-react";
 import RoomListSection from "@/components/festival/RoomListSection";
 import useLocationStore from "@/stores/useLocationStore";
 import { LngLat } from "mapbox-gl";
-import useAuthStore from "@/stores/useAuthStore";
 import { useCheckLogin } from "@/hooks/useCheckLogin";
 import Nav from "@/components/layout/Nav";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import ErrorPage from "./ErrorPage";
 
 
 
@@ -65,11 +63,10 @@ export default function RoomListPage() {
 
 
 
-  if (isRoomLoading || isFestivalLoading) return <div>로딩 중...</div>;
-  if (isRoomError || isFestivalError) return <div>에러 발생!</div>;
+  // if (isRoomLoading || isFestivalLoading) return <LoadingSpinner />;
+  if (isRoomError || isFestivalError) return <ErrorPage />;
   if (!roomDatas) return <div>방 정보를 불러올 수 없습니다.</div>;
   if (!festivalData) return <div>축제 정보를 불러올 수 없습니다.</div>;
-
 
   const handleCreateRoom = () => {
     if (checkLogin())

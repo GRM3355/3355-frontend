@@ -39,9 +39,10 @@ export default function FestivalListBottomSheet({
   const [distance, setDistance] = useState<number>(3000);
   const {
     data: roomDatas,
-    isLoading: isRoomLoading,
-    isError: isRoomError,
-    refetch
+    isLoading,
+    isError,
+    refetch,
+    isRefetching
   } = useGetRoomsByFestivalId({ festivalId: festivalData?.festivalId });
 
   useEffect(() => {
@@ -63,10 +64,6 @@ export default function FestivalListBottomSheet({
     if (festivalData)
       navigate(`/room-list/${festivalData?.festivalId}`);
 
-  }
-
-  if (isRoomLoading) {
-    return <p>로딩 중...</p>;
   }
 
 

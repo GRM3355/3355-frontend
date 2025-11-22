@@ -1,6 +1,6 @@
 import type { ChatAPI } from "@/types/api";
 import ChatItem from "./ChatItem";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 type ChatSectionProps = {
   userId: string | undefined;
@@ -58,7 +58,6 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const isAtBottom = () => {
     if (!scrollRef.current) return false;

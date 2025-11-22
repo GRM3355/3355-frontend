@@ -1,11 +1,10 @@
 import Lottie from 'lottie-react'
-import React from 'react'
 import loadingAnimation from "@/../public/loading.json";
 
 export default function LoadingSpinner() {
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-full h-full gap-4">
+      <div className="flex flex-col items-center justify-center w-full h-full gap-4 bg-alpha-black-10">
         <Lottie
           animationData={loadingAnimation} // JSON 파일 경로
           loop={true} // 반복 재생

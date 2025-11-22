@@ -13,110 +13,6 @@ import { LngLat } from "mapbox-gl";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-// const tempToken = "bf7bb5bb-d975-4d23-8786-1cfd65039570";
-// const roomId = "4c9a54b6-f935-44cf-bd50-5657b43d9374";
-
-export const bubbleTestData: ChatAPI[] = [
-  // --- 내 메시지 단독(single) ---
-  {
-    id: "1",
-    chatRoomId: "room1",
-    userId: "1234",
-    nickname: "Me",
-    content: "첫 번째 단독 메시지",
-    type: "TEXT",
-    createdAt: "2025-11-15T10:00:00Z",
-    likeCount: 0,
-    liked: false,
-  },
-
-  // --- 상대 메시지 두 개(top → bottom) ---
-  {
-    id: "2",
-    chatRoomId: "room1",
-    userId: "9999",
-    nickname: "Bob",
-    content: "안녕하세요!",
-    type: "TEXT",
-    createdAt: "2025-11-15T10:01:00Z",
-    likeCount: 1,
-    liked: false,
-  },
-  {
-    id: "3",
-    chatRoomId: "room1",
-    userId: "9999",
-    nickname: "Bob",
-    content: "오늘 날씨 좋죠?",
-    type: "TEXT",
-    createdAt: "2025-11-15T10:01:10Z",
-    likeCount: 0,
-    liked: false,
-  },
-
-  // --- 내 메시지 연속 3개(top → middle → bottom) ---
-  {
-    id: "4",
-    chatRoomId: "room1",
-    userId: "1234",
-    nickname: "Me",
-    content: "저도 날씨 좋아서 기분 좋네요!",
-    type: "TEXT",
-    createdAt: "2025-11-15T10:02:00Z",
-    likeCount: 5,
-    liked: true,
-  },
-  {
-    id: "5",
-    chatRoomId: "room1",
-    userId: "1234",
-    nickname: "Me",
-    content: "점심 뭐 먹을까요?",
-    type: "TEXT",
-    createdAt: "2025-11-15T10:02:10Z",
-    likeCount: 1,
-    liked: true,
-  },
-  {
-    id: "6",
-    chatRoomId: "room1",
-    userId: "1234",
-    nickname: "Me",
-    content: "아무거나 잘 먹습니다!",
-    type: "TEXT",
-    createdAt: "2025-11-15T10:02:20Z",
-    likeCount: 0,
-    liked: false,
-  },
-
-  // --- 상대 단독 메시지(single) ---
-  {
-    id: "7",
-    chatRoomId: "room1",
-    userId: "9999",
-    nickname: "Bob",
-    content: "저는 샌드위치 먹고 싶어요!",
-    type: "TEXT",
-    createdAt: "2025-11-15T10:03:00Z",
-    likeCount: 2,
-    liked: true,
-  },
-
-  // --- 내 긴 메시지 단독(single) ---
-  {
-    id: "8",
-    chatRoomId: "room1",
-    userId: "1234",
-    nickname: "Me",
-    content:
-      "좋아요! 샌드위치 먹으러 갈까요? 저는 치킨 샌드위치 좋아해요. 양상추 듬뿍!",
-    type: "TEXT",
-    createdAt: "2025-11-15T10:04:00Z",
-    likeCount: 3,
-    liked: true,
-  },
-];
-
 export default function ChatPage() {
   const [messages, setMessages] = useState<ChatAPI[]>([]);
   const [message, setMessage] = useState("");
@@ -316,9 +212,6 @@ export default function ChatPage() {
       <div className='flex-1 w-full h-full relative overflow-hidden'>
         <div className="flex flex-col h-full">
           <div className="flex-1 overflow-y-auto">
-            {/* {beforeMessage && beforeMessage.map(m => (
-            <p>{m.content}</p>
-          ))} */}
             <ChatSection userId={userId} messages={messages} onScrollUp={handleScrollUp} />
           </div>
           <div className="px-2">
