@@ -35,48 +35,6 @@ function App() {
 
   const { isLoginModalOpen, closeLoginModal } = useLoginStore();
 
-  const LAT = 37.56813168
-  const LON = 126.9696496
-
-  // const { error } = useCurrentLocation();
-
-  // const { setCoord } = useAuthStore();
-
-  // useEffect(() => {
-  //   // 토큰 없으면 서버에서 발급
-  //   if (!tempToken) {
-  //     api.post('/api/auth/tokens', {
-  //       lat: LAT,
-  //       lon: LON,
-  //       validCoordinates: true,
-  //     },
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         }
-  //       })
-  //       .then(response => {
-  //         const newToken = response.data.data.accessToken;
-  //         const payload: any = jwtDecode(newToken);
-  //         console.log(payload.auth);
-  //         setTempToken(newToken);
-  //         setCoord(LAT, LON);
-  //         console.log('임시 토큰 발급 성공:', newToken);
-  //         setUserId(newToken);
-  //       })
-  //       .catch(error => {
-  //         console.error('임시 토큰 발급 실패:', error);
-  //         console.error('에러 상세:', error.response?.data);
-  //       });
-  //   }
-  // }, [tempToken, setTempToken]);
-
-  // useEffect(() => {
-  //   setCoord(LAT, LON);
-
-  // }, [])
-
-  // console.log("임시 토큰:", tempToken);
   const { setIsAllowed, setLocation } = useLocationStore();
 
 
@@ -97,7 +55,8 @@ function App() {
 
 
   return (
-    <div className='flex flex-col h-dvh w-full sm:w-100 mx-auto relative overflow-hidden'>
+    <div className='flex flex-col h-dvh w-full sm:w-100 mx-auto relative overflow-hidden'
+      translate='no'>
       {/* <p>{tempToken}</p> */}
       {/*<p>{userId}</p> */}
       <div className='flex-1 relative pb-18'>

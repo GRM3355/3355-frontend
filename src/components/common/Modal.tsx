@@ -13,7 +13,7 @@ export default function Modal({ isOpen, onClose, children, className }: ModalPro
   return (
     <div
       className={`fixed inset-0 bg-black/50 flex justify-center items-center z-50`}
-      onClick={onClose} // 배경 클릭 시 닫기
+    // onClick={onClose} // 배경 클릭 시 닫기
     >
       <div
         className={`${className} max-w-90`}

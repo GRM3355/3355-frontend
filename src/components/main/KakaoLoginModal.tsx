@@ -29,6 +29,7 @@
 import React from 'react';
 import Modal from '../common/Modal';
 import Button from '../common/Button';
+import { useNavigate } from 'react-router-dom';
 
 type KakaoLoginModalProps = {
   isOpen: boolean;
@@ -40,6 +41,7 @@ const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;  //api 로그인 처리 
 const RETURN_URI = import.meta.env.VITE_RETURN_URI;   //프론트페이지로 되돌아올 url
 
 export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProps) {
+  const navigate = useNavigate();
 
   const handleClickLogin = () => {
     console.log("REDIRECT_URI", REDIRECT_URI);
@@ -57,6 +59,10 @@ export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProp
     window.location.href = kakaoAuthUrl;
   };
 
+  const handleClose = () => {
+    onClose();
+    navigate('/');
+  }
   return (
     <Modal
       isOpen={isOpen}
@@ -71,7 +77,7 @@ export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProp
           <img src="/Kakao.svg" alt="" />
           <span>카카오 로그인</span>
         </div>
-        <Button onClick={() => onClose()}>다음에 하기</Button>
+        <Button onClick={() => handleClose()}>다음에 하기</Button>
       </div>
     </Modal>
   );

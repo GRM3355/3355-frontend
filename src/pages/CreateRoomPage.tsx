@@ -10,6 +10,7 @@ import useLocationStore from "@/stores/useLocationStore";
 import Nav from "@/components/layout/Nav";
 import ErrorPage from "./ErrorPage";
 import useLoginStore from "@/stores/useLoginStore";
+import { useCheckLogin } from "@/hooks/useCheckLogin";
 
 export default function CreateRoomPage() {
   const { festivalId } = useParams();
@@ -19,14 +20,19 @@ export default function CreateRoomPage() {
   // const { mutate, isPending } = useCreateRoom();
   const { mutate, isPending, isError } = useCreateRoom();
   const { lat, lon } = useLocationStore();
-  const { isLoggedIn, openLoginModal } = useLoginStore();
+  const { openLoginModal } = useLoginStore();
   const navigate = useNavigate();
 
+  const checkLogin = useCheckLogin();
+  useEffect(() => {
+    checkLogin();
+  }, []);
+
   const handleCreateRoom = () => {
-    if (!isLoggedIn) {
-      openLoginModal();
-      return;
-    }
+    // if (!isLoggedIn) {
+    //   openLoginModal();
+    //   return;
+    // }
 
     if (!accessToken || !festivalId || !lat || !lon) return;
 
@@ -41,11 +47,11 @@ export default function CreateRoomPage() {
     });
   }
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      openLoginModal();
-    }
-  }, [festivalId, accessToken, isLoggedIn])
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     openLoginModal();
+  //   }
+  // }, [festivalId, accessToken, isLoggedIn])
 
   if (!festivalId) return <ErrorPage />;
   if (isError) return <ErrorPage />;
