@@ -36,8 +36,10 @@ export default function SearchPage() {
     navigate(-1);
   }
 
-  const searchResultCount = (data?.festivals.totalCount ?? 0) + (data?.chatRooms.totalCount ?? 0);
+  const festivals = data?.festivals;
+  const rooms = data?.chatRooms;
 
+  const searchResultCount = (data?.festivals.totalCount ?? 0) + (data?.chatRooms.totalCount ?? 0);
 
   return (
     <>
@@ -84,7 +86,7 @@ export default function SearchPage() {
                 <div className='flex gap-1 pb-4 items-center'>
                   <span className='title3-sb text-text-primary'>검색 결과</span>
                   <span className='label5-r text-text-quaternary'>
-                    {(data?.festivals.totalCount ?? 0) + (data?.chatRooms.totalCount ?? 0)}</span>
+                    {(festivals?.totalCount ?? 0) + (rooms?.totalCount ?? 0)}</span>
                 </div>
               )}
               {/* 페스티벌 섹션 */}
@@ -92,19 +94,19 @@ export default function SearchPage() {
                 <>
                   <div className='flex gap-2 pb-3 items-center'>
                     <span className='title1-sb text-text-primary'>{activeTab === "ALL" ? "페스티벌" : "검색 결과"}</span>
-                    <span className='label2-r text-text-quaternary'>{data?.festivals.data.length}</span>
+                    <span className='label2-r text-text-quaternary'>{festivals?.data.length}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     {(activeTab === "ALL"
-                      ? data?.festivals?.data?.slice(0, 4)
-                      : data?.festivals?.data
+                      ? festivals?.data?.slice(0, 4)
+                      : festivals?.data
                     )?.map((festival: FestivalAPI) => (
                       <FestivalItem key={festival.festivalId} festivalData={festival} />
                     ))}
                   </div>
 
-                  {activeTab === "ALL" && (
-                    <div className='flex w-full items-center justify-center gap-1 label1-sb text-text-primary pt-3 pb-8'
+                  {(activeTab === "ALL" && festivals?.data && festivals?.data.length > 4) && (
+                    <div className='flex w-full items-center justify-center gap-1 label1-sb text-text-primary pt-3'
                       onClick={() => setActiveTab("FESTIVAL")}>
                       <span>더보기</span>
                       <ChevronRight size={20} />
@@ -112,24 +114,23 @@ export default function SearchPage() {
                   )}
                 </>
               )}
-
+              {activeTab === "ALL" && <div className=' pb-8'></div>}
               {/* 채팅방 섹션 */}
               {(activeTab === "ALL" || activeTab === "CHATROOM") && (
                 <>
                   <div className='flex gap-2 pb-3 items-center'>
                     <span className='title1-sb text-text-primary'>{activeTab === "ALL" ? "채팅방" : "검색 결과"}</span>
-                    <span className='label2-r text-text-quaternary'>{data?.chatRooms.data.length}</span>
+                    <span className='label2-r text-text-quaternary'>{rooms?.data.length}</span>
                   </div>
                   <div className='flex flex-col gap-2'>
                     {(activeTab === "ALL"
-                      ? data?.chatRooms?.data?.slice(0, 3)
-                      : data?.chatRooms?.data
+                      ? rooms?.data?.slice(0, 3)
+                      : rooms?.data
                     )?.map((room: RoomAPI) => (
                       <RoomItem key={room.chatRoomId} room={room} showDetail={true} />
                     ))}
                   </div>
-
-                  {activeTab === "ALL" && (
+                  {(activeTab === "ALL" && rooms?.data && rooms?.data.length > 4) && (
                     <div className='flex w-full items-center justify-center gap-1 label1-sb text-text-primary pt-3'
                       onClick={() => setActiveTab("CHATROOM")}>
                       <span>더보기</span>
