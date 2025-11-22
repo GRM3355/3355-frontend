@@ -21,8 +21,6 @@ export default function ChatPage() {
   const { roomId } = useParams();
   const [userId, setUserId] = useState();
   const [distance, setDistance] = useState<number>(3000);
-  // const { roomId: rawRoomId } = useParams();
-  // const roomId = rawRoomId ? decodeURIComponent(rawRoomId) : undefined;
   const navigate = useNavigate();
   const { openConfirm, closeConfirm } = useConfirmStore();
   const { isAllowed, lat, lon } = useLocationStore();

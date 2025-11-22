@@ -1,6 +1,6 @@
 import type { ChatAPI } from "@/types/api";
 import ChatItem from "./ChatItem";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 type ChatSectionProps = {
   userId: string | undefined;
@@ -58,6 +58,7 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isLoadingBefore, setIsLoadingBefore] = useState(false);
 
   const isAtBottom = () => {
     if (!scrollRef.current) return false;
@@ -73,6 +74,7 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
     return scrollTop <= 0;
   }
 
+  const prevScrollHeightRef = useRef(0);
   useLayoutEffect(() => {
     if (!scrollRef.current) return;
     if (messages.length === 0) return;
@@ -80,26 +82,45 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
     if (!isMounted) {
       scrollToBottom();
       setIsMounted(true);
+      return;
     }
 
+    if (isLoadingBefore && prevScrollHeightRef.current > 0) {
+      const container = scrollRef.current;
+      const newScrollHeight = container.scrollHeight;
+      const heightDiff = newScrollHeight - prevScrollHeightRef.current;
+
+      // 새로 추가된 메시지의 높이만큼 스크롤 위치 유지
+      container.scrollTop += heightDiff;
+      setIsLoadingBefore(false);
+      prevScrollHeightRef.current = 0;
+    }
+  }, [messages, isMounted]);
+
+  useEffect(() => {
+    if (!scrollRef.current) return;
     if (isAtBottom()) {
-      // 메세지 추가됐을때 바닥이면 자동 스크롤
       scrollToBottom();
     }
-  }, [messages]);
+  }, [messages, isMounted]);
 
   const handleScroll = () => {
     if (!isMounted) return;
 
     if (isAtBottom()) {
       setShowScrollDown(false);
-    }
-    else {
+    } else {
       setShowScrollDown(true);
     }
 
-    if (isAtTop())
-      onScrollUp();
+    if (isAtTop()) {
+      // 스크롤바가 맨 위에 도달했을 때만 이전 메시지 로드
+      if (!isLoadingBefore) {
+        prevScrollHeightRef.current = scrollRef.current!.scrollHeight;
+        setIsLoadingBefore(true);
+        onScrollUp();
+      }
+    }
   };
 
   const scrollToBottom = () => {
