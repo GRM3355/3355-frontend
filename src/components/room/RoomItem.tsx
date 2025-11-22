@@ -4,6 +4,7 @@ import { useConfirmStore } from "@/stores/useConfirmStore";
 import useLocationStore from "@/stores/useLocationStore";
 import useLoginStore from "@/stores/useLoginStore";
 import type { ChatRoomAPI, RoomAPI } from "@/types/api";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 type RoomItemProps = {
@@ -11,6 +12,7 @@ type RoomItemProps = {
   showDetail?: boolean;
   hasNew?: boolean;
 }
+
 
 export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
 
   const { mutate, isPending } = useJoinRoom(room);
   const { lat, lon } = useLocationStore();
+
+  const [thumbnail, setThumbnail] = useState("");
 
   const handleEnterRoom = () => {
     if (!accessToken) {
@@ -51,11 +55,31 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
     });
   }
 
+  const chat_thumbnails = [
+    '/chat_thumbnail/1.svg',
+    '/chat_thumbnail/2.svg',
+    '/chat_thumbnail/3.svg',
+    '/chat_thumbnail/4.svg',
+    '/chat_thumbnail/5.svg',
+    '/chat_thumbnail/6.svg',
+    '/chat_thumbnail/7.svg',
+    '/chat_thumbnail/8.svg',
+  ];
+
+  function getRandomThumbnail() {
+    const index = Math.floor(Math.random() * chat_thumbnails.length);
+    return chat_thumbnails[index];
+  }
+
+  useEffect(() => {
+    setThumbnail(getRandomThumbnail());
+  }, [])
+
   return (
     <>
       <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-4 rounded-3'
         onClick={() => handleEnterRoom()}>
-        <img src="/testImg.png" alt="Festival Image"
+        <img src={thumbnail} alt="Festival Image"
           className="h-full aspect-square rounded-full" />
         <div>
           {showDetail && (
