@@ -20,20 +20,15 @@ export default function CreateRoomPage() {
   // const { mutate, isPending } = useCreateRoom();
   const { mutate, isPending, isError } = useCreateRoom();
   const { lat, lon } = useLocationStore();
-  const { openLoginModal } = useLoginStore();
-  const navigate = useNavigate();
 
   const checkLogin = useCheckLogin();
+
   useEffect(() => {
+    if (accessToken === undefined) return;
     checkLogin();
-  }, []);
+  }, [accessToken]);
 
   const handleCreateRoom = () => {
-    // if (!isLoggedIn) {
-    //   openLoginModal();
-    //   return;
-    // }
-
     if (!accessToken || !festivalId || !lat || !lon) return;
 
     const id = parseInt(festivalId);
@@ -46,12 +41,6 @@ export default function CreateRoomPage() {
       lon
     });
   }
-
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     openLoginModal();
-  //   }
-  // }, [festivalId, accessToken, isLoggedIn])
 
   if (!festivalId) return <ErrorPage />;
   if (isError) return <ErrorPage />;
