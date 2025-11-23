@@ -36,18 +36,13 @@ export default function FestivalListSection({ region }: FestivalListSectionProps
   return (
     <>
       {/* 정렬 */}
-      <div className='flex gap-1 items-center justify-between p-4'>
-        <span className='title1-sb text-text-primary'>진행/예정 페스티벌</span>
+      <div className='flex gap-1 items-center justify-between pt-[13px] pb-2.5 px-4'>
+        <span className='title1-sb text-text-primary '>진행/예정 페스티벌</span>
         <span className='flex-1 label2-r text-text-tertiary'>{festivalCount?.count ?? 0}</span>
-        {/* <Select
-            items={FILTER}
-            selected={filter}
-            onSelect={setFilter}
-          /> */}
       </div>
-
       {/* 진행중인 페스티벌 */}
-      <div className='grid grid-cols-2 h-full gap-2 overflow-y-auto p-4 scrollbar-hide pb-16'
+      <div className='grid grid-cols-2 w-full h-full gap-x-[7px] gap-y-[11px]
+      overflow-y-auto px-4 scrollbar-hide pb-16'
         onScroll={handleScroll}>
         {/* > */}
         {(festivals && festivals.length > 0) ? (festivals.map((festival: FestivalAPI, i) => (

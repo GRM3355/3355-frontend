@@ -30,19 +30,24 @@ export default function Tab({ items, selected, onSelect }: TabProps) {
 
   return (
     <>
-      <div
-        ref={scrollRef}
-        className='flex h-max overflow-x-auto whitespace-nowrap scrollbar-hide'>
-        {items.map((item: TabItem) => (
-          <div key={item.key} className="flex flex-col w-max h-max">
-            <span
-              className={`p-2 cursor-pointer snap-start h-9 
+      <div className="relative mt-2">
+        <span className="absolute bottom-0.5 w-full left-0 h-px bg-line-divider-primary rounded-full" />
+        <div
+          ref={scrollRef}
+          className='flex relative h-max overflow-x-auto whitespace-nowrap scrollbar-hide px-4 gap-1.5'>
+          {items.map((item: TabItem) => (
+            <div key={item.key} className="flex flex-col w-max h-max">
+              <div
+                className={`cursor-pointer snap-start h-9 relative px-[7px] pt-[7px]
                       ${selected === item.key ? "text-text-brand label1-sb" : "text-text-primary label2-r"}`}
-              onClick={() => onSelect(item.key)}>
-              {item.label}</span>
-            {selected === item.key && <span className="w-full h-1 bg-text-brand rounded-full" />}
-          </div>
-        ))}
+                onClick={() => onSelect(item.key)}>
+                {item.label}
+                {selected === item.key && <span className="absolute bottom-0 left-0 w-full h-1 bg-text-brand rounded-full z-10" />}
+              </div>
+
+            </div>
+          ))}
+        </div>
       </div>
     </>
   )

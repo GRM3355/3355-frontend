@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "brand" | "default" | "error";
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md";
   className?: string;
   children: ReactNode;
 }
@@ -24,15 +24,14 @@ export default function Button({
   };
 
   const sizes = {
-    sm: "p-1 text-sm",
-    md: "p-2 text-base",
-    lg: "px-5 py-3 text-lg",
+    sm: "p-1 label1-sb",
+    md: "p-2 label4-sb",
   };
 
   return (
     // <button {...rest} className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}>
     <button {...rest} disabled={disabled}
-      className={` ${className ? "" : "w-full"} rounded-2 hover:brightness-90 
+      className={` ${className ? "" : "w-full"} rounded-2 hover:brightness-90 h-[38px]
     ${variants[variant]} ${sizes[size]} ${className}
     disabled:bg-state-interacion-container-disabled disabled:text-text-disabled`}>
 

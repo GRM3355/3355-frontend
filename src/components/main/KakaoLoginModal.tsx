@@ -69,15 +69,20 @@ export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProp
       onClose={onClose}
       className="w-full h-max p-5 m-10 rounded-2xl bg-surface-bg-modal-sheet"
     >
-      <div className="flex flex-col  gap-2">
+      <div className="flex flex-col gap-1">
         <p className="title2-sb text-text-primary ">로그인</p>
-        <p className='body1-r text-text-secondary mb-4'>로그인이 필요한 서비스입니다.</p>
-        <div className='flex px-3 py-2 justify-center gap-2 w-full bg-yellow-300 rounded-2 '
-          onClick={handleClickLogin}>
-          <img src="/Kakao.svg" alt="" />
-          <span>카카오 로그인</span>
+        <p className='body1-r text-text-secondary mb-6'>로그인이 필요한 서비스입니다.</p>
+        <div className='flex flex-col gap-2'>
+          <div className='flex h-[38px] px-3 py-2 justify-center gap-2 w-full bg-yellow-300 rounded-2 '
+            onClick={handleClickLogin}>
+            <div className='flex text-text-primary gap-2.5 items-center'>
+              <img src="/Kakao.svg" alt="" className='w-5 h-5' />
+              <span>카카오 로그인</span>
+            </div>
+          </div>
+          <Button onClick={() => handleClose()} className='h-[38px]'>다음에 하기</Button>
         </div>
-        <Button onClick={() => handleClose()}>다음에 하기</Button>
+
       </div>
     </Modal>
   );

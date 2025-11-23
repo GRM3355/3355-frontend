@@ -31,7 +31,7 @@ import useLocationStore from './stores/useLocationStore'
 function App() {
   //확인 모달용
   const { isOpen, title, message, confirmText, cancelText,
-    onConfirm, onCancel, closeConfirm, } = useConfirmStore();
+    onConfirm, onCancel, closeConfirm, variant, } = useConfirmStore();
 
   const { isLoginModalOpen, closeLoginModal } = useLoginStore();
 
@@ -55,7 +55,7 @@ function App() {
 
 
   return (
-    <div className='flex flex-col h-dvh w-full sm:w-100 mx-auto relative overflow-hidden'
+    <div className='flex flex-col h-dvh w-full min-w-[360px] max-w-[480px] sm:w-100 mx-auto relative overflow-hidden'
       translate='no'>
       {/* <p>{tempToken}</p> */}
       {/*<p>{userId}</p> */}
@@ -85,6 +85,7 @@ function App() {
       </div>
       <ConfirmModal
         isOpen={isOpen}
+        variant={variant}
         title={title}
         message={message}
         confirmText={confirmText}

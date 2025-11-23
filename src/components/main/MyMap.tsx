@@ -5,9 +5,8 @@ import type { FeatureCollection, Point } from 'geojson';
 import type { FestivalAPI } from '@/types/api';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type { GeoJSONFeature } from 'mapbox-gl';
-import { ChevronDownLeftSolid, ChevronUpLeftSolid, Circle, CircleSolid, InfoCircle, InfoTriangleSolid, Target, Triangle } from '@mynaui/icons-react';
+import { ChevronDownLeftSolid, ChevronUpLeftSolid, CircleSolid, InfoCircle } from '@mynaui/icons-react';
 import { metersToPixels, regions } from '@/utils/map';
-import { useAsyncError, useLocation } from 'react-router-dom';
 import SinglePoints from './SinglePoints';
 import GroupPoints from './GroupPoints';
 import { isFestivalActive } from '@/utils/date';
@@ -76,6 +75,7 @@ export default function MyMap({
 
   // 클러스터 색깔 정보
   const [showColorInfo, setShowColorInfo] = useState<boolean>(false);
+
 
   // GeoJSON으로 변환
   const geoJsonPoints: FeatureCollection<Point, { id: number; name: string }> = useMemo(() => ({
@@ -189,7 +189,6 @@ export default function MyMap({
   }
 
   const handleGoMyPos = () => {
-
     handleFlyTo(myViewport.longitude, myViewport.latitude, myViewport.zoom, true);
     handleCloseBottomSheet();
   }
@@ -266,7 +265,7 @@ export default function MyMap({
             filter={['has', 'point_count']}
             layout={{
               "icon-image": "cluster-icon", // 위에서 등록한 이름
-              "icon-size": 0.8, // 아이콘 크기 조절
+              "icon-size": 1, // 아이콘 크기 조절
               "icon-allow-overlap": true, // 겹쳐도 표시
             }}
             minzoom={6}
@@ -313,7 +312,8 @@ export default function MyMap({
               mapRef.current?.resize();
             }}
           >
-            <img src="cluster.png" alt={region.label} className='z-0' />
+            <img src="cluster.png" alt={region.label} className={`z-0
+            ${region.key == 'SEOUL' ? "w-8" : "w-[72px]"}`} />
             <span className='absolute inset-0 flex items-center justify-center title1-sb text-text-primary'>
               {festivalCounts.get(region.key) ?? 0}</span>
           </Marker>
@@ -339,7 +339,8 @@ export default function MyMap({
             }}
           >
             <div
-              className={`absolute w-max h-max left-0 bottom-6 bg-white rounded-3 rounded-bl-none p-2 z-10 tooltip`}>
+              className={`absolute flex items-center w-max h-[42px] left-0 bottom-6 label4-sb 
+              bg-white rounded-3 rounded-bl-none px-2.5 py-2 z-10 tooltip`}>
               {region.label}
               <ChevronUpLeftSolid className='absolute -bottom-3 -left-[7px] text-white' />
             </div>
@@ -356,17 +357,17 @@ export default function MyMap({
       {/* 클러스터 색깔 정보 */}
       <div className='absolute w-max h-max top-0 left-0'
         onClick={() => setShowColorInfo(prev => !prev)}>
-        <InfoCircle size={30} className='absolute top-4 left-4 bg-white text-center self-center rounded-full floating p-1' />
+        <InfoCircle size={30} className='absolute top-[17px] left-[21px] bg-white text-center self-center rounded-full floating p-[5px]' />
         {showColorInfo && (
           <>
-            <div className='absolute top-16 left-8 w-max h-max flex flex-col gap-1 bg-white rounded-4 tooltip p-3 rounded-tl-none'>
-              <ZoneInfoItem label="매우 혼잡" info='(0,000 ~ 0,000)' />
-              <ZoneInfoItem color="bg-state-zone-yellow-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
-              <ZoneInfoItem color="bg-state-zone-green-primary" label="보통 혼잡" info='(0,000 ~ 0,000)' />
-              <ZoneInfoItem color="bg-state-zone-gray-primary" label="예정 축제" />
-              <hr className='text-line-divider-primary my-2' />
-              <p className='caption3-r text-text-tertiary'>* 인원수 기준</p>
-              <ChevronDownLeftSolid className='absolute -top-3 -left-2 text-white' />
+            <div className='absolute top-16 left-9 w-max h-max flex flex-col gap-1.5 bg-white rounded-4 tooltip p-3 rounded-tl-none'>
+              <ZoneInfoItem label="활발존" info='(~1,000+)' />
+              <ZoneInfoItem color="bg-state-zone-yellow-primary" label="보통존" info='(~700)' />
+              <ZoneInfoItem color="bg-state-zone-green-primary" label="여유존" info='(~300)' />
+              <ZoneInfoItem color="bg-state-zone-gray-primary" label="예정존" />
+              <hr className='text-line-divider-primary mt-7px mb-6px' />
+              <p className='caption3-r text-text-tertiary'>* 채팅 접속자 수 기준</p>
+              <ChevronDownLeftSolid className='absolute -top-3 -left-[7px] text-white' />
             </div>
           </>
         )}
@@ -378,8 +379,11 @@ export default function MyMap({
         onClick={() => handleResearchFestival()}>이 지역 재검색</span>
       {/* 현재 위치로 이동 */}
       {isAllowed && (
-        <img src="/Target.svg" alt="target" className={`absolute ${isShowBottomSheet ? "bottom-92" : "bottom-4"} 
+        <img src="/Target.svg" alt="target" className={`absolute 
       right-3 bg-white p-2.5 rounded-full floating z-10`}
+          style={{
+            bottom: isShowBottomSheet ? window.innerHeight * 0.53 + "px" : "16px"
+          }}
           onClick={() => handleGoMyPos()} />
       )}
     </div >

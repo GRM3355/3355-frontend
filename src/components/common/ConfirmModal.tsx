@@ -10,6 +10,7 @@ type ConfirmModalProps = {
   onConfirm?: () => void;
   onCancel?: () => void;
   onClose: () => void;
+  variant?: 'brand' | 'default' | 'error';
 }
 
 export default function ConfirmModal({
@@ -20,7 +21,8 @@ export default function ConfirmModal({
   cancelText,
   onConfirm,
   onCancel,
-  onClose
+  onClose,
+  variant = 'brand',
 }: ConfirmModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}
@@ -29,7 +31,7 @@ export default function ConfirmModal({
       <p className='body1-r mb-6 text-text-secondary whitespace-pre-line'>{message}</p>
       <div className='flex gap-2'>
         {cancelText && <Button onClick={() => onCancel ? onCancel() : onClose?.()}>{cancelText}</Button>}
-        <Button onClick={() => onConfirm?.()} variant='brand'>{confirmText}</Button>
+        <Button onClick={() => onConfirm?.()} variant={variant}>{confirmText}</Button>
       </div>
     </Modal>
   );

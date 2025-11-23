@@ -80,7 +80,7 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
       <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-4 rounded-3'
         onClick={() => handleEnterRoom()}>
         <img src={thumbnail} alt="Festival Image"
-          className="h-full aspect-square rounded-full" />
+          className="w-12 aspect-square rounded-full" />
         <div>
           {showDetail && (
             <div>

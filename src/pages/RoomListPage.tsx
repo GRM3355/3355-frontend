@@ -65,8 +65,8 @@ export default function RoomListPage() {
 
   // if (isRoomLoading || isFestivalLoading) return <LoadingSpinner />;
   if (isRoomError || isFestivalError) return <ErrorPage />;
-  if (!roomDatas) return <div>방 정보를 불러올 수 없습니다.</div>;
-  if (!festivalData) return <div>축제 정보를 불러올 수 없습니다.</div>;
+  if (!roomDatas) return <div></div>;
+  if (!festivalData) return <div></div>;
 
   const handleCreateRoom = () => {
     if (checkLogin())
@@ -86,26 +86,25 @@ export default function RoomListPage() {
             className={`w-full h-max ${isFixed ? "sticky -top-[200px] left-0 z-10" : "relative"
               }`}
           >
-            <div className="w-full aspect-squar relative">
+            <div className="w-full aspect-square relative">
               <img
                 src={festivalData.firstImage || '/testImg.png'}
                 alt="축제 이미지"
                 className="w-full aspect-square object-cover object-top"
               />
               <div className="absolute inset-0 bg-linear-to-b from-black/0 to-black/50 pointer-events-none"></div>
-              <div className="absolute bottom-0 text-white p-3">
-                <div className="flex items-center w-max p-1 gap-1 text-text-inverse label8-b rounded-1 bg-surface-container-brand-1 ">
-                  <UserSolid size={12} />
+              <div className="absolute bottom-0 text-white p-5 pb-[30px]">
+                <div className="flex items-center w-max p-1 pr-1.5 gap-1 text-text-inverse label8-b rounded-1 bg-surface-container-brand-1 ">
+                  <UserSolid size={14} />
                   <p className="">{festivalData.totalParticipantCount}명 참여중</p>
-
                 </div>
-                <p className="title5-sb my-2">{festivalData.title}</p>
+                <p className="title5-sb my-1">{festivalData.title}</p>
                 <p className="label6-sb">{festivalData.eventStartDate} - {festivalData.eventEndDate}</p>
                 <p className="label7-r">{festivalData.addr1}</p>
               </div>
             </div>
 
-            <p className="label5-r text-text-tertiary bg-gray-100 px-3 py-2">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
+            <p className="label5-r text-text-tertiary bg-gray-100 px-4 py-2.5">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
           </div>
 
           <div className="min-h-[80%] pb-32">

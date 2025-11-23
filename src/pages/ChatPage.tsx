@@ -206,7 +206,7 @@ export default function ChatPage() {
       <Header showBack={true} info={roomInfo}
         onLeaveRoom={() => openConfirm('채팅방을 나가시겠어요?',
           "모든 채팅 기록이 사라집니다.",
-          handleLeaveRoom, undefined, '나가기', '취소')} />
+          handleLeaveRoom, undefined, '나가기', '취소', 'error')} />
       <div className='flex-1 w-full h-full relative overflow-hidden'>
         <div className="flex flex-col h-full">
           <div className="flex-1 overflow-y-auto">

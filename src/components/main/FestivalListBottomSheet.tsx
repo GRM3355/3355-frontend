@@ -82,13 +82,13 @@ export default function FestivalListBottomSheet({
       isOpen={isShowBottomSheet}
       onClose={() => onHideBottomSheet()}
     >
-      <div className='flex p-4 gap-2'>
+      <div className='flex py-2 px-2.5 gap-[7px]'>
         <img src={festivalData.firstImage || '/testImg.png'} alt=""
           className='w-15 h-15' />
         <div className='flex flex-col'>
-          <div className="flex items-center w-max p-1 gap-1 text-text-inverse label8-b rounded-1 bg-surface-container-brand-1 ">
-            <UserSolid size={12} />
-            <span>{festivalData.totalParticipantCount}명 참여중</span>
+          <div className="flex items-center w-max p-1 pr-1.5 gap-1 text-text-inverse label8-b rounded-1 bg-surface-container-brand-1 ">
+            <UserSolid size={14} className='' />
+            <span className='label8-b text-text-inverse'>{festivalData.totalParticipantCount}명 참여중</span>
           </div>
           <p className='title1-sb text-text-primary'>{festivalData.title}</p>
           <p className='label5-r text-text-quaternary'>
@@ -97,12 +97,12 @@ export default function FestivalListBottomSheet({
             onClick={() => handleShowDetail()} >더보러가기 &gt;</span>
         </div>
       </div>
-      <p className="label5-r text-text-tertiary bg-gray-100 px-3 py-2">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
+      <p className="h-18px label5-r text-text-tertiary bg-gray-100 px-3 py-2">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
       <div className='h-full overflow-y-auto relative scrollbar-hide'>
         <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
 
       </div>
-      {(isAllowed && distance <= 500) && (<Plus className="absolute bottom-8 right-8 w-11 h-11 bg-text-brand text-text-inverse rounded-full p-1 floating"
+      {(isAllowed && distance <= 500) && (<Plus className="fixed bottom-30 right-4 w-[46px] h-[46px] bg-text-brand text-text-inverse rounded-full p-1 floating"
         onClick={(e) => handleCreateRoom(e)} />)}
     </BottomSheet>
   )

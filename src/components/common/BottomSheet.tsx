@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type BottomSheetProps = {
   isOpen: boolean;
@@ -53,9 +53,14 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
     }
 
     onClose?.(); // 닫는 이벤트 있는 경우
-    setHeight(500);
+    setHeight(screenHeight * 0.7);
   };
 
+  useEffect(() => {
+    const screenHeight = window.innerHeight;
+
+    setHeight(screenHeight * 0.7);
+  }, [window.innerHeight])
 
   return (
     <div
@@ -69,7 +74,7 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
       >
         {/* 드래그 핸들 */}
         <div
-          className="pt-3 pb-2 cursor-grab active:cursor-grabbing flex justify-center"
+          className="pt-2 pb-3 cursor-grab active:cursor-grabbing flex justify-center"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -77,7 +82,7 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
           onTouchMove={onTouchMove}
           onTouchEnd={onPointerUp}
         >
-          <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+          <div className="w-9 h-[5px] bg-surface-container-grabber rounded-full" />
         </div>
 
         {/* 콘텐츠 */}
