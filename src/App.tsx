@@ -45,7 +45,9 @@ function App() {
         const { latitude, longitude } = pos.coords;
         //TODO 추후 위치 변경
         // setLocation(latitude, longitude);
-        setLocation(37.5681, 126.9696)
+        setLocation(37.5179669, 126.957047)
+        //latitude: lat ?? 37.5179669,
+        //longitude: lon ?? 126.957047,
       },
       (err) => {
         console.error(err);

@@ -5,6 +5,10 @@ html, body {
   overscroll-behavior: none; /* 스크롤 끝에서 바운스 방지 */
 }
 
+span, input {
+  line-height: 1; /* 기본 line-height 제거 */
+}
+
 /* 스크롤은 가능하지만 스크롤바는 안 보이게 */
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
@@ -14,6 +18,7 @@ html, body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
 
 @theme {
   --font-sans: 'Wanted Sans Variable', sans-serif;

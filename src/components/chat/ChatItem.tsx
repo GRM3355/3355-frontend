@@ -61,12 +61,12 @@ export default function ChatItem({ chat, isMine, bubblePosition, isSameDate }: C
   return (
     <>
       {!isSameDate &&
-        <div className="w-full flex justify-center items-center py-2">
-          <p className="w-8 h-px bg-icon-border-secondary mx-4"></p>
-          <span className="text-text-quaternary caption3-r">
+        <div className="w-full flex justify-center items-center py-[26px]">
+          <p className="flex-1 h-px bg-line-border-secondary mx-4"></p>
+          <span className=" text-text-quaternary caption3-r">
             {formatDate(chat.createdAt.split('T')[0])}
           </span>
-          <p className="w-8 h-px bg-icon-border-secondary mx-4"></p>
+          <p className="flex-1 h-px bg-line-border-secondary mx-4"></p>
         </div>
       }
       <div className={`w-[80%] flex flex-col ${isMine ? "ml-auto items-end" : ""}`}
@@ -81,7 +81,7 @@ export default function ChatItem({ chat, isMine, bubblePosition, isSameDate }: C
         </p>}
 
         {/* 말풍선 + 시간 */}
-        <div className={`flex flex-row items-end gap-1 mb-1 w-full ${isMine ? "justify-end" : ""}`}>
+        <div className={`flex flex-row items-end gap-2 mb-1 mt-0.5 w-full ${isMine ? "justify-end" : ""}`}>
           {/* 상대방: 시간 → 왼, 말풍선 → 오른쪽 */}
           {(bubblePosition === 'single' || bubblePosition === 'bottom') && isMine && (
             <span className="caption4-r text-text-quaternary">{formattedTime}</span>
@@ -105,17 +105,17 @@ export default function ChatItem({ chat, isMine, bubblePosition, isSameDate }: C
         {/* 좋아요 버튼 */}
         {(chat.likeCount > 0 || (chat.likeCount == 0 && chat.liked)) && (
           <div
-            className="w-max flex gap-0.5 px-0.75 py-0.5 bg-state-interacion-container-bubble-default items-center
+            className="w-max h-5 flex gap-0.5 px-1 py-0.5 mb-1.5 bg-state-interacion-container-bubble-default items-center
             rounded-full">
             <LikeSolid
-              size={12}
+              size={14}
               className={chat.likeCount > 0 ? "text-alpha-yellow-70" : "text-icon-container-tertiary"}
             />
             <span className={`${chat.likeCount > 0 ? "text-text-brand" : "text-text-primary"} caption5-r`}>{chat.likeCount}</span>
           </div>
         )}
       </div>
-      {(bubblePosition === 'single' || bubblePosition === 'bottom') && <span className="pb-4" />}
+      {(bubblePosition === 'single' || bubblePosition === 'bottom') && <span className="pb-[26px]" />}
     </>
 
   );

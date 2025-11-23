@@ -32,7 +32,7 @@ export default function FestivalItem({ festivalData }: RoomItemProps) {
       <p className='text-primary title3-sb pt-1.5'>{festivalData.title}</p>
       <div className='flex items-center text-icon-container-tertiary gap-0.5'>
         <CalendarSolid size={14} />
-        <span className='caption5-r'>Date · </span>
+        <span className='caption5-r text-text-tertiary'>Date · </span>
         {isActive ? (
           <span className='caption5-r text-text-brand '>개최중</span>
         ) : (

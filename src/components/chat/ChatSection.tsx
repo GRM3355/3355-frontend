@@ -136,7 +136,7 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
   return (
     <>
       <div className="flex w-full h-full relative">
-        <div className={`flex flex-col flex-1 overflow-y-auto p-2 gap-1 scrollbar-hide`}
+        <div className={`flex flex-col flex-1 overflow-y-auto p-2 scrollbar-hide`}
           ref={scrollRef} onScroll={handleScroll}>
           {messages.map((m, i) => {
             const bubblePosition = getBubblePosition(messages, i);
@@ -148,13 +148,12 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
               isSameDate={sameDate} />)
           }
           )}
-
         </div>
         {showScrollDown && (
           <button
             onClick={scrollToBottom}
             className=" left-1/2 -translate-x-1/2 bg-surface-overlay-chip chip px-4 py-1 rounded-full 
-            absolute bottom-4 label5-r text-basic-100"
+            absolute bottom-1.5 label5-r text-basic-100 chip"
           >
             새로운 메시지로 이동
           </button>

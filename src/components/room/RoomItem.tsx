@@ -25,7 +25,7 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
   const { mutate, isPending } = useJoinRoom(room);
   const { lat, lon } = useLocationStore();
 
-  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnail, setThumbnail] = useState("/chat_thumbnail/1.svg");
 
   const handleEnterRoom = () => {
     if (!accessToken) {
@@ -77,7 +77,7 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
 
   return (
     <>
-      <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-4 rounded-3'
+      <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-3 rounded-3'
         onClick={() => handleEnterRoom()}>
         <img src={thumbnail} alt="Festival Image"
           className="w-12 aspect-square rounded-full" />
@@ -95,7 +95,7 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
           </div>
         </div>
         {hasNew && <span className="ml-auto w-4 h-4 flex items-center justify-center text-xs
-      bg-text-brand text-text-inverse rounded-full">
+      bg-text-brand text-text-inverse rounded-full label8-b">
           N
         </span>
         }

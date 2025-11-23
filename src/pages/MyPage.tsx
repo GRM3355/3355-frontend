@@ -73,12 +73,12 @@ const MyPage = () => {
     <>
       <Header showBack={true} title="계정안내"></Header>
       <div className='flex-1 w-full h-full relative overflow-hidden'>
-        <div className='flex flex-col p-4 h-full pb-20'>
+        <div className='flex flex-col p-4 py-[26px] h-full'>
           <div className='flex-1'>
             <p className='title4-sb text-text-brand'>나의 정보</p>
             <p className='pt-3 title3-sb text-text-primary'>{data.accountEmail}</p>
-            <p className='pb-4 caption2-r text-text-quaternary'>가입일: {data.createdAt.split('T')[0]}</p>
-            <hr className='text-line-border-primary h-px pt-4' />
+            <p className='pb-8 caption2-r text-text-quaternary'>가입일: {data.createdAt.split('T')[0]}</p>
+            <hr className='text-line-border-primary h-px pb-8' />
             <p className='title4-sb text-text-brand'>약관 및 정책</p>
 
             {/* 약관 */}
@@ -105,7 +105,7 @@ const MyPage = () => {
               </div>
             </div>
           </div>
-          <div className='flex justify-center gap-4 text-text-quaternary'>
+          <div className='flex justify-center gap-7 text-text-quaternary'>
             <span onClick={() => openConfirm('탈퇴하시겠어요?',
               `탈퇴하기 버튼을 누르면
             탈퇴 처리됩니다.`,

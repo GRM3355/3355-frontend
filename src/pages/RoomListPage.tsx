@@ -48,6 +48,9 @@ export default function RoomListPage() {
       setDistance(dist);
     }
 
+    console.log({ festivalData });
+
+
   }, [festivalData?.festivalId, isAllowed]);
 
   const handleScroll = () => {

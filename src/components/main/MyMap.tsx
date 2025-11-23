@@ -54,15 +54,15 @@ export default function MyMap({
   const [myViewport, setMyViewport] = useState<ViewState>({
     // latitude: lat,
     // longitude: lon,
-    latitude: 37.5681,
-    longitude: 126.9696,
+    latitude: 37.5179669,
+    longitude: 126.957047,
     zoom: 14,
   } as ViewState);
 
   //화면 움직일때의 좌표
   const [viewport, setViewport] = useState<ViewState>({
-    latitude: lat ?? 37.5701342,
-    longitude: lon ?? 126.9772235,
+    latitude: lat ?? 37.5179669,
+    longitude: lon ?? 126.957047,
     zoom: 14,
   } as ViewState);
 
@@ -351,7 +351,7 @@ export default function MyMap({
         <Marker
           longitude={myViewport.longitude}
           latitude={myViewport.latitude}>
-          <CircleSolid size={12} className='z-999' />
+          <CircleSolid size={12} className='z-999 text-surface-container-brand-1' />
         </Marker>
       </MapGL>
       {/* 클러스터 색깔 정보 */}

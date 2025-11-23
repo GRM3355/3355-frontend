@@ -41,9 +41,9 @@ export default function Input({
 
   return (
     <>
-      <div className="flex items-center gap-2">
-        <div className={`flex flex-1 items-center gap-2 w-full ${currentClass}`}>
-          {icon && <div>{icon}</div>}
+      <div className="flex w-full items-center gap-2">
+        <div className={`flex flex-1 items-center gap-1.5 w-full ${currentClass}`}>
+          {icon && <div className="text-icon-border-primary">{icon}</div>}
           <input
             {...rest}
             disabled={isDisabled}
@@ -66,7 +66,7 @@ export default function Input({
               className="w-5 h-5 p-1 text-white bg-icon-container-secondary rounded-full" />
           )}
         </div>
-        {(isFocused || rest.value) && onSend && <SendSolid size={32} className="bg-orange-50 text-text-brand rounded-full p-1"
+        {(isFocused || rest.value) && onSend && <SendSolid size={38} className="bg-orange-50 text-text-brand rounded-full p-1"
           onClick={() => onSend()} />}
       </div>
     </>

@@ -45,15 +45,15 @@ export default function SearchPage() {
     <>
       <div className='flex flex-col h-full'>
         {/* 검색 */}
-        <div className='flex p-4 gap-2 items-center'>
-          <ChevronLeft size={24}
+        <div className='flex py-[7px] pl-2 pr-4 gap-1 items-center'>
+          <ChevronLeft size={40} className='p-1'
             onClick={() => handleClickBack()} />
           <Input
             type="text"
-            placeholder="검색어 입력"
+            placeholder="검색어를 입력해주세요."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            icon={<Search />}
+            icon={<Search size={20} stroke={1.25} />}
             defaultStyle="input-search-default"
             focusStyle="input-search-focus"
             completeStyle="input-search-complete"
@@ -81,22 +81,22 @@ export default function SearchPage() {
               selected={activeTab}
               onSelect={setActiveTab}
             />
-            <div className='w-full h-full overflow-y-scroll p-4 scrollbar-hide'>
+            <div className='w-full h-full overflow-y-scroll p-4 py-[26px] scrollbar-hide'>
               {activeTab === "ALL" && (
-                <div className='flex gap-1 pb-4 items-center'>
+                <div className='flex gap-2 pb-5 items-center'>
                   <span className='title3-sb text-text-primary'>검색 결과</span>
-                  <span className='label5-r text-text-quaternary'>
+                  <span className='label5-r text-text-tertiary'>
                     {(festivals?.totalCount ?? 0) + (rooms?.totalCount ?? 0)}</span>
                 </div>
               )}
               {/* 페스티벌 섹션 */}
               {(activeTab === "ALL" || activeTab === "FESTIVAL") && (
                 <>
-                  <div className='flex gap-2 pb-3 items-center'>
+                  <div className='flex gap-2 pb-4 items-center'>
                     <span className='title1-sb text-text-primary'>{activeTab === "ALL" ? "페스티벌" : "검색 결과"}</span>
-                    <span className='label2-r text-text-quaternary'>{festivals?.data.length}</span>
+                    <span className='label2-r text-text-tertiary'>{festivals?.data.length}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-x-2.5 gap-y-5">
                     {(activeTab === "ALL"
                       ? festivals?.data?.slice(0, 4)
                       : festivals?.data
@@ -118,9 +118,9 @@ export default function SearchPage() {
               {/* 채팅방 섹션 */}
               {(activeTab === "ALL" || activeTab === "CHATROOM") && (
                 <>
-                  <div className='flex gap-2 pb-3 items-center'>
+                  <div className='flex gap-2 pb-4 items-center'>
                     <span className='title1-sb text-text-primary'>{activeTab === "ALL" ? "채팅방" : "검색 결과"}</span>
-                    <span className='label2-r text-text-quaternary'>{rooms?.data.length}</span>
+                    <span className='label2-r text-text-tertiary'>{rooms?.data.length}</span>
                   </div>
                   <div className='flex flex-col gap-2'>
                     {(activeTab === "ALL"
