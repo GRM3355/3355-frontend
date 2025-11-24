@@ -21,7 +21,7 @@ export default function RoomItem({ room, isJoined, showDetail, hasNew }: RoomIte
   const { openConfirm, closeConfirm } = useConfirmStore();
   const { accessToken } = useAuthStore();
   const { openLoginModal } = useLoginStore();
-  const { lat, lon } = useLocationStore();
+  const { lat, lon, isAllowed } = useLocationStore();
 
   const { mutate, isPending } = useJoinRoom(room);
 
@@ -30,6 +30,19 @@ export default function RoomItem({ room, isJoined, showDetail, hasNew }: RoomIte
   const handleEnterRoom = () => {
     if (!accessToken) {
       openLoginModal();
+      return;
+    }
+
+    if (!isAllowed) {
+      openConfirm('위치정보 접근 허용 안내',
+        `위치 확인, 채팅방 생성 및 이용을 위해
+        사용 기기의 설정에서 위치정보 접근 권한을 허용해주세요.
+        
+        [Android]
+        설정 → 위치 → 앱 권한 → 위치정보 접근 허용
+        [iOS]
+        설정 → 개인 정보 보호 및 보안 → 위치 서비스 → 위치 접근 허용`,
+        closeConfirm, undefined, '확인');
       return;
     }
 

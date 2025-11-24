@@ -19,10 +19,12 @@ export default function MyChatPage() {
 
   const { roomActivities, updateRoomActivity, getRoomActivity } = useRoomStore();
   const checkLogin = useCheckLogin();
+
   useEffect(() => {
+    if (!accessToken) return;
     checkLogin();
     refetch();
-  }, []);
+  }, [accessToken]);
 
   useEffect(() => {
     console.log(data);

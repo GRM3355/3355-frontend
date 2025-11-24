@@ -50,38 +50,43 @@ export default function MyMap({
   onSearchFestivalByLocation }: MyMapProps) {
   const mapRef = useRef<MapRef>(null);
 
-  const { lat, lon, isAllowed } = useLocationStore();
+  const { lat, lon, isAllowed, setMapViewport, mapViewport } = useLocationStore();
 
   //유저 실제 위치 좌표 
   const [myViewport, setMyViewport] = useState<ViewState>({
-    // latitude: lat,
-    // longitude: lon,
-    latitude: 37.5179669,
-    longitude: 126.957047,
+    latitude: lat,
+    longitude: lon,
+    // latitude: 37.5179669,
+    // longitude: 126.957047,
     zoom: 14,
   } as ViewState);
 
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
   //화면 움직일때의 좌표
   const [viewport, setViewport] = useState<ViewState>({
-    latitude: parseFloat(searchParams.get('lat') || '') || lat || 37.5701342,
-    longitude: parseFloat(searchParams.get("lon") || '') || lon || 126.9772235,
-    zoom: parseFloat(searchParams.get("zoom") || '') || 14,
+    latitude: mapViewport?.latitude ?? lat ?? 37.5701342,
+    longitude: mapViewport?.longitude ?? lon ?? 126.9772235,
+    zoom: mapViewport?.zoom ?? 14,
   } as ViewState);
 
   const [debouncedViewport] = useDebounce(viewport, 1000);
 
   //쿼리 저장
+  useEffect(() => {
+    if (!debouncedViewport) return;
+
+    setMapViewport(debouncedViewport);
+  }, [debouncedViewport]);
+
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
-    setSearchParams({
-      lat: debouncedViewport.latitude.toFixed(6),
-      lon: debouncedViewport.longitude.toFixed(6),
-      zoom: debouncedViewport.zoom.toFixed(2),
-    });
-  }, [debouncedViewport, setSearchParams]);
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+
+      console.log("초기 viewport로 refetch 실행", viewport);
+      handleResearchFestival();
+    }
+  }, [viewport]);
 
 
   //선택된 축제 포인트

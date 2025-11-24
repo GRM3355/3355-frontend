@@ -26,7 +26,7 @@ function App() {
 
   const { isLoginModalOpen, closeLoginModal } = useLoginStore();
 
-  const { setIsAllowed, setLocation } = useLocationStore();
+  const { setIsAllowed, setIsDenied, setLocation } = useLocationStore();
 
 
   useEffect(() => {
@@ -35,19 +35,34 @@ function App() {
         setIsAllowed();
         const { latitude, longitude } = pos.coords;
         //TODO 추후 위치 변경
-        // setLocation(latitude, longitude);
-        setLocation(37.5179669, 126.957047)
+        setLocation(latitude, longitude);
+        //setLocation(37.5179669, 126.957047)
         //latitude: lat ?? 37.5179669,
         //longitude: lon ?? 126.957047,
       },
       (err) => {
         //로그인 안했으면 고정값
         setLocation(37.5701342, 126.9772235);
-
-
-        console.error(err);
+        console.log(err);
       }
     );
+
+    if (navigator.permissions) {
+      navigator.permissions.query({ name: 'geolocation' }).then((status) => {
+        status.onchange = () => {
+          console.log('권한 변경:', status.state);
+          if (status.state === 'granted') {
+            navigator.geolocation.getCurrentPosition((pos) => {
+              setIsAllowed();
+              setLocation(pos.coords.latitude, pos.coords.longitude);
+            });
+          }
+          else {
+            setIsDenied();
+          }
+        };
+      });
+    }
   }, []);
 
 
