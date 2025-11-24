@@ -55,10 +55,12 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '@/stores/useAuthStore';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import useLoginStore from '@/stores/useLoginStore';
 
 export default function KakaoRedirectPage() {
   const navigate = useNavigate();
   const { setAccessToken } = useAuthStore();
+  const { closeLoginModal } = useLoginStore();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -67,13 +69,15 @@ export default function KakaoRedirectPage() {
     if (accessToken) {
       console.log('로그인 성공!', accessToken);
       setAccessToken(accessToken); // store에 저장
+      closeLoginModal();
     } else {
       console.log("로그인 실패! accessToken이 없습니다.");
+      closeLoginModal();
     }
 
-    // navigate('/', { replace: true });
-    navigate(-3);
-    navigate('.', { replace: true });
+    navigate('/', { replace: true });
+    // navigate(-3);
+    // navigate('.', { replace: true });
   }, [navigate, setAccessToken]);
 
   return (
