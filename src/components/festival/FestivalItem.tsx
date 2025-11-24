@@ -26,10 +26,10 @@ export default function FestivalItem({ festivalData }: RoomItemProps) {
           className="w-full aspect-square object-cover rounded-3"
         />
         {!isActive && <div className="absolute inset-0 bg-surface-overlay-dim-modal-sheet flex items-center justify-center">
-          <span className='label8-b text-white'>Coming Soon</span>
+          <span className='label8-b text-white'>개최 예정</span>
         </div>}
       </div>
-      <p className='text-primary title3-sb pt-1.5'>{festivalData.title}</p>
+      <p className='text-primary label4-sb pt-1.5'>{festivalData.title}</p>
       <div className='flex items-center text-icon-container-tertiary gap-0.5'>
         <CalendarSolid size={14} />
         <span className='caption5-r text-text-tertiary'>Date · </span>

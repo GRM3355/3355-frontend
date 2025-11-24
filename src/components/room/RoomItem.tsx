@@ -9,12 +9,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 type RoomItemProps = {
   room: RoomAPI;
+  isJoined: boolean;
   showDetail?: boolean;
   hasNew?: boolean;
 }
 
-
-export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
+export default function RoomItem({ room, isJoined, showDetail, hasNew }: RoomItemProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -82,10 +82,23 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
       <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-3 rounded-3'
         onClick={() => handleEnterRoom()}>
         {thumbnail && (
-          <img
-            src={thumbnail}
-            alt="Festival Image"
-            className="w-12 aspect-square rounded-full" />)}
+          <>
+            <div className="relative w-12 aspect-square">
+              <img
+                src={thumbnail}
+                alt="Festival Image"
+                className="absolute inset-0 w-full h-full object-cover rounded-full"
+              />
+              {isJoined && (
+                <div className="absolute inset-0 w-full h-full rounded-full leading-none
+              bg-surface-overlay-dim-modal-sheet label8-b text-text-inverse flex items-center justify-center">
+                  참여중
+                </div>
+              )}
+
+            </div>
+          </>
+        )}
         <div>
           {showDetail && (
             <div>
