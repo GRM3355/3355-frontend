@@ -77,7 +77,7 @@ export default function Input({
 
               // 값이 비어있으면 기본 높이로
               if (!el.value || el.value.trim() === '') {
-                el.style.height = "38px";
+                el.style.height = "24px";
               } else {
                 handleResize();
               }
@@ -93,7 +93,7 @@ export default function Input({
                 e.preventDefault();
                 onSend();
                 const el = textareaRef.current;
-                if (el) el.style.height = "38px";
+                if (el) el.style.height = "24px";
               }
             }}
           />
