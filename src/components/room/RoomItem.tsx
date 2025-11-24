@@ -21,9 +21,9 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
   const { openConfirm, closeConfirm } = useConfirmStore();
   const { accessToken } = useAuthStore();
   const { openLoginModal } = useLoginStore();
+  const { lat, lon } = useLocationStore();
 
   const { mutate, isPending } = useJoinRoom(room);
-  const { lat, lon } = useLocationStore();
 
   const [thumbnail, setThumbnail] = useState("/chat_thumbnail/1.svg");
 
@@ -48,10 +48,12 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
   const handleConfirm = () => {
     closeConfirm();
 
-    if (!accessToken || !room.chatRoomId) return;
+    if (!accessToken || !room.chatRoomId || !lat || !lon) return;
     mutate({
       roomId: room.chatRoomId,
       token: accessToken,
+      lat,
+      lon
     });
   }
 
@@ -79,8 +81,11 @@ export default function RoomItem({ room, showDetail, hasNew }: RoomItemProps) {
     <>
       <div className='flex h-20 items-center border border-line-border-secondary p-4 gap-3 rounded-3'
         onClick={() => handleEnterRoom()}>
-        <img src={thumbnail} alt="Festival Image"
-          className="w-12 aspect-square rounded-full" />
+        {thumbnail && (
+          <img
+            src={thumbnail}
+            alt="Festival Image"
+            className="w-12 aspect-square rounded-full" />)}
         <div>
           {showDetail && (
             <div>

@@ -41,7 +41,7 @@ export default function FestivalListSection({ region }: FestivalListSectionProps
         <span className='flex-1 label2-r text-text-tertiary'>{festivalCount?.count ?? 0}</span>
       </div>
       {/* 진행중인 페스티벌 */}
-      <div className='grid grid-cols-2 w-full h-full gap-x-[10px] gap-y-[20px]
+      <div className='grid grid-cols-2 w-full h-full gap-x-2.5 gap-y-5
       overflow-y-auto px-4 scrollbar-hide pb-16'
         onScroll={handleScroll}>
         {/* > */}

@@ -54,13 +54,15 @@ export const createRoom = async ({ festivalId, token, title, lat, lon }: PostRoo
 };
 
 // 입장
-export const joinRoom = async ({ roomId, token, }: { roomId: string; token: string; }) => {
+export const joinRoom = async ({ roomId, token, lat, lon }:
+  { roomId: string; token: string; lat: number; lon: number; }) => {
   console.log('방 join 요청:', { roomId });
   console.log('URL:', `/api/v1/chat-rooms/${roomId}/join`);
 
   try {
     const { data } = await apiClient.post(
       `/api/v1/chat-rooms/${roomId}/join`,
+      { lat, lon },
       {
         headers: {
           'Content-Type': 'application/json',
