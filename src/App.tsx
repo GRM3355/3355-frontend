@@ -18,6 +18,7 @@ import KakaoLoginModal from './components/main/KakaoLoginModal'
 import useLoginStore from './stores/useLoginStore'
 import KakaoRedirectPage from './pages/KakaoRedirectPage'
 import useLocationStore from './stores/useLocationStore'
+import ComponentTestPage from './pages/ComponentTestPage'
 
 function App() {
   //확인 모달용
@@ -35,8 +36,9 @@ function App() {
         setIsAllowed();
         const { latitude, longitude } = pos.coords;
         //TODO 추후 위치 변경
-        setLocation(latitude, longitude);
-        //setLocation(37.5179669, 126.957047)
+        // setLocation(latitude, longitude);
+        setLocation(37.5179669, 126.957047)
+
         //latitude: lat ?? 37.5179669,
         //longitude: lon ?? 126.957047,
       },
@@ -83,8 +85,8 @@ function App() {
               <Route path='/search' element={<SearchPage />} />
               <Route path='/kakao-redirect' element={<KakaoRedirectPage />} />
               <Route path='*' element={<NotFound />} />
-              {/* <Route path='test' element={<ComponentTestPage />} /> //TODO 추후 삭제
-            <Route path='/report' element={<ReportPage />} /> //제보
+              <Route path='test' element={<ComponentTestPage />} /> //TODO 추후 삭제
+              {/*<Route path='/report' element={<ReportPage />} /> //제보
             <Route path='echo' element={<EchoTest />} />
             <Route path='/logout' element={<KakaoLogout />} />
             <Route path='/quit' element={<Quit />} /> */}

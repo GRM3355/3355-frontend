@@ -54,10 +54,10 @@ export default function MyMap({
 
   //유저 실제 위치 좌표 
   const [myViewport, setMyViewport] = useState<ViewState>({
-    latitude: lat,
-    longitude: lon,
-    // latitude: 37.5179669,
-    // longitude: 126.957047,
+    // latitude: lat,
+    // longitude: lon,
+    latitude: 37.5179669,
+    longitude: 126.957047,
     zoom: 14,
   } as ViewState);
 
