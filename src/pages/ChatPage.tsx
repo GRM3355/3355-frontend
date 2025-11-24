@@ -154,6 +154,7 @@ export default function ChatPage() {
 
     if (!stompClientRef.current || !message.trim()) {
       console.log("전송 불가");
+      setMessage("");
       return;
     }
 

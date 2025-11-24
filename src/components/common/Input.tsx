@@ -21,6 +21,8 @@ type InputProps =
   | (BaseProps & InputHTMLAttributes<HTMLInputElement>)
   | (BaseProps & TextareaHTMLAttributes<HTMLTextAreaElement>);
 
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
 export default function Input({
   className = "",
   icon,
@@ -74,7 +76,8 @@ export default function Input({
             onBlur={() => setIsFocused(false)}
             onKeyDown={(e) => {
               if (e.nativeEvent.isComposing) return;
-              if (e.key === "Enter" && !e.shiftKey && rest.value && onSend) {
+
+              if (!isMobile && e.key === "Enter" && !e.shiftKey && rest.value && onSend) {
                 e.preventDefault();
                 onSend();
                 const el = textareaRef.current;
