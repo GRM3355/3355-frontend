@@ -59,6 +59,7 @@ export default function Header({
 
   const handleClickUser = () => {
     const accessToken = useAuthStore.getState().accessToken;
+    console.log("### accessToken", accessToken)
     if (accessToken)
       navigate(`/mypage`)
     else
