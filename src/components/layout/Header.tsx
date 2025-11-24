@@ -36,6 +36,7 @@ export default function Header({
 
   const { openConfirm, closeConfirm } = useConfirmStore();
   const { openLoginModal } = useLoginStore();
+  const { accessToken } = useAuthStore();
 
   const handleBackConfirm = () => {
     closeConfirm();
@@ -58,7 +59,6 @@ export default function Header({
   }
 
   const handleClickUser = () => {
-    const accessToken = useAuthStore.getState().accessToken;
     console.log("### accessToken", accessToken)
     if (accessToken)
       navigate(`/mypage`)
