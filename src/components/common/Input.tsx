@@ -77,12 +77,13 @@ export default function Input({
             onKeyDown={(e) => {
               if (e.nativeEvent.isComposing) return;
 
-              if (!isMobile && e.key === "Enter" && !e.shiftKey && rest.value && onSend) {
+              if (isMobile || e.shiftKey) {
+                return;
+              } else if (!isMobile && !e.shiftKey && rest.value && onSend) {
                 e.preventDefault();
                 onSend();
                 const el = textareaRef.current;
-                if (el)
-                  el.style.height = "24px";
+                if (el) el.style.height = "38px";
               }
             }}
           />
