@@ -57,7 +57,7 @@ export default function SearchPage() {
             type="text"
             placeholder="검색어를 입력해주세요."
             value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
+            onChange={(e: any) => setKeyword(e.target.value)}
             icon={<Search size={20} stroke={1.25} />}
             defaultStyle="input-search-default"
             focusStyle="input-search-focus"

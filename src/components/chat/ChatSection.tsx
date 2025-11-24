@@ -99,7 +99,7 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
 
   useEffect(() => {
     if (!scrollRef.current) return;
-    if (isAtBottom()) {
+    if (isAtBottom() || messages[messages.length - 1].userId == userId) {
       scrollToBottom();
     }
   }, [messages, isMounted]);

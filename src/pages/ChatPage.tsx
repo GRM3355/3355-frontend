@@ -217,14 +217,19 @@ export default function ChatPage() {
               type="text"
               placeholder="메세지 입력"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              defaultStyle="px-4 py-2 h-[38px] border rounded-2 text-text-quaternary border-line-border-secondary bg-surface-container-default"
-              focusStyle="px-4 py-2 h-[38px] border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
-              completeStyle="px-4 py-2 h-[38px] border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
-              disabledStyle="px-4 py-2 h-[38px] rounded-2 text-text-disabled bg-state-interacion-container-disabled"
+              onChange={(e: any) => setMessage(e.target.value)}
+              // defaultStyle="px-4 py-2 min-h-[38px] border rounded-2 text-text-quaternary border-line-border-secondary bg-surface-container-default"
+              // focusStyle="px-4 py-2 min-h-[38px] border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
+              // completeStyle="px-4 py-2 min-h-[38px] border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
+              // disabledStyle="px-4 py-2 min-h-[38px] rounded-2 text-text-disabled bg-state-interacion-container-disabled"
+              defaultStyle="px-4 py-2 min-h-[38px] border rounded-2 text-text-quaternary border-line-border-secondary bg-surface-container-default"
+              focusStyle="px-4 py-2 min-h-[38px] border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
+              completeStyle="px-4 py-2 min-h-[38px] border rounded-2 text-text-primary border-state-interacion-border-focus bg-surface-container-default"
+              disabledStyle="px-4 py-2 min-h-[38px] rounded-2 text-text-disabled bg-state-interacion-container-disabled"
               isDisabled={distance > 500}
               onSend={() => sendMessage()}
               onClear={() => setMessage('')}
+              inputType="textarea"
             />
           </div>
         </div>

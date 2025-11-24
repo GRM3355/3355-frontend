@@ -63,7 +63,7 @@ export default function CreateRoomPage() {
               type="text"
               placeholder="채팅방명을 입력해주세요."
               value={roomTitle}
-              onChange={(e) => setRoomTitle(e.target.value)}
+              onChange={(e: any) => setRoomTitle(e.target.value)}
               defaultStyle="border border-line-border-secondary h-12 p-3 rounded-2 text-text-placeholder"
               focusStyle="border h-12 p-3 rounded-2 text-text-secondary body1-r"
               completeStyle="border h-12 p-3 rounded-2 text-text-primary"

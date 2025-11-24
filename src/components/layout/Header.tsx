@@ -80,7 +80,7 @@ export default function Header({
       }
       {title && <span className="title3-sb text-text-primary ml-2 mr-auto">{title}</span>}
       {info &&
-        <div className="flex flex-col mr-auto">
+        <div className="flex flex-col mr-auto gap-0.5">
           <div className="flex gap-1">
             <span className="title3-sb text-text-primary">{info.title}</span>
             <span className="title3-sb text-text-tertiary">{info.participantCount}</span>

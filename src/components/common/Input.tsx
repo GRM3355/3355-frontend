@@ -1,7 +1,9 @@
 import { SendSolid, X } from "@mynaui/icons-react";
-import { useState, type InputHTMLAttributes, type ReactNode } from "react";
+import { useState, type ReactNode, type InputHTMLAttributes, type TextareaHTMLAttributes, useRef } from "react";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+type InputType = "input" | "textarea";
+
+interface BaseProps {
   defaultStyle?: string;
   focusStyle?: string;
   completeStyle?: string;
@@ -10,9 +12,14 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   icon?: ReactNode;
   showClear?: boolean;
-  onClear?: () => void; // 삭제 버튼 클릭 시 콜백
-  onSend?: () => void; //전송 등
+  onClear?: () => void;
+  onSend?: () => void;
+  inputType?: InputType; // ★ input/textarea 구분
 }
+
+type InputProps =
+  | (BaseProps & InputHTMLAttributes<HTMLInputElement>)
+  | (BaseProps & TextareaHTMLAttributes<HTMLTextAreaElement>);
 
 export default function Input({
   className = "",
@@ -22,12 +29,14 @@ export default function Input({
   completeStyle = "",
   disabledStyle = "",
   isDisabled = false,
+  inputType = "input",
   showClear,
   onClear,
   onSend,
   ...rest
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const currentClass = isDisabled
     ? disabledStyle
@@ -39,37 +48,73 @@ export default function Input({
 
   const isComplete = !!rest.value;
 
+  const handleResize = () => {
+    const el = textareaRef.current;
+    if (!el) return;
+
+    el.style.height = "24px"; // 초기 높이로 리셋
+    el.style.height = `${el.scrollHeight}px`; // 내용에 맞게 자동 증가
+  };
+
   return (
-    <>
-      <div className="flex w-full items-center gap-2 flex-nowrap">
-        <div className={`flex flex-1 items-center gap-1.5 min-w-0 ${currentClass}`}>
-          {icon && <div className="text-icon-border-primary">{icon}</div>}
-          <input
-            {...rest}
+    <div className="flex w-full items-center gap-2 flex-nowrap">
+      <div className={`flex flex-1 items-center gap-1.5 min-w-0 ${currentClass}`}>
+        {icon && <div className="text-icon-border-primary">{icon}</div>}
+
+        {inputType === "textarea" ? (
+          <textarea
+            ref={textareaRef}
+            {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)}
             disabled={isDisabled}
+            className="resize-none focus:outline-none focus:ring-0 w-full max-h-15"
+            style={{ height: "24px" }}
+            onInput={() => handleResize()}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             onKeyDown={(e) => {
-              if (e.nativeEvent.isComposing) return; //한글 입력 중복 문제 해결용
-
-              if (e.key === "Enter" && rest.value && onSend) {
+              if (e.nativeEvent.isComposing) return;
+              if (e.key === "Enter" && !e.shiftKey && rest.value && onSend) {
                 e.preventDefault();
-                e.stopPropagation();
                 onSend();
+                const el = textareaRef.current;
+                if (el)
+                  el.style.height = "24px";
               }
             }}
-            className="focus:outline-none focus:ring-0"
           />
-
-          {isComplete && showClear && (
-            <X onClick={onClear}
-              className="w-5 h-5 p-1 text-white bg-icon-container-secondary rounded-full shrink-0" />
-          )}
-        </div>
-        {(isFocused || rest.value) && onSend && <SendSolid size={38} className="bg-orange-50 text-text-brand rounded-full p-1 shrink-0"
-          onClick={() => onSend()} />}
+        ) : (
+          <>
+            <input
+              {...(rest as InputHTMLAttributes<HTMLInputElement>)}
+              disabled={isDisabled}
+              maxLength={20}
+              className="flex-1 focus:outline-none focus:ring-0"
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onKeyDown={(e) => {
+                if (e.nativeEvent.isComposing) return;
+                if (e.key === "Enter" && rest.value && onSend) {
+                  e.preventDefault();
+                  onSend();
+                }
+              }}
+            />
+            {isComplete && showClear && (
+              <X
+                onClick={onClear}
+                className="w-5 h-5 p-1 text-white bg-icon-container-secondary rounded-full shrink-0"
+              />
+            )}
+          </>
+        )}
       </div>
-    </>
-
+      {(isFocused || rest.value) && onSend && (
+        <SendSolid
+          size={38}
+          className="bg-orange-50 text-text-brand rounded-full p-1 shrink-0 mt-auto"
+          onClick={() => onSend()}
+        />
+      )}
+    </div>
   );
 }
