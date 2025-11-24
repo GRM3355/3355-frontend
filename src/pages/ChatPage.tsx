@@ -96,7 +96,7 @@ export default function ChatPage() {
         });
 
         client.subscribe('/user/queue/errors', (frame) => {
-          // console.error('STOMP 에러 수신:', frame.body);
+          console.error('STOMP 에러 수신:', frame.body);
           // 여기에 에러 알림 로직 추가
         });
 

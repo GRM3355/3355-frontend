@@ -132,7 +132,7 @@ export default function SearchPage() {
                       ? rooms?.slice(0, 3)
                       : rooms
                     )?.map((room: RoomAPI) => (
-                      <RoomItem key={room.chatRoomId} room={room} showDetail={true} />
+                      <RoomItem key={room.chatRoomId} room={room} showDetail={true} isJoined={false} />
                     ))}
                   </div>
                   {(activeTab === "ALL" && rooms && rooms?.length > 4) && (
