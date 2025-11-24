@@ -68,6 +68,7 @@ export default function Input({
             disabled={isDisabled}
             className="resize-none focus:outline-none focus:ring-0 w-full max-h-15"
             style={{ height: "24px" }}
+            enterKeyHint="enter"
             onInput={() => handleResize()}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
