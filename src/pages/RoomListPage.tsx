@@ -11,6 +11,7 @@ import { useCheckLogin } from "@/hooks/useCheckLogin";
 import Nav from "@/components/layout/Nav";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorPage from "./ErrorPage";
+import { useConfirmStore } from "@/stores/useConfirmStore";
 
 
 
@@ -20,6 +21,7 @@ export default function RoomListPage() {
   const navigate = useNavigate();
   const { lat, lon, isAllowed } = useLocationStore();
   const checkLogin = useCheckLogin();
+  const { openConfirm, closeConfirm } = useConfirmStore();
 
 
   const [isFixed, setIsFixed] = useState(false);
@@ -64,7 +66,11 @@ export default function RoomListPage() {
     }
   };
 
-
+  useEffect(() => {
+    return () => {
+      closeConfirm();
+    };
+  }, []);
 
   // if (isRoomLoading || isFestivalLoading) return <LoadingSpinner />;
   if (isRoomError || isFestivalError) return <ErrorPage />;
@@ -72,6 +78,13 @@ export default function RoomListPage() {
   if (!festivalData) return <div></div>;
 
   const handleCreateRoom = () => {
+    if (roomDatas.content.length >= 30) {
+      openConfirm('채팅방 개설 한도 초과',
+        "기존 채팅방으로 입장해 주세요.",
+        closeConfirm, undefined, '확인',)
+      return;
+    }
+
     if (checkLogin())
       navigate(`/create-room/${festivalData.festivalId}`, { replace: true });
   }

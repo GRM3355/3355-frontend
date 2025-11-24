@@ -9,6 +9,7 @@ import { ArrowRight, Info, Plus, UserSolid } from '@mynaui/icons-react';
 import RoomListSection from '../festival/RoomListSection';
 import useLocationStore from '@/stores/useLocationStore';
 import { LngLat } from 'mapbox-gl';
+import { useConfirmStore } from '@/stores/useConfirmStore';
 
 type FestivalListBottomSheetProps = {
   festivalData?: FestivalAPI;
@@ -44,6 +45,7 @@ export default function FestivalListBottomSheet({
     refetch,
     isRefetching
   } = useGetRoomsByFestivalId({ festivalId: festivalData?.festivalId });
+  const { openConfirm, closeConfirm } = useConfirmStore();
 
   useEffect(() => {
     if (festivalData?.festivalId) refetch();
@@ -66,13 +68,25 @@ export default function FestivalListBottomSheet({
 
   }
 
+  useEffect(() => {
+    return () => {
+      closeConfirm();
+    };
+  }, []);
 
   const handleCreateRoom = (e: MouseEvent) => {
     e.stopPropagation();
+    if (!roomDatas) return;
+
+    if (roomDatas.content.length >= 30) {
+      openConfirm('채팅방 개설 한도 초과',
+        "기존 채팅방으로 입장해 주세요.",
+        closeConfirm, undefined, '확인',)
+      return;
+    }
 
     if (festivalData)
       navigate(`/create-room/${festivalData.festivalId}`, { replace: true });
-
   }
 
   if (!festivalData || !roomDatas?.content) return null;
