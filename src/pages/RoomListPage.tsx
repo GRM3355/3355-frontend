@@ -13,7 +13,14 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorPage from "./ErrorPage";
 import { useConfirmStore } from "@/stores/useConfirmStore";
 
-
+function formatDateToYYYYMMDD(dateStr: string) {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}.${month}.${day}`;
+}
 
 export default function RoomListPage() {
   const { festivalId } = useParams();
@@ -115,7 +122,9 @@ export default function RoomListPage() {
                   <p className="">{festivalData.totalParticipantCount}명 참여중</p>
                 </div>
                 <p className="title5-sb my-1">{festivalData.title}</p>
-                <p className="label6-sb">{festivalData.eventStartDate} - {festivalData.eventEndDate}</p>
+                <p className="label6-sb">
+                  {formatDateToYYYYMMDD(festivalData.eventStartDate)} -
+                  {formatDateToYYYYMMDD(festivalData.eventEndDate)}</p>
                 <p className="label7-r">{festivalData.addr1}</p>
               </div>
             </div>

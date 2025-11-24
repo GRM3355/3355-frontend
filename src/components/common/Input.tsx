@@ -42,7 +42,7 @@ export default function Input({
   return (
     <>
       <div className="flex w-full items-center gap-2">
-        <div className={`flex flex-1 items-center gap-1.5 w-full ${currentClass}`}>
+        <div className={`flex flex-1 items-center gap-1.5 ${currentClass}`}>
           {icon && <div className="text-icon-border-primary">{icon}</div>}
           <input
             {...rest}

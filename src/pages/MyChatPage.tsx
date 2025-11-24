@@ -34,23 +34,30 @@ export default function MyChatPage() {
             <span className="title3-sb text-text-primary">현재 참여중인 채팅방</span>
             <span className="label5-r text-text-tertiary">{data?.content.length ?? 0}</span>
           </div>
-          <div className="h-full flex flex-col gap-2 overflow-y-auto scrollbar-hide pb-16">
-            {data?.content.map(room => {
-              console.log(room);
-              const activity = getRoomActivity(room.chatRoomId);
-              let hasNew = false;
-              if (activity?.lastViewedAt) {
-                const localDate = new Date(activity.lastViewedAt);
-                const backDate = new Date(room.lastMessageAt);
+          {(data && data.content.length > 0) ? (
+            <div className="h-full flex flex-col gap-2 overflow-y-auto scrollbar-hide pb-16">
+              {data?.content.map(room => {
+                console.log(room);
+                const activity = getRoomActivity(room.chatRoomId);
+                let hasNew = false;
+                if (activity?.lastViewedAt) {
+                  const localDate = new Date(activity.lastViewedAt);
+                  const backDate = new Date(room.lastMessageAt);
 
-                hasNew = backDate > localDate;
-              }
+                  hasNew = backDate > localDate;
+                }
 
-              return (
-                <RoomItem key={room.chatRoomId} room={room} showDetail={true} hasNew={hasNew} />
-              )
-            })}
-          </div>
+                return (
+                  <RoomItem key={room.chatRoomId} room={room} showDetail={true} hasNew={hasNew} isJoined={false} />
+                )
+              })}
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+              <img src="/empty/chat.svg" alt="" />
+              <p className="body1-r">현재 참여중인 방이 없습니다.</p>
+            </div>
+          )}
         </div>
       </div>
       <Nav />
