@@ -112,9 +112,8 @@ export default function FestivalListBottomSheet({
         </div>
       </div>
       <p className="h-18px label5-r text-text-tertiary bg-gray-100 px-3 py-2">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
-      <div className='h-full overflow-y-auto relative scrollbar-hide'>
+      <div className='h-full overflow-y-auto relative scrollbar-hide pb-50'>
         <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
-
       </div>
       {(isAllowed && distance <= 500) && (<Plus className="fixed bottom-30 right-4 w-[46px] h-[46px] bg-text-brand text-text-inverse rounded-full p-1 floating"
         onClick={(e) => handleCreateRoom(e)} />)}

@@ -132,7 +132,7 @@ export default function RoomListPage() {
             <p className="label5-r text-text-tertiary bg-gray-100 px-4 py-2.5">페스티벌 Zone 내에서만 채팅 및 채팅방 생성이 가능합니다.</p>
           </div>
 
-          <div className="min-h-[80%] pb-32">
+          <div className="min-h-[80%] pb-40">
             <RoomListSection festivalData={festivalData} roomDatas={roomDatas.content} />
           </div>
         </div >

@@ -41,7 +41,7 @@ export default function RoomListSection({ roomDatas }: RoomListSectionProps) {
     : unjoinedRooms;
 
   return (
-    <div className="flex flex-col h-full p-4 pt-5 pb-8">
+    <div className="flex flex-col h-max p-4 pt-5">
       <div className="flex gap-1 pb-3 ">
         <span className="title3-sb text-text-primary">단체 채팅방</span>
         <span className="flex-1 label5-r text-text-tertiary">
@@ -53,8 +53,7 @@ export default function RoomListSection({ roomDatas }: RoomListSectionProps) {
           onSelect={setFilter}
         />
       </div>
-      <div className='flex flex-col h-full gap-2 '>
-
+      <div className='flex flex-col gap-2 '>
         {/* <div className='flex flex-col h-full gap-2 overflow-y-auto scrollbar-hide'> */}
         {filteredRooms.map((room: RoomAPI) => (
           <RoomItem key={room.chatRoomId} room={room} isJoined={false} />

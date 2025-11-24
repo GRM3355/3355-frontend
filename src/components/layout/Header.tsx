@@ -72,7 +72,7 @@ export default function Header({
   return (
     <div className='flex items-center justify-between w-full h-16 px-2.5 py-[9px] bg-white'>
       {showBack && <ChevronLeft size={40} onClick={() => handleClickBack()} className="p-2" />}
-      {showLogo && <div className="flex gap-1.5" onClick={() => handleClickLogo()}>
+      {showLogo && <div className="flex gap-1.5 items-center" onClick={() => handleClickLogo()}>
         <img src="/ZonyLogo.svg" alt="" />
         <span className="label1-sb">Zony</span>
       </div>
