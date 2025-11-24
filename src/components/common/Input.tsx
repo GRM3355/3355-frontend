@@ -58,15 +58,15 @@ export default function Input({
                 onSend();
               }
             }}
-            className="focus:outline-none focus:ring-0 flex-1"
+            className="focus:outline-none focus:ring-0 flex-1 min-w-0"
           />
 
           {isComplete && showClear && (
             <X onClick={onClear}
-              className="w-5 h-5 p-1 text-white bg-icon-container-secondary rounded-full" />
+              className="w-5 h-5 p-1 text-white bg-icon-container-secondary rounded-full shrink-0" />
           )}
         </div>
-        {(isFocused || rest.value) && onSend && <SendSolid size={38} className="bg-orange-50 text-text-brand rounded-full p-1"
+        {(isFocused || rest.value) && onSend && <SendSolid size={38} className="bg-orange-50 text-text-brand rounded-full p-1 shrink-0"
           onClick={() => onSend()} />}
       </div>
     </>
