@@ -41,8 +41,8 @@ export default function Input({
 
   return (
     <>
-      <div className="flex w-full items-center gap-2">
-        <div className={`flex flex-1 items-center gap-1.5 ${currentClass}`}>
+      <div className="flex w-full items-center gap-2 flex-nowrap">
+        <div className={`flex flex-1 items-center gap-1.5 min-w-0 ${currentClass}`}>
           {icon && <div className="text-icon-border-primary">{icon}</div>}
           <input
             {...rest}

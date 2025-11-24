@@ -56,6 +56,7 @@ export default function KakaoLoginModal({ isOpen, onClose }: KakaoLoginModalProp
       '&scope=account_email' +
       `&state=${encodeURIComponent(RETURN_URI)}`;
 
+    onClose();
     window.location.href = kakaoAuthUrl;
   };
 

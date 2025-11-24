@@ -11,21 +11,12 @@ import ConfirmModal from './components/common/ConfirmModal'
 import { useConfirmStore } from './stores/useConfirmStore'
 import CreateRoomPage from './pages/CreateRoomPage'
 import MyChatPage from './pages/MyChatPage'
-import useAuthStore from './stores/useAuthStore'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import SearchPage from './pages/SearchPage'
-import EchoTest from './pages/EchoTest'
-import api from './api/axios'
-import ComponentTestPage from './pages/ComponentTestPage'
 import MyPage from './pages/MyPage'
-import { jwtDecode } from "jwt-decode";
 import KakaoLoginModal from './components/main/KakaoLoginModal'
 import useLoginStore from './stores/useLoginStore'
 import KakaoRedirectPage from './pages/KakaoRedirectPage'
-import useCurrentLocation from './hooks/useCurrentLocation'
-import KakaoLogout from './pages/KakaoLogout'
-import Quit from './pages/MyQuit'
 import useLocationStore from './stores/useLocationStore'
 
 function App() {
@@ -63,8 +54,6 @@ function App() {
   return (
     <div className='flex flex-col h-dvh w-full min-w-[360px] max-w-[480px] sm:w-100 mx-auto relative overflow-hidden'
       translate='no'>
-      {/* <p>{tempToken}</p> */}
-      {/*<p>{userId}</p> */}
       <div className='flex-1 relative pb-18'>
         <div className='absolute inset-0'>
           <div className='flex flex-col w-full h-full '>
