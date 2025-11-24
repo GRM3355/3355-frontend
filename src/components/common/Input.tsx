@@ -58,7 +58,7 @@ export default function Input({
                 onSend();
               }
             }}
-            className="focus:outline-none focus:ring-0 flex-1 min-w-0"
+            className="focus:outline-none focus:ring-0"
           />
 
           {isComplete && showClear && (

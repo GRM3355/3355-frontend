@@ -24,6 +24,10 @@ export default function MyChatPage() {
     refetch();
   }, []);
 
+  useEffect(() => {
+    console.log(data);
+  }, [data])
+
   return (
     <>
       <Header showLogo={true} showUser={true} showSearch={true} />

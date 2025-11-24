@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import MapGL, { Source, Layer, Marker } from 'react-map-gl/mapbox';
 import type { MapRef, ViewState } from 'react-map-gl/mapbox';
 import type { FeatureCollection, Point } from 'geojson';
@@ -13,6 +13,8 @@ import { isFestivalActive } from '@/utils/date';
 import ZoneInfoItem from './ZoneInfoItem';
 import { useGetFestivalCounts } from '@/hooks/useFestival';
 import useLocationStore from '@/stores/useLocationStore';
+import { useSearchParams } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -59,19 +61,34 @@ export default function MyMap({
     zoom: 14,
   } as ViewState);
 
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
   //화면 움직일때의 좌표
   const [viewport, setViewport] = useState<ViewState>({
-    latitude: lat ?? 37.5179669,
-    longitude: lon ?? 126.957047,
-    zoom: 14,
+    latitude: parseFloat(searchParams.get('lat') || '') || lat || 37.5701342,
+    longitude: parseFloat(searchParams.get("lon") || '') || lon || 126.9772235,
+    zoom: parseFloat(searchParams.get("zoom") || '') || 14,
   } as ViewState);
+
+  const [debouncedViewport] = useDebounce(viewport, 1000);
+
+  //쿼리 저장
+
+  useEffect(() => {
+    setSearchParams({
+      lat: debouncedViewport.latitude.toFixed(6),
+      lon: debouncedViewport.longitude.toFixed(6),
+      zoom: debouncedViewport.zoom.toFixed(2),
+    });
+  }, [debouncedViewport, setSearchParams]);
+
 
   //선택된 축제 포인트
   const [selectedFestivalPoint, setSeletedFestivalPoint] = useState<SinglePoint | null>(null);
 
   //페스티벌 개수
   const festivalCounts = useGetFestivalCounts();
-
 
   // 클러스터 색깔 정보
   const [showColorInfo, setShowColorInfo] = useState<boolean>(false);
@@ -255,7 +272,7 @@ export default function MyMap({
           data={geoJsonPoints}
           cluster={true}
           clusterMaxZoom={12}
-          clusterRadius={20}
+          clusterRadius={30}
         >
           {/* 클러스터 심볼 */}
           <Layer

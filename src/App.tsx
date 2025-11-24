@@ -41,9 +41,9 @@ function App() {
         //longitude: lon ?? 126.957047,
       },
       (err) => {
-        //TODO 아래 두줄 지우기!!!!!!!!!!!!!!!!!
-        setIsAllowed();
-        setLocation(37.5179669, 126.957047);
+        //로그인 안했으면 고정값
+        setLocation(37.5701342, 126.9772235);
+
 
         console.error(err);
       }
