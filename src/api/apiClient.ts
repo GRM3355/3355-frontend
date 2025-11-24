@@ -75,9 +75,11 @@ apiClient.interceptors.response.use(
 
         const newAccessToken = refreshResponse.data.data.accessToken;
 
-        console.log("새 토큰 발급:", newAccessToken);
-        // 새 토큰 저장
-        useAuthStore.getState().setAccessToken(newAccessToken);
+        if (newAccessToken) {
+          console.log("새 토큰 발급:", newAccessToken);
+          // 새 토큰 저장
+          useAuthStore.getState().setAccessToken(newAccessToken);
+        }
 
         // 대기 중 요청 처리
         processQueue(null, newAccessToken);
