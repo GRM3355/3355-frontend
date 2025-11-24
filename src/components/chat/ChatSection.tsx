@@ -143,7 +143,7 @@ export default function ChatSection({ userId, messages, onScrollUp }: ChatSectio
             const prev = messages[i - 1];
             const sameDate = prev ? isSameDate(prev.createdAt, m.createdAt) : false;
 
-            return (<ChatItem key={`${m.id}_${i}`} chat={m} isMine={m.userId == userId}
+            return (<ChatItem key={m.id} chat={m} isMine={m.userId == userId}
               bubblePosition={bubblePosition}
               isSameDate={sameDate} />)
           }

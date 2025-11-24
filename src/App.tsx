@@ -50,6 +50,10 @@ function App() {
         //longitude: lon ?? 126.957047,
       },
       (err) => {
+        //TODO 아래 두줄 지우기!!!!!!!!!!!!!!!!!
+        setIsAllowed();
+        setLocation(37.5179669, 126.957047);
+
         console.error(err);
       }
     );

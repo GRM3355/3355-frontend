@@ -2,7 +2,6 @@ import Button from '@/components/common/Button'
 import ConfirmModal from '@/components/common/ConfirmModal'
 import Modal from '@/components/common/Modal'
 import React from 'react'
-import loadingAnimation from "@/../public/loading.json";
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 export default function ComponentTestPage() {

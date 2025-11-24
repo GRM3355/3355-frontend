@@ -162,7 +162,7 @@ export const useMessagesInfinite = (roomId: string) => {
     queryKey: ["messages", roomId],
 
     queryFn: ({ pageParam }) => {
-      console.log("📡 API 호출 - pageParam:", pageParam); // 로그 1
+      console.log("API 호출 - pageParam:", pageParam); // 로그 1
       return getMessages({
         roomId,
         before: pageParam as string,
@@ -180,9 +180,7 @@ export const useMessagesInfinite = (roomId: string) => {
       // 다음 요청용 before = 가장 오래된 메시지 id
       return messages[messages.length - 1].id;
     },
-
-    staleTime: Infinity,
-    gcTime: 5 * 60 * 1000,
+    staleTime: 0,
   });
 };
 

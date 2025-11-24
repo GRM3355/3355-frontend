@@ -8,6 +8,7 @@ import useLocationStore from "@/stores/useLocationStore";
 import useRoomStore from "@/stores/useRoomStore";
 import type { ChatAPI, RoomAPI } from "@/types/api";
 import { Client } from "@stomp/stompjs";
+import { useQueryClient } from "@tanstack/react-query";
 import { jwtDecode } from "jwt-decode";
 import { LngLat } from "mapbox-gl";
 import { useEffect, useRef, useState } from "react";
@@ -25,12 +26,12 @@ export default function ChatPage() {
   const { openConfirm, closeConfirm } = useConfirmStore();
   const { isAllowed, lat, lon } = useLocationStore();
   const location = useLocation();
-
   const { roomInfo } = location.state as { roomInfo: RoomAPI };
 
   const { mutate, isPending } = useLeaveRoom();
 
   const { updateRoomActivity } = useRoomStore();
+  const queryClient = useQueryClient();
 
 
   if (!roomInfo) {
@@ -45,12 +46,12 @@ export default function ChatPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    refetch
   } = useMessagesInfinite(roomId);
 
 
   useEffect(() => {
     if (!roomId) return;
+
 
     setMessages([]);
     const payload: any = jwtDecode(accessToken);
@@ -63,7 +64,7 @@ export default function ChatPage() {
         // Authorization: `Bearer ${tempToken}`,
         Authorization: `Bearer ${accessToken}`,
       },
-      debug: (str) => console.log("STOMP DEBUG:", str),
+      // debug: (str) => console.log("STOMP DEBUG:", str),
 
       onConnect: () => {
         console.log(" 연결됨");
@@ -75,9 +76,9 @@ export default function ChatPage() {
         });
 
         client.subscribe(`/sub/chat-rooms/${roomId}`, (frame) => {
-          console.log("서버 메시지 원본:", frame.body);
+          // console.log("서버 메시지 원본:", frame.body);
           const msg = JSON.parse(frame.body);
-          console.log("파싱된 메시지:", msg);
+          // console.log("파싱된 메시지:", msg);
 
           if ('content' in msg) {
             // 일반 채팅 메시지
@@ -95,23 +96,25 @@ export default function ChatPage() {
         });
 
         client.subscribe('/user/queue/errors', (frame) => {
-          console.error('STOMP 에러 수신:', frame.body);
+          // console.error('STOMP 에러 수신:', frame.body);
           // 여기에 에러 알림 로직 추가
         });
 
+        console.log("이전대화불러오기")
+        //이전대화
+        fetchNextPage();
       },
     });
 
     client.activate();
     stompClientRef.current = client;
 
-    //이전대화
-    refetch();
-
     return () => {
       if (client.active) {
         client.deactivate();
       }
+
+      queryClient.resetQueries({ queryKey: ["messages", roomId] });
 
       const curTime = new Date;
       updateRoomActivity({ roomId, lastViewedAt: curTime, hasNewChat: false })
@@ -126,26 +129,18 @@ export default function ChatPage() {
     }
   };
 
+
   useEffect(() => {
+
     if (data) {
-      // console.log(data);
-      // const beforeMessage = data?.pages.flatMap(page => page.content).reverse();
-      // setMessages(prev => {
-      //   const newMessages = beforeMessage.filter(m => !prev.some(p => p.id === m.id));
-      //   return [...newMessages, ...prev];
-      // });
-      // console.log("불러옴")
-
-      const newMessages = data.pages.flatMap(page => page.content);
-
+      // console.log("----", { data });
+      const beforeMessage = data?.pages.flatMap(page => page.content).reverse();
       setMessages(prev => {
-        const all = [...prev, ...newMessages];
-        const unique = [...new Map(all.map(m => [m.id, m])).values()];
-        // 시간순 정렬
-        return unique.sort((a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
+        const newMessages = beforeMessage.filter(m => !prev.some(p => p.id === m.id));
+        // console.log("messages", { newMessages, prev });
+        return [...newMessages, ...prev];
       });
+
     }
   }, [data]);
 

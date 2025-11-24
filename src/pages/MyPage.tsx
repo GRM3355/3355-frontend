@@ -105,13 +105,15 @@ const MyPage = () => {
               </div>
             </div>
           </div>
-          <div className='flex justify-center gap-7 text-text-quaternary'>
+          <div className='flex justify-center gap-6 text-text-quaternary'>
             <span onClick={() => openConfirm('탈퇴하시겠어요?',
               `탈퇴하기 버튼을 누르면
             탈퇴 처리됩니다.`,
-              handleDeleteAccount, undefined, '탈퇴하기', '취소')}>탈퇴하기</span>
+              handleDeleteAccount, undefined, '탈퇴하기', '취소')}
+              className='p-4'>탈퇴하기</span>
             <span onClick={() => openConfirm('로그아웃 안내',
-              '로그아웃 하시겠어요?', handleLogout, undefined, '로그아웃', '취소')}>로그아웃</span>
+              '로그아웃 하시겠어요?', handleLogout, undefined, '로그아웃', '취소')}
+              className='p-4'>로그아웃</span>
           </div>
         </div>
       </div>
