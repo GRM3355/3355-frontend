@@ -1,5 +1,5 @@
 import Input from '@/components/common/Input';
-import { useGetSearch } from '@/hooks/useSearch';
+import { useGetSearch, useGetSearchFestivals, useGetSearchRooms } from '@/hooks/useSearch';
 import type { FestivalAPI, RoomAPI } from '@/types/api';
 import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce';
@@ -24,23 +24,28 @@ export default function SearchPage() {
 
   const [activeTab, setActiveTab] = useState<string>("ALL");
 
-  const { data, isLoading, isError, refetch, isFetching } = useGetSearch({ keyword: debouncedKeyword });
+  //const { data, isLoading, isError, refetch, isFetching } = useGetSearch({ keyword: debouncedKeyword });
+
+  const { data: festivals, refetch: refetchFestivals } = useGetSearchFestivals({ keyword: debouncedKeyword });
+  const { data: rooms, refetch: refetchRooms } = useGetSearchRooms({ keyword: debouncedKeyword });
+
 
   useEffect(() => {
     if (debouncedKeyword.trim()) {
-      refetch();
+      refetchFestivals();
+      refetchRooms();
+      console.log("검색 결과", { festivals, rooms })
     }
-  }, [debouncedKeyword, refetch]);
+  }, [debouncedKeyword, refetchFestivals, refetchRooms]);
 
   const handleClickBack = () => {
     navigate(-1);
   }
 
-  const festivals = data?.festivals;
-  const rooms = data?.chatRooms;
+  // const festivals = data?.festivals;
+  // const rooms = data?.chatRooms;
 
-  const searchResultCount = (data?.festivals.totalCount ?? 0) + (data?.chatRooms.totalCount ?? 0);
-
+  const searchResultCount = (festivals?.length ?? 0) + (rooms?.length ?? 0);
   return (
     <>
       <div className='flex flex-col h-full'>
@@ -64,7 +69,7 @@ export default function SearchPage() {
         {(keyword == "" || searchResultCount == 0) && <AD />}
 
         {/* 검색 결과 */}
-        {(debouncedKeyword === "" || !data) ? (
+        {(debouncedKeyword === "" || (!festivals && !rooms)) ? (
           <div className="flex flex-col w-full h-full items-center justify-center gap-4">
             <img src="/empty/search-guide.svg" alt="" />
             <p className="text-text-primary body1-r">검색어를 입력해주세요.</p>
@@ -86,7 +91,7 @@ export default function SearchPage() {
                 <div className='flex gap-2 pb-5 items-center'>
                   <span className='title3-sb text-text-primary'>검색 결과</span>
                   <span className='label5-r text-text-tertiary'>
-                    {(festivals?.totalCount ?? 0) + (rooms?.totalCount ?? 0)}</span>
+                    {(festivals?.length ?? 0) + (rooms?.length ?? 0)}</span>
                 </div>
               )}
               {/* 페스티벌 섹션 */}
@@ -94,18 +99,18 @@ export default function SearchPage() {
                 <>
                   <div className='flex gap-2 pb-4 items-center'>
                     <span className='title1-sb text-text-primary'>{activeTab === "ALL" ? "페스티벌" : "검색 결과"}</span>
-                    <span className='label2-r text-text-tertiary'>{festivals?.data.length}</span>
+                    <span className='label2-r text-text-tertiary'>{festivals?.length}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-x-2.5 gap-y-5">
                     {(activeTab === "ALL"
-                      ? festivals?.data?.slice(0, 4)
-                      : festivals?.data
+                      ? festivals?.slice(0, 4)
+                      : festivals
                     )?.map((festival: FestivalAPI) => (
                       <FestivalItem key={festival.festivalId} festivalData={festival} />
                     ))}
                   </div>
 
-                  {(activeTab === "ALL" && festivals?.data && festivals?.data.length > 4) && (
+                  {(activeTab === "ALL" && festivals && festivals.length > 4) && (
                     <div className='flex w-full items-center justify-center gap-1 label1-sb text-text-primary pt-3'
                       onClick={() => setActiveTab("FESTIVAL")}>
                       <span>더보기</span>
@@ -120,17 +125,17 @@ export default function SearchPage() {
                 <>
                   <div className='flex gap-2 pb-4 items-center'>
                     <span className='title1-sb text-text-primary'>{activeTab === "ALL" ? "채팅방" : "검색 결과"}</span>
-                    <span className='label2-r text-text-tertiary'>{rooms?.data.length}</span>
+                    <span className='label2-r text-text-tertiary'>{rooms?.length}</span>
                   </div>
                   <div className='flex flex-col gap-2'>
                     {(activeTab === "ALL"
-                      ? rooms?.data?.slice(0, 3)
-                      : rooms?.data
+                      ? rooms?.slice(0, 3)
+                      : rooms
                     )?.map((room: RoomAPI) => (
                       <RoomItem key={room.chatRoomId} room={room} showDetail={true} />
                     ))}
                   </div>
-                  {(activeTab === "ALL" && rooms?.data && rooms?.data.length > 4) && (
+                  {(activeTab === "ALL" && rooms && rooms?.length > 4) && (
                     <div className='flex w-full items-center justify-center gap-1 label1-sb text-text-primary pt-3'
                       onClick={() => setActiveTab("CHATROOM")}>
                       <span>더보기</span>

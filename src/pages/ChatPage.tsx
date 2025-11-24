@@ -52,6 +52,7 @@ export default function ChatPage() {
   useEffect(() => {
     if (!roomId) return;
 
+    setMessages([]);
     const payload: any = jwtDecode(accessToken);
     console.log(payload?.sub || null);
     setUserId(payload?.sub)
@@ -127,12 +128,24 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (data) {
-      const beforeMessage = data?.pages.flatMap(page => page.content).reverse();
+      // console.log(data);
+      // const beforeMessage = data?.pages.flatMap(page => page.content).reverse();
+      // setMessages(prev => {
+      //   const newMessages = beforeMessage.filter(m => !prev.some(p => p.id === m.id));
+      //   return [...newMessages, ...prev];
+      // });
+      // console.log("불러옴")
+
+      const newMessages = data.pages.flatMap(page => page.content);
+
       setMessages(prev => {
-        const newMessages = beforeMessage.filter(m => !prev.some(p => p.id === m.id));
-        return [...newMessages, ...prev];
+        const all = [...prev, ...newMessages];
+        const unique = [...new Map(all.map(m => [m.id, m])).values()];
+        // 시간순 정렬
+        return unique.sort((a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
       });
-      console.log("불러옴")
     }
   }, [data]);
 
