@@ -59,6 +59,7 @@ export default function Header({
   }
 
   const handleClickUser = () => {
+    console.log("유저", accessToken);
     if (accessToken)
       navigate(`/mypage`)
     else
