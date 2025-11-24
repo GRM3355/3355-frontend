@@ -71,7 +71,17 @@ export default function Input({
             className="resize-none focus:outline-none focus:ring-0 w-full max-h-15"
             style={{ height: "24px" }}
             enterKeyHint="enter"
-            onInput={() => handleResize()}
+            onInput={() => {
+              const el = textareaRef.current;
+              if (!el) return;
+
+              // 값이 비어있으면 기본 높이로
+              if (!el.value || el.value.trim() === '') {
+                el.style.height = "38px";
+              } else {
+                handleResize();
+              }
+            }}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             onKeyDown={(e) => {
