@@ -107,10 +107,10 @@ export default function MyMap({
     // latitude: 37.4415949966, longitude: 126.7360188509,
 
     // 페인터즈
-    latitude: 37.5681316804, longitude: 126.9696495605,
+    // latitude: 37.5681316804, longitude: 126.9696495605,
 
     // 2025 우리쌀 우리술 K-라이스페스타
-    // latitude: 37.6689881691, longitude: 126.7458171427
+    latitude: 37.6689881691, longitude: 126.7458171427,
 
     zoom: 14,
   } as ViewState);
