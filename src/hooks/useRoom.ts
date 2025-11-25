@@ -86,6 +86,11 @@ export const useJoinRoom = (roomInfo: RoomAPI) => {
     navigate(-1);
   }
 
+  const handleCapacityErrorConfirm = () => {
+    closeConfirm();
+    // 정원 초과 케이스는 현재 페이지에 머무름 (뒤로가기 안함)
+  }
+
   return useMutation({
     mutationFn: joinRoom,
     onSuccess: (data: any) => {
@@ -117,11 +122,11 @@ export const useJoinRoom = (roomInfo: RoomAPI) => {
             handleConfirm, undefined, '확인');
         } else if (errorMessage?.includes('채팅방 최대 정원') || 
                    (errorMessage?.includes('정원') && errorMessage?.includes('초과'))) {
-          // 정원 초과 케이스 - 숫자 부분 제거
+          // 정원 초과 케이스 - 숫자 부분 제거, 현재 페이지에 머무름
           const cleanMessage = errorMessage?.replace(/\([^)]*\)/g, '') || '채팅방 정원이 초과되었습니다.';
           openConfirm('ERROR',
             cleanMessage,
-            handleConfirm, undefined, '확인');
+            handleCapacityErrorConfirm, undefined, '확인');
         } else {
           // 기타 409 에러
           openConfirm('ERROR',
