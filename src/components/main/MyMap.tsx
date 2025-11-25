@@ -56,13 +56,17 @@ export default function MyMap({
   const [myViewport, setMyViewport] = useState<ViewState>({
     // latitude: lat,
     // longitude: lon,
+    // latitude: , longitude: ,
     
     // 노들
     // latitude: 37.5179669,
     // longitude: 126.957047,
 
-    // 한강역사탐방 (120)
-    latitude: 37.5263997727, longitude: 126.9336095794,
+    // 한강야경투어, 한강역사탐방 (119, 120)
+    // latitude: 37.5263997727, longitude: 126.9336095794,
+
+    // 청춘마이크 수도강원권 (111)
+    latitude: 37.5119526047, longitude: 126.9980013443,
 
     zoom: 14,
   } as ViewState);
