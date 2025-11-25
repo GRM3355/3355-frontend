@@ -38,6 +38,7 @@ export default function Input({
   ...rest
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const [isComposing, setIsComposing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const currentClass = isDisabled
@@ -71,30 +72,38 @@ export default function Input({
             className="resize-none focus:outline-none focus:ring-0 w-full max-h-15"
             style={{ height: "24px" }}
             enterKeyHint="enter"
+            onCompositionStart={() => setIsComposing(true)}
+            onCompositionEnd={() => setIsComposing(false)}
+            onBlur={() => {
+              setIsFocused(false);
+              handleResize();
+            }}
             onInput={() => {
               const el = textareaRef.current;
               if (!el) return;
 
-              // 값이 비어있으면 기본 높이로
-              if (!el.value || el.value.trim() === '') {
-                el.style.height = "24px";
-              } else {
-                handleResize();
-              }
+              if (!el.value.trim()) el.style.height = "24px";
+              else handleResize();
             }}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
             onKeyDown={(e) => {
-              if (e.nativeEvent.isComposing) return;
+              if (isComposing) return;
 
-              if (isMobile || e.shiftKey) {
-                return;
-              } else if (!isMobile && !e.shiftKey && rest.value && onSend) {
+              // if (isMobile || e.shiftKey) {
+              //   return;
+              // } else if (!isMobile && !e.shiftKey && rest.value && onSend) {
+              //   e.preventDefault();
+              //   onSend();
+              //   const el = textareaRef.current;
+              //   if (el) el.style.height = "24px";
+              // }
+              if (e.key === "Enter" && !e.shiftKey && onSend) {
                 e.preventDefault();
                 onSend();
-                const el = textareaRef.current;
-                if (el) el.style.height = "24px";
               }
+
+              const el = textareaRef.current;
+              if (el) el.style.height = "24px";
             }}
           />
         ) : (
