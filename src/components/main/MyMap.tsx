@@ -56,23 +56,22 @@ export default function MyMap({
   const [myViewport, setMyViewport] = useState<ViewState>({
     // latitude: lat,
     // longitude: lon,
-    // latitude: , longitude: ,
     
     // 노들
     // latitude: 37.5179669,
     // longitude: 126.957047,
 
-    // 한강야경투어, 한강역사탐방 (119, 120)
+    // 한강야경투어, 한강역사탐방
     // latitude: 37.5263997727, longitude: 126.9336095794,
 
-    // 청춘마이크 수도강원권 (111)
+    // 청춘마이크 수도강원권
     // latitude: 37.5119526047, longitude: 126.9980013443,
 
     // 서울 무용제 
-    latitude: 37.5812640855, longitude: 127.0029878163,
+    // latitude: 37.5812640855, longitude: 127.0029878163,
 
     // 구리 빛 축제
-    // latitude: 37.5825191614, longitude: 127.1386448674,
+    latitude: 37.5825191614, longitude: 127.1386448674,
 
     // 퓨처그라운드 (FUTUREGROUND)
     // latitude: 37.5621960337, longitude: 126.8015844987,
