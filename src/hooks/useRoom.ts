@@ -79,6 +79,12 @@ export const useCreateRoom = () => {
 
 export const useJoinRoom = (roomInfo: RoomAPI) => {
   const navigate = useNavigate();
+  const { openConfirm, closeConfirm } = useConfirmStore();
+
+  const handleConfirm = () => {
+    closeConfirm();
+    navigate(-1);
+  }
 
   return useMutation({
     mutationFn: joinRoom,
@@ -96,8 +102,37 @@ export const useJoinRoom = (roomInfo: RoomAPI) => {
         url: error.config?.url,
         message: error.response?.data?.error?.message
       });
-      navigate(-1);
-      console.error('방 생성 실패:', { error });
+      
+      const errorCode = error.response?.data?.error?.code;
+      const errorMessage = error.response?.data?.error?.message;
+      const statusCode = error.response?.status;
+      
+      // 409 Conflict 에러 처리 (정원 초과 또는 이미 가입됨)
+      if (statusCode === 409 || errorCode === 'CONFLICT') {
+        // 에러 메시지에 따라 적절한 안내 표시
+        if (errorMessage?.includes('이미') && errorMessage?.includes('입장')) {
+          // 이미 가입됨 케이스
+          openConfirm('ERROR',
+            '이미 채팅방에 입장되어 있습니다.',
+            handleConfirm, undefined, '확인');
+        } else if (errorMessage?.includes('채팅방 최대 정원') || 
+                   (errorMessage?.includes('정원') && errorMessage?.includes('초과'))) {
+          // 정원 초과 케이스 - 백엔드 메시지 그대로 표시
+          openConfirm('ERROR',
+            errorMessage || '채팅방 정원이 초과되었습니다.',
+            handleConfirm, undefined, '확인');
+        } else {
+          // 기타 409 에러
+          openConfirm('ERROR',
+            '채팅방에 참여할 수 없습니다.\n정원이 초과되었거나 이미 참여 중인 방일 수 있습니다.',
+            handleConfirm, undefined, '확인');
+        }
+      } else {
+        // 다른 에러는 기존처럼 뒤로가기
+        navigate(-1);
+      }
+      
+      console.error('방 입장 실패:', { error });
     },
   });
 };
