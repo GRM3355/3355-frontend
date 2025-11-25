@@ -89,21 +89,18 @@ export default function Input({
             onKeyDown={(e) => {
               if (isComposing) return;
 
-              // if (isMobile || e.shiftKey) {
-              //   return;
-              // } else if (!isMobile && !e.shiftKey && rest.value && onSend) {
-              //   e.preventDefault();
-              //   onSend();
-              //   const el = textareaRef.current;
-              //   if (el) el.style.height = "24px";
-              // }
-              if (e.key === "Enter" && !e.shiftKey && onSend) {
-                e.preventDefault();
-                onSend();
+              if (e.key === "Enter") {
+                if (isMobile || e.shiftKey) {
+                  // 모바일이거나 Shift+Enter하면 줄바꿈
+                  return;
+                } else if (rest.value && onSend) {
+                  // PC에서 Enter만 눌러도 전송
+                  e.preventDefault();
+                  onSend();
+                  const el = textareaRef.current;
+                  if (el) el.style.height = "24px";
+                }
               }
-
-              const el = textareaRef.current;
-              if (el) el.style.height = "24px";
             }}
           />
         ) : (
