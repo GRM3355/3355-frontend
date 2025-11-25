@@ -71,10 +71,10 @@ export default function MyMap({
     // latitude: 37.5812640855, longitude: 127.0029878163,
 
     // 구리 빛 축제
-    latitude: 37.5825191614, longitude: 127.1386448674,
+    // latitude: 37.5825191614, longitude: 127.1386448674,
 
     // 퓨처그라운드 (FUTUREGROUND)
-    // latitude: 37.5621960337, longitude: 126.8015844987,
+    latitude: 37.5621960337, longitude: 126.8015844987,
 
     // 종로 어디나 스테이지
     // latitude: 37.5720618985, longitude: 126.9763210635,
