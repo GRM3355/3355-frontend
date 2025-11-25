@@ -117,9 +117,10 @@ export const useJoinRoom = (roomInfo: RoomAPI) => {
             handleConfirm, undefined, '확인');
         } else if (errorMessage?.includes('채팅방 최대 정원') || 
                    (errorMessage?.includes('정원') && errorMessage?.includes('초과'))) {
-          // 정원 초과 케이스 - 백엔드 메시지 그대로 표시
+          // 정원 초과 케이스 - 숫자 부분 제거
+          const cleanMessage = errorMessage?.replace(/\([^)]*\)/g, '') || '채팅방 정원이 초과되었습니다.';
           openConfirm('ERROR',
-            errorMessage || '채팅방 정원이 초과되었습니다.',
+            cleanMessage,
             handleConfirm, undefined, '확인');
         } else {
           // 기타 409 에러
