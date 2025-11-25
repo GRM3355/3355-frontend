@@ -39,7 +39,7 @@ function App() {
         // setLocation(latitude, longitude);
 
         // 노들
-        // setLocation(37.5179669, 126.957047)
+        setLocation(37.5179669, 126.957047)
 
         // 한강역사탐방
         // setLocation(37.5263997727, 126.9336095794)
@@ -90,7 +90,7 @@ function App() {
         // setLocation(37.5681316804, 126.9696495605)
 
         // 2025 우리쌀 우리술 K-라이스페스타
-        setLocation(37.6689881691, 126.7458171427)
+        // setLocation(37.6689881691, 126.7458171427)
 
         //latitude: lat ?? 37.5179669,
         //longitude: lon ?? 126.957047,
