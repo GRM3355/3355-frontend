@@ -37,7 +37,12 @@ function App() {
         const { latitude, longitude } = pos.coords;
         //TODO 추후 위치 변경
         // setLocation(latitude, longitude);
-        setLocation(37.5179669, 126.957047)
+
+        // 노들
+        // setLocation(37.5179669, 126.957047)
+
+        // 한강역사탐방
+        setLocation(37.5263997727, 126.9336095794)
 
         //latitude: lat ?? 37.5179669,
         //longitude: lon ?? 126.957047,

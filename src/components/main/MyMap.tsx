@@ -56,8 +56,14 @@ export default function MyMap({
   const [myViewport, setMyViewport] = useState<ViewState>({
     // latitude: lat,
     // longitude: lon,
-    latitude: 37.5179669,
-    longitude: 126.957047,
+    
+    // 노들
+    // latitude: 37.5179669,
+    // longitude: 126.957047,
+
+    // 한강역사탐방 (120)
+    latitude: 37.5263997727, longitude: 126.9336095794,
+
     zoom: 14,
   } as ViewState);
 
