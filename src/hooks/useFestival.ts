@@ -13,7 +13,7 @@ import { regions } from '@/utils/map';
 //   });
 // };
 export const useGetFestivals = (params: any = {}) => {
-  const defaultParams = { page: 1, pageSize: 10, order: 'DATE_ASC', region: '', status: '', keyword: '', ps: false };
+  const defaultParams = { page: 1, pageSize: 10, order: 'DATE_DESC', region: '', status: '', keyword: '', ps: false };
 
   return useQuery<{ content: FestivalAPI[] }>({
     queryKey: ['festivals', params], //params변화 감지
@@ -33,7 +33,7 @@ interface FestivalResponse {
 }
 
 export const useGetFestivalsInfinite = (params: any = {}) => {
-  const defaultParams = { page: 1, pageSize: 10, order: 'DATE_ASC', region: '', status: '', keyword: '', ps: false };
+  const defaultParams = { page: 1, pageSize: 10, order: 'DATE_DESC', region: '', status: '', keyword: '', ps: false };
 
 
   return useInfiniteQuery<FestivalResponse>({
