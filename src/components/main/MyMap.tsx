@@ -98,10 +98,10 @@ export default function MyMap({
     // latitude: 37.5651071556, longitude: 126.9765906796,
 
     // 남산봉수의식 등 전통문화행사
-    latitude: 37.5698206245, longitude: 126.9836898995,
+    // latitude: 37.5698206245, longitude: 126.9836898995,
 
     // DDP 건축투어
-    // latitude: 37.566107632, longitude: 127.0095709797,
+    latitude: 37.566107632, longitude: 127.0095709797,
 
     // 남동 빛의 거리
     // latitude: 37.4415949966, longitude: 126.7360188509,
