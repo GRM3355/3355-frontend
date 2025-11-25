@@ -77,10 +77,10 @@ export default function MyMap({
     // latitude: 37.5621960337, longitude: 126.8015844987,
 
     // 종로 어디나 스테이지
-    latitude: 37.5720618985, longitude: 126.9763210635,
+    // latitude: 37.5720618985, longitude: 126.9763210635,
 
     // 2025 문화가 흐르는 서울광장
-    // latitude: 37.5655015943, longitude: 126.9787960237,
+    latitude: 37.5655015943, longitude: 126.9787960237,
 
     // 쏙쏙들이페스티벌
     // latitude: 37.7833378215, longitude: 126.6946991484,
