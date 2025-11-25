@@ -109,9 +109,9 @@ export default function MyMap({
         id: festival.festivalId, name: festival.title, ㅜㅜ: festival.totalParticipantCount,
         status: !isFestivalActive(festival.eventStartDate, festival.eventEndDate)
           ? 'upcoming'
-          : festival.totalParticipantCount >= 3
+          : festival.totalParticipantCount >= 1000
             ? 'high'
-            : festival.totalParticipantCount >= 2
+            : festival.totalParticipantCount >= 700
               ? 'medium'
               : 'low'
       }
