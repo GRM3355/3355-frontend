@@ -89,10 +89,10 @@ export default function MyMap({
     // latitude: 37.5708709408, longitude: 127.008107089,
 
     // APAP 작품투어
-    latitude: 37.4195037091, longitude: 126.9256299791,
+    // latitude: 37.4195037091, longitude: 126.9256299791,
 
     // 서울조각페스티벌
-    // latitude: 37.5662570431, longitude: 126.9777210995,
+    latitude: 37.5662570431, longitude: 126.9777210995,
 
     // 서울 왕궁수문장 교대의식
     // latitude: 37.5651071556, longitude: 126.9765906796,
