@@ -8,13 +8,23 @@ type RoomItemProps = {
   festivalData: FestivalAPI
 }
 
-function formatDateToMMDD(dateStr: string) {
+function formatDateToYYMMDD(dateStr: string) {
   if (!dateStr) return "";
   const date = new Date(dateStr);
+  const year = String(date.getFullYear()).slice(-2); // 뒤 두 자리
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  return `${month}.${day}`;
+  return `${year}.${month}.${day}`;
 }
+
+// function formatDateToYYYYMMDD(dateStr: string) {
+//   if (!dateStr) return "";
+//   const date = new Date(dateStr);
+//   const year = date.getFullYear();
+//   const month = String(date.getMonth() + 1).padStart(2, "0");
+//   const day = String(date.getDate()).padStart(2, "0");
+//   return `${year}.${month}.${day}`;
+// }
 
 export default function FestivalItem({ festivalData }: RoomItemProps) {
   const navigate = useNavigate()
@@ -41,7 +51,7 @@ export default function FestivalItem({ festivalData }: RoomItemProps) {
       <div className='flex items-center text-icon-container-tertiary gap-0.5'>
         <CalendarSolid size={14} />
         <span className='caption5-r text-text-tertiary'>
-          {formatDateToMMDD(festivalData.eventStartDate)}~{formatDateToMMDD(festivalData.eventEndDate)} ·
+          {formatDateToYYMMDD(festivalData.eventStartDate)} - {formatDateToYYMMDD(festivalData.eventEndDate)} ·
         </span>
         {isActive ? (
           <span className='caption5-r text-text-brand '>개최중</span>

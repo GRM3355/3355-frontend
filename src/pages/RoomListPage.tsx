@@ -123,8 +123,7 @@ export default function RoomListPage() {
                 </div>
                 <p className="title5-sb my-1">{festivalData.title}</p>
                 <p className="label6-sb">
-                  {formatDateToYYYYMMDD(festivalData.eventStartDate)} -
-                  {formatDateToYYYYMMDD(festivalData.eventEndDate)}</p>
+                  {formatDateToYYYYMMDD(festivalData.eventStartDate)} - {formatDateToYYYYMMDD(festivalData.eventEndDate)}</p>
                 <p className="label7-r">{festivalData.addr1}</p>
               </div>
             </div>
