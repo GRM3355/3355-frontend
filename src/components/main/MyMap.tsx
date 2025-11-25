@@ -101,10 +101,10 @@ export default function MyMap({
     // latitude: 37.5698206245, longitude: 126.9836898995,
 
     // DDP 건축투어
-    latitude: 37.566107632, longitude: 127.0095709797,
+    // latitude: 37.566107632, longitude: 127.0095709797,
 
     // 남동 빛의 거리
-    // latitude: 37.4415949966, longitude: 126.7360188509,
+    latitude: 37.4415949966, longitude: 126.7360188509,
 
     // 페인터즈
     // latitude: 37.5681316804, longitude: 126.9696495605,
