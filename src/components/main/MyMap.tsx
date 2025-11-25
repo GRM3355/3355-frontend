@@ -66,7 +66,52 @@ export default function MyMap({
     // latitude: 37.5263997727, longitude: 126.9336095794,
 
     // 청춘마이크 수도강원권 (111)
-    latitude: 37.5119526047, longitude: 126.9980013443,
+    // latitude: 37.5119526047, longitude: 126.9980013443,
+
+    // 서울 무용제 
+    latitude: 37.5812640855, longitude: 127.0029878163,
+
+    // 구리 빛 축제
+    // latitude: 37.5825191614, longitude: 127.1386448674,
+
+    // 퓨처그라운드 (FUTUREGROUND)
+    // latitude: 37.5621960337, longitude: 126.8015844987,
+
+    // 종로 어디나 스테이지
+    // latitude: 37.5720618985, longitude: 126.9763210635,
+
+    // 2025 문화가 흐르는 서울광장
+    // latitude: 37.5655015943, longitude: 126.9787960237,
+
+    // 쏙쏙들이페스티벌
+    // latitude: 37.7833378215, longitude: 126.6946991484,
+
+    // 광무대 목요풍류
+    // latitude: 37.5708709408, longitude: 127.008107089,
+
+    // APAP 작품투어
+    // latitude: 37.4195037091, longitude: 126.9256299791,
+
+    // 서울조각페스티벌
+    // latitude: 37.5662570431, longitude: 126.9777210995,
+
+    // 서울 왕궁수문장 교대의식
+    // latitude: 37.5651071556, longitude: 126.9765906796,
+
+    // 남산봉수의식 등 전통문화행사
+    // latitude: 37.5698206245, longitude: 126.9836898995,
+
+    // DDP 건축투어
+    // latitude: 37.566107632, longitude: 127.0095709797,
+
+    // 남동 빛의 거리
+    // latitude: 37.4415949966, longitude: 126.7360188509,
+
+    // 페인터즈
+    // latitude: 37.5681316804, longitude: 126.9696495605,
+
+    // 2025 우리쌀 우리술 K-라이스페스타
+    // latitude: 37.6689881691, longitude: 126.7458171427
 
     zoom: 14,
   } as ViewState);
