@@ -92,13 +92,13 @@ export default function MyMap({
     // latitude: 37.4195037091, longitude: 126.9256299791,
 
     // 서울조각페스티벌
-    latitude: 37.5662570431, longitude: 126.9777210995,
+    // latitude: 37.5662570431, longitude: 126.9777210995,
 
     // 서울 왕궁수문장 교대의식
     // latitude: 37.5651071556, longitude: 126.9765906796,
 
     // 남산봉수의식 등 전통문화행사
-    // latitude: 37.5698206245, longitude: 126.9836898995,
+    latitude: 37.5698206245, longitude: 126.9836898995,
 
     // DDP 건축투어
     // latitude: 37.566107632, longitude: 127.0095709797,
