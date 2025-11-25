@@ -379,7 +379,7 @@ export default function MyMap({
       {/* 클러스터 색깔 정보 */}
       <div className='absolute w-max h-max top-0 left-0'
         onClick={() => setShowColorInfo(prev => !prev)}>
-        <InfoCircle size={30} className='absolute top-[17px] left-[21px] bg-white text-center self-center rounded-full floating p-[5px]' />
+        <InfoCircle size={30} className='absolute top-[17px] left-[21px] bg-white text-center self-center rounded-full floating p-[5px] bg-clip-padding' />
         {showColorInfo && (
           <>
             <div className='absolute top-16 left-9 w-max h-max flex flex-col gap-1.5 bg-white rounded-4 tooltip p-3 rounded-tl-none'>
